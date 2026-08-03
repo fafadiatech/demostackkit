@@ -7,7 +7,6 @@ Uses deterministic random for reproducibility.
 from __future__ import annotations
 
 import json
-import subprocess
 from datetime import date, timedelta
 
 from demostackkit.seeder.base import BaseTransactionSeeder
@@ -101,14 +100,7 @@ for o in orders:
 frappe.db.commit()
 print(f'Sales Orders created: {{created}}')
 """
-        result = subprocess.run(
-            ["docker", "exec", "-i", self.ctx.backend_container, "python", "-c", script],
-            capture_output=True,
-            text=True,
-            timeout=300,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
+        self._exec(script, timeout=300)
 
 
 def _parse_relative_date(value: str) -> date:

@@ -7,7 +7,15 @@
       "Bash(demostackkit --help)",
       "Bash(demostackkit list *)",
       "Bash(demostackkit validate *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(docker run *)",
+      "Bash(docker compose *)",
+      "Bash(find *)",
+      "Bash(docker exec demostackkit-backend-1 *)",
+      "Bash(demostackkit up *)",
+      "Bash(grep *)",
+      "Bash(docker exec *)"
     ]
   }
 }

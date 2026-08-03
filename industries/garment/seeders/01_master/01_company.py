@@ -8,7 +8,6 @@ All operations are idempotent — safe to run multiple times.
 from __future__ import annotations
 
 import json
-import subprocess
 from demostackkit.seeder.base import BaseMasterSeeder, SeedContext
 
 
@@ -24,6 +23,12 @@ class CompanySeeder(BaseMasterSeeder):
 import frappe
 frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
 frappe.connect()
+
+# Ensure required Warehouse Types exist (not created by setup wizard bypass)
+for wh_type in ['Transit', 'Finished Goods', 'Work In Progress', 'Stores']:
+    if not frappe.db.exists('Warehouse Type', wh_type):
+        frappe.get_doc({{'doctype': 'Warehouse Type', 'name': wh_type, 'warehouse_type': wh_type}}).insert(ignore_permissions=True)
+frappe.db.commit()
 
 # Create company if not exists
 if not frappe.db.exists('Company', '{company.name}'):
@@ -50,15 +55,3 @@ frappe.db.commit()
         self.ctx.cache_set("company_abbr", company.abbr)
         self.ctx.cache_set("currency", company.currency)
 
-    def _exec(self, script: str) -> str:
-        result = subprocess.run(
-            ["docker", "exec", "-i", self.ctx.backend_container, "python", "-c", script],
-            capture_output=True,
-            text=True,
-            timeout=120,
-        )
-        if self.ctx.verbose:
-            print(result.stdout)
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
-        return result.stdout

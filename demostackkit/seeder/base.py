@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import abc
 import random as _random_module
+import subprocess
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
@@ -133,6 +134,26 @@ class BaseSeeder(abc.ABC):
         """
         Optional cleanup called after run() completes (or fails).
         """
+
+    def _exec(self, script: str, timeout: int = 120) -> str:
+        """Execute a Python script inside the backend container using the bench virtualenv."""
+        python = f"{self.ctx.bench_path}/env/bin/python"
+        result = subprocess.run(
+            [
+                "docker", "exec", "-i",
+                "-e", "FRAPPE_STREAM_LOGGING=1",
+                self.ctx.backend_container,
+                python, "-c", script,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+        )
+        if self.ctx.verbose:
+            print(result.stdout)
+        if result.returncode != 0:
+            raise RuntimeError(result.stderr or result.stdout)
+        return result.stdout
 
 
 class BaseMasterSeeder(BaseSeeder, abc.ABC):

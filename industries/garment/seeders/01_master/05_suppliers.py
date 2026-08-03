@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import csv
 import json
-import subprocess
 from pathlib import Path
 
 from demostackkit.seeder.base import BaseMasterSeeder
@@ -51,14 +50,7 @@ for r in rows:
 frappe.db.commit()
 print(f'Suppliers: created={{created}}, skipped={{skipped}}')
 """
-        result = subprocess.run(
-            ["docker", "exec", "-i", self.ctx.backend_container, "python", "-c", script],
-            capture_output=True,
-            text=True,
-            timeout=180,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
+        self._exec(script, timeout=180)
 
         supplier_names = [r["supplier_name"] for r in rows]
         self.ctx.cache_set("supplier_names", supplier_names)

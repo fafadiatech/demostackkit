@@ -7,7 +7,6 @@ Idempotent — uses ignore_if_duplicate=True.
 
 from __future__ import annotations
 
-import subprocess
 from demostackkit.seeder.base import BaseMasterSeeder
 
 
@@ -49,11 +48,4 @@ for grp in groups:
 
 frappe.db.commit()
 """
-        result = subprocess.run(
-            ["docker", "exec", "-i", self.ctx.backend_container, "python", "-c", script],
-            capture_output=True,
-            text=True,
-            timeout=120,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
+        self._exec(script)

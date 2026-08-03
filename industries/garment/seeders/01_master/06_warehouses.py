@@ -5,7 +5,6 @@ Seeder: Warehouses for Garment Manufacturing. Idempotent.
 from __future__ import annotations
 
 import json
-import subprocess
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
@@ -55,11 +54,4 @@ for wh in warehouses:
 frappe.db.commit()
 print(f'Warehouses: created={{created}}, skipped={{skipped}}')
 """
-        result = subprocess.run(
-            ["docker", "exec", "-i", self.ctx.backend_container, "python", "-c", script],
-            capture_output=True,
-            text=True,
-            timeout=120,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
+        self._exec(script)

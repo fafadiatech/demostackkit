@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import csv
 import json
-import subprocess
 from pathlib import Path
 
 from demostackkit.seeder.base import BaseMasterSeeder
@@ -31,10 +30,20 @@ class ItemSeeder(BaseMasterSeeder):
         company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
         items_json = json.dumps(items)
 
+        # Collect all UOMs used in the CSV so we can ensure they exist.
+        required_uoms = sorted({row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")})
+        uoms_json = json.dumps(required_uoms)
+
         script = f"""
 import frappe, json
 frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
 frappe.connect()
+
+# Ensure all required UOMs exist before inserting items.
+for uom_name in json.loads('''{uoms_json}'''):
+    if not frappe.db.exists('UOM', uom_name):
+        frappe.get_doc({{'doctype': 'UOM', 'uom_name': uom_name}}).insert(ignore_permissions=True)
+frappe.db.commit()
 
 items = json.loads('''{items_json}''')
 created = 0
@@ -60,14 +69,7 @@ for item in items:
 frappe.db.commit()
 print(f'Items: created={{created}}, skipped={{skipped}}')
 """
-        result = subprocess.run(
-            ["docker", "exec", "-i", self.ctx.backend_container, "python", "-c", script],
-            capture_output=True,
-            text=True,
-            timeout=180,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
+        self._exec(script, timeout=180)
 
         item_codes = [row["item_code"] for row in items]
         self.ctx.cache_set("item_codes", item_codes)

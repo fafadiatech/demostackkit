@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import csv
 import json
-import subprocess
 from pathlib import Path
 
 from demostackkit.seeder.base import BaseMasterSeeder
@@ -27,10 +26,20 @@ class CustomerSeeder(BaseMasterSeeder):
         rows = _read_csv(csv_path)
         rows_json = json.dumps(rows)
 
+        # Collect customer groups used in the CSV so we can ensure they exist.
+        required_groups = sorted({r.get("customer_group", "Commercial") for r in rows if r.get("customer_group")})
+        groups_json = json.dumps(required_groups)
+
         script = f"""
 import frappe, json
 frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
 frappe.connect()
+
+# Ensure required Customer Groups exist.
+for grp in json.loads('''{groups_json}'''):
+    if not frappe.db.exists('Customer Group', grp):
+        frappe.get_doc({{'doctype': 'Customer Group', 'customer_group_name': grp, 'parent_customer_group': 'All Customer Groups'}}).insert(ignore_permissions=True)
+frappe.db.commit()
 
 rows = json.loads('''{rows_json}''')
 created = skipped = 0
@@ -51,14 +60,7 @@ for r in rows:
 frappe.db.commit()
 print(f'Customers: created={{created}}, skipped={{skipped}}')
 """
-        result = subprocess.run(
-            ["docker", "exec", "-i", self.ctx.backend_container, "python", "-c", script],
-            capture_output=True,
-            text=True,
-            timeout=180,
-        )
-        if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
+        self._exec(script, timeout=180)
 
         customer_names = [r["customer_name"] for r in rows]
         self.ctx.cache_set("customer_names", customer_names)

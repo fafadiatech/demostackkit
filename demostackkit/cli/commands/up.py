@@ -56,6 +56,7 @@ def up(
     if detach and seed:
         console.print("\n[dim]Waiting for ERPNext to be ready before seeding...[/dim]")
         _wait_for_backend(runner, timeout_seconds=180)
+        _create_site_if_needed(config, repo_root)
         console.print(f"[bold cyan]Running seeders...[/bold cyan]")
         _run_seed(industry, repo_root)
 
@@ -80,6 +81,103 @@ def _wait_for_backend(runner: "ComposeRunner", timeout_seconds: int = 180) -> No
             pass
         time.sleep(5)
     console.print("[yellow]Warning: backend did not report healthy within timeout, proceeding anyway[/yellow]")
+
+
+def _create_site_if_needed(config: "object", repo_root: Path) -> None:
+    """Create the Frappe site if it doesn't already exist, then install ERPNext."""
+    import subprocess
+    from demostackkit.core.config import IndustryConfig
+
+    assert isinstance(config, IndustryConfig)
+    site = config.site.name
+    container = "demostackkit-backend-1"
+    bench_path = "/home/frappe/frappe-bench"
+
+    env_vars = _load_env_file(repo_root / "infra" / ".env")
+    db_root_password = env_vars.get("DB_ROOT_PASSWORD", "erpnext")
+    admin_password = env_vars.get("SITE_ADMIN_PASSWORD", "admin")
+
+    # Check if site is fully set up by querying the DB for "All Item Groups",
+    # which the ERPNext setup wizard creates. We can't rely on apps.txt (Frappe v15
+    # tracks installs in the DB) or site_config.json (created before install-app runs).
+    setup_check = subprocess.run(
+        ["docker", "exec", "-e", "FRAPPE_STREAM_LOGGING=1", container,
+         f"{bench_path}/env/bin/python", "-c",
+         (
+             "import frappe; "
+             f"frappe.init(site='{site}', sites_path='{bench_path}/sites'); "
+             "frappe.connect(); "
+             "print('ready' if frappe.db.exists('Item Group', 'All Item Groups') else 'not_ready')"
+         )],
+        capture_output=True,
+        text=True,
+    )
+    if setup_check.returncode == 0 and "ready" in setup_check.stdout:
+        console.print(f"[dim]Site {site} already fully set up, skipping creation.[/dim]")
+        return
+
+    # Drop any partial site (site_config.json exists but setup is incomplete).
+    drop_check = subprocess.run(
+        ["docker", "exec", container, "test", "-f", f"{bench_path}/sites/{site}/site_config.json"],
+        capture_output=True,
+    )
+    if drop_check.returncode == 0:
+        console.print(f"[dim]Dropping incomplete site {site}...[/dim]")
+        drop_cmd = (
+            f"cd {bench_path} && bench drop-site {site} "
+            f"--mariadb-root-password '{db_root_password}' --force"
+        )
+        subprocess.run(["docker", "exec", container, "bash", "-c", drop_cmd])
+
+    console.print(f"[bold cyan]Creating site {site}...[/bold cyan]")
+    create_cmd = (
+        f"cd {bench_path} && "
+        f"bench new-site {site} "
+        f"--mariadb-root-password '{db_root_password}' "
+        f"--admin-password '{admin_password}' "
+        "--no-mariadb-socket"
+    )
+    result = subprocess.run(["docker", "exec", container, "bash", "-c", create_cmd])
+    if result.returncode != 0:
+        raise RuntimeError(f"bench new-site failed for {site}")
+
+    console.print(f"[bold cyan]Installing ERPNext on {site}...[/bold cyan]")
+    install_cmd = f"cd {bench_path} && bench --site {site} install-app erpnext"
+    result = subprocess.run(["docker", "exec", container, "bash", "-c", install_cmd])
+    if result.returncode != 0:
+        raise RuntimeError(f"bench install-app erpnext failed for {site}")
+
+    console.print(f"[bold cyan]Running ERPNext setup wizard for {site}...[/bold cyan]")
+    company = config.company
+    # setup_complete(args) takes a single positional dict — use --args, not --kwargs.
+    wizard_args = (
+        f"[{{'language': 'English', 'country': '{company.country}', "
+        f"'currency': '{company.currency}', 'timezone': 'Asia/Kolkata', "
+        f"'chart_of_accounts': 'Standard'}}]"
+    )
+    wizard_cmd = (
+        f"cd {bench_path} && bench --site {site} execute "
+        f"frappe.desk.page.setup_wizard.setup_wizard.setup_complete "
+        f"--args \"{wizard_args}\""
+    )
+    result = subprocess.run(["docker", "exec", container, "bash", "-c", wizard_cmd])
+    if result.returncode != 0:
+        raise RuntimeError(f"ERPNext setup wizard failed for {site}")
+
+
+def _load_env_file(env_file: Path) -> dict:
+    """Parse a simple key=value .env file, ignoring comments and blank lines."""
+    env_vars: dict = {}
+    if not env_file.exists():
+        return env_vars
+    for line in env_file.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "=" in line:
+            key, _, value = line.partition("=")
+            env_vars[key.strip()] = value.strip()
+    return env_vars
 
 
 def _run_seed(industry: str, repo_root: Path) -> None:

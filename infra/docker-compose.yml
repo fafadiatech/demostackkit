@@ -157,7 +157,7 @@ services:
       redis-queue:
         condition: service_started
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8000/api/method/ping || exit 1"]
+      test: ["CMD-SHELL", "curl -so /dev/null http://localhost:8000/api/method/ping"]
       interval: 15s
       timeout: 10s
       retries: 30

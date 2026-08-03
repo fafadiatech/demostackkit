@@ -11,6 +11,22 @@
 # All ERPNext sites share the same containers. Each industry gets its
 # own Frappe site (e.g. garment.localhost) on the shared stack.
 
+# Seeder base — build locally, no Docker Hub pull.
+# x- prefix keys at top level are extension fields ignored by compose.
+x-seeder-base: &seeder-base
+  build:
+    context: ..
+    dockerfile: docker/images/seeder/Dockerfile
+  image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+  volumes:
+    - sites:/home/frappe/frappe-bench/sites
+    - ../industries:/demostackkit/industries:ro
+    - logs:/home/frappe/frappe-bench/logs
+  depends_on:
+    backend:
+      condition: service_healthy
+  restart: "no"
+
 x-erpnext-env: &erpnext-env
   FRAPPE_SITE_NAME_HEADER: "$$host"
   BACKEND: backend:8000
@@ -91,28 +107,61 @@ services:
     restart: unless-stopped
 
   # ── ERPNext v15 Shared Application Layer ────────────────────────────
+  #
+  # IMPORTANT: frappe/erpnext:v15 has gunicorn at
+  #   /home/frappe/frappe-bench/env/bin/gunicorn   (NOT in $PATH)
+  # The default CMD "start.sh" uses the full path correctly.
+  # Do NOT override command: for the backend — let start.sh handle it.
+  #
+  # The sites/ volume mounts over the image's baked-in sites/ directory,
+  # wiping common_site_config.json. The `configurator` service below
+  # recreates it before the backend starts.
+
+  configurator:
+    image: frappe/erpnext:${ERPNEXT_VERSION:-v15}
+    # bench set-config -g passes values through ast.literal_eval, which rejects
+    # bare strings like "redis://...". Write the JSON file directly instead.
+    command: bash /configure.sh
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      REDIS_CACHE: redis-cache:6379
+      REDIS_QUEUE: redis-queue:6379
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+      - logs:/home/frappe/frappe-bench/logs
+      - ./configure.sh:/configure.sh:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_started
+      redis-queue:
+        condition: service_started
+    restart: "no"
 
   backend:
     image: frappe/erpnext:${ERPNEXT_VERSION:-v15}
-    command: >
-      gunicorn
-      --chdir=/home/frappe/frappe-bench/sites
-      --bind=0.0.0.0:8000
-      --threads=4
-      --workers=2
-      --worker-class=gthread
-      --timeout=120
-      frappe.app:application
+    # No command override — default CMD is start.sh which runs gunicorn
+    # via full path /home/frappe/frappe-bench/env/bin/gunicorn
     environment:
       <<: *erpnext-env
     volumes: *erpnext-volumes
-    <<: *erpnext-depends
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_started
+      redis-queue:
+        condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:8000/api/method/ping || exit 1"]
       interval: 15s
       timeout: 10s
-      retries: 20
-      start_period: 90s
+      retries: 30
+      start_period: 120s
     restart: unless-stopped
 
   frontend:
@@ -123,6 +172,8 @@ services:
       UPSTREAM_REAL_IP_ADDRESS: "127.0.0.1"
       UPSTREAM_REAL_IP_RECURSIVE: "off"
       UPSTREAM_REAL_IP_HEADER: "X-Forwarded-For"
+      PROXY_READ_TIMEOUT: "120"
+      CLIENT_MAX_BODY_SIZE: "50m"
     volumes: *erpnext-volumes
     depends_on:
       backend:
@@ -189,23 +240,6 @@ services:
   # The image is built locally from docker/images/seeder/. Run:
   #   make build-seeder
   # before using profiles directly.
-  #
-  # build: + image: means: build locally and tag as demostackkit/seeder:latest.
-  # No Docker Hub pull is attempted.
-
-  x-seeder-base: &seeder-base
-    build:
-      context: ..
-      dockerfile: docker/images/seeder/Dockerfile
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ../industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-garment:
     <<: *seeder-base

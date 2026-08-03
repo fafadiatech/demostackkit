@@ -1,0 +1,26 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+FAB-COT-WH-001,White Cotton Fabric 30/30,Raw Material,Meter,100% combed cotton white fabric 30x30 thread count,1,180.00
+FAB-COT-BL-002,Blue Denim Fabric 12oz,Raw Material,Meter,Heavy duty 12oz blue denim fabric,1,250.00
+FAB-POL-BK-003,Black Polyester Fabric,Raw Material,Meter,Anti-wrinkle black polyester blend,1,120.00
+FAB-SIL-RD-004,Red Silk Fabric,Raw Material,Meter,Pure silk fabric in red colour,1,850.00
+FAB-LIN-NA-005,Navy Linen Fabric,Raw Material,Meter,Breathable navy blue linen fabric,1,320.00
+THR-COT-WH-001,White Cotton Thread 40/2,Consumable,Spool,Mercerised cotton sewing thread white,1,45.00
+THR-COT-BL-002,Blue Polyester Thread 40/3,Consumable,Spool,High-tenacity polyester thread blue,1,38.00
+BTN-PLY-BK-001,Black Plastic Buttons 15mm,Consumable,Piece,Standard shirt buttons black plastic,1,2.50
+BTN-MTL-SL-002,Silver Metal Buttons 20mm,Consumable,Piece,Blazer metal buttons silver finish,1,8.00
+ZIP-NLN-BK-001,Black Nylon Zip 20cm,Consumable,Piece,YKK-style nylon zip 20cm black,1,12.00
+ZIP-MTL-GD-002,Gold Metal Zip 30cm,Consumable,Piece,Antique gold metal zip 30cm,1,25.00
+LBL-WVN-001,Woven Care Label,Consumable,Piece,Standard woven care and brand label,1,3.50
+PKG-PLY-001,Poly Bag 40x60cm,Packaging,Piece,Clear polythene garment bag,1,4.00
+PKG-BOX-001,Export Carton 60x40x30,Packaging,Piece,Double corrugated export carton,1,85.00
+GRM-TSH-WH-S,White T-Shirt Small,Finished Goods,Piece,100% cotton round-neck white T-shirt size S,1,280.00
+GRM-TSH-WH-M,White T-Shirt Medium,Finished Goods,Piece,100% cotton round-neck white T-shirt size M,1,280.00
+GRM-TSH-WH-L,White T-Shirt Large,Finished Goods,Piece,100% cotton round-neck white T-shirt size L,1,280.00
+GRM-TSH-BL-M,Blue T-Shirt Medium,Finished Goods,Piece,100% cotton round-neck blue T-shirt size M,1,295.00
+GRM-DNM-32,Blue Denim Jeans W32,Finished Goods,Piece,Slim fit 12oz blue denim jeans waist 32,1,780.00
+GRM-DNM-34,Blue Denim Jeans W34,Finished Goods,Piece,Slim fit 12oz blue denim jeans waist 34,1,780.00
+GRM-SHT-WH-M,White Formal Shirt Medium,Finished Goods,Piece,100% cotton formal white shirt size M,1,450.00
+GRM-SHT-BL-M,Blue Formal Shirt Medium,Finished Goods,Piece,100% cotton formal blue shirt size M,1,470.00
+GRM-JKT-BK-M,Black Polyester Jacket Medium,Finished Goods,Piece,Anti-wrinkle polyester jacket black size M,1,950.00
+GRM-DRS-RD-S,Red Silk Dress Small,Finished Goods,Piece,Pure silk formal dress red size S,1,2800.00
+GRM-TRS-NA-32,Navy Linen Trousers W32,Finished Goods,Piece,Breathable linen trousers navy size 32,1,680.00

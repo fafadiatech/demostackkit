@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "demostackkit"
+version = "0.1.0"
+description = "Create, manage and distribute ERPNext demo environments for different industries"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [
+    { name = "DemoStackKit Contributors" },
+]
+keywords = ["erpnext", "frappe", "demo", "docker", "erp"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+    "jinja2>=3.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "types-pyyaml",
+    "types-requests",
+    "pre-commit>=3.5.0",
+]
+
+[project.scripts]
+demostackkit = "demostackkit.cli.app:main"
+
+[project.urls]
+Homepage = "https://github.com/demostackkit/demostackkit"
+Issues = "https://github.com/demostackkit/demostackkit/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["demostackkit"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+markers = [
+    "unit: fast unit tests, no external dependencies",
+    "integration: integration tests, may use filesystem",
+    "e2e: end-to-end tests, requires Docker",
+]
+
+[tool.coverage.run]
+source = ["demostackkit"]
+omit = ["tests/*"]

@@ -1,0 +1,21 @@
+customer_name,customer_group,territory,customer_type,gst_category,gstin,mobile_no,email_id
+FashionHub Retail Pvt Ltd,Commercial,India,Company,Registered,27AABCF1234R1Z5,9876543210,purchase@fashionhub.in
+TrendZone Exports,Commercial,Rest Of The World,Company,SEZ,27AABCT5678R1Z2,9876543211,orders@trendzone.com
+StyleCraft India,Commercial,India,Company,Registered,06AABCS9012R1Z8,9876543212,procurement@stylecraft.in
+GlobalWear International,Commercial,Rest Of The World,Company,Overseas,,,trade@globalwear.com
+Loomcraft Garments,Commercial,India,Company,Registered,29AABCL3456R1Z4,9876543214,buying@loomcraft.in
+Metro Fashion House,Commercial,India,Company,Registered,27AABCM7890R1Z0,9876543215,purchase@metrofashion.in
+Boutique Elegance Surat,Retail,India,Company,Registered,24AABCB2345R1Z6,9876543216,info@boutiqueelegance.com
+Export Link Dubai,Commercial,Rest Of The World,Company,Overseas,,,sourcing@exportlink.ae
+IndiaThread B2B,Commercial,India,Company,Registered,07AABCI6789R1Z3,9876543218,orders@indiathread.com
+Velvet Arc Fashion,Retail,India,Company,Registered,09AABCV0123R1Z9,9876543219,purchase@velvetarc.in
+Apex Clothing Co,Commercial,India,Company,Registered,33AABCA4567R1Z5,9876543220,procurement@apexclothing.in
+StarStyle Mumbai,Retail,India,Company,Registered,27AABCS8901R1Z1,9876543221,orders@starstyle.in
+Eastward Fashions,Commercial,India,Company,Registered,19AABCE2345R1Z7,9876543222,buying@eastwardfashions.in
+Premier Garments Ltd,Commercial,India,Company,Registered,27AABCP6789R1Z4,9876543223,purchase@premiergarments.in
+Rainbow Textiles,Retail,India,Company,Registered,24AABCR0123R1Z0,9876543224,info@rainbowtextiles.in
+SilkRoute Exports,Commercial,Rest Of The World,Company,Overseas,,,trade@silkrouteexports.com
+NexGen Apparels,Commercial,India,Company,Registered,36AABCN4567R1Z6,9876543226,orders@nexgenapparels.in
+Urban Threads Mumbai,Retail,India,Company,Registered,27AABCU8901R1Z2,9876543227,purchase@urbanthreads.in
+Pacific Garment Traders,Commercial,Rest Of The World,Company,Overseas,,,sourcing@pacificgarment.com
+Crystal Stitch House,Retail,India,Company,Registered,29AABCC2345R1Z8,9876543229,info@crystalstitch.in

@@ -1,0 +1,126 @@
+# Garment Manufacturing Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up garment
+# URL: http://garment.localhost  (admin / admin)
+
+name: "Garment Manufacturing"
+slug: "garment"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for apparel and garment manufacturers.
+  Covers fabric procurement, cut-make-trim production, quality inspection,
+  finished goods dispatch and customer invoicing.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "Alpha Garments Pvt Ltd"
+  abbr: "AGA"
+  currency: "INR"
+  country: "India"
+  default_letter_head: "Alpha Garments Letter Head"
+  tax_id: "27AABCU9603R1ZX"
+  fiscal_year_start: "04-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "garment.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Manufacturing
+  - HR
+  - Payroll
+  - Quality Management
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240101
+  volumes:
+    customers: 20
+    suppliers: 15
+    sales_orders: 50
+    purchase_orders: 30
+    production_orders: 25
+    stock_entries: 80
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  load_order:
+    - custom_fields.json
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "production.manager@garment.demo"
+    full_name: "Priya Sharma"
+    roles:
+      - Manufacturing Manager
+      - Stock Manager
+  - email: "sales.exec@garment.demo"
+    full_name: "Rahul Mehta"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "purchase.manager@garment.demo"
+    full_name: "Anita Desai"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@garment.demo"
+    full_name: "Sunita Patel"
+    roles:
+      - Accounts Manager
+
+# ── Dashboards ────────────────────────────────────────────────────────────────
+dashboards:
+  default: "production_dashboard"
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+reports:
+  featured:
+    - "Fabric Consumption Report"
+    - "Production Summary"
+    - "Stock Ageing"
+    - "Sales Analytics"
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: "Garment Manufacturing"
+
+# ── Validation Thresholds ─────────────────────────────────────────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 30
+  min_customers: 15
+  required_doctypes:
+    - BOM
+    - Workstation
+    - Operation
+    - Item Group

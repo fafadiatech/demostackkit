@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dev dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Ruff lint
+        run: ruff check demostackkit/ tests/
+
+      - name: Ruff format check
+        run: ruff format --check demostackkit/ tests/
+
+      - name: Mypy type check
+        run: mypy demostackkit/
+        continue-on-error: true  # Non-blocking during early development
+
+  test:
+    name: Unit Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Run unit tests
+        run: pytest tests/unit/ -v --cov=demostackkit --cov-report=xml -m "unit or not e2e"
+
+      - name: Upload coverage
+        if: matrix.python-version == '3.11'
+        uses: codecov/codecov-action@v4
+        with:
+          file: coverage.xml
+          fail_ci_if_error: false
+
+  validate-industries:
+    name: Validate Industry Configs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Discover and validate all industries
+        run: |
+          python -c "
+          from pathlib import Path
+          from demostackkit.core.discovery import IndustryRegistry
+          root = Path('industries')
+          registry = IndustryRegistry.from_root(root, skip_invalid=False)
+          print(f'Found {len(registry)} valid industries: {registry.slugs()}')
+          "
+
+      - name: Validate garment fixtures
+        run: |
+          python -c "
+          from pathlib import Path
+          from demostackkit.core.config import load_industry_config
+          cfg = load_industry_config(Path('industries/garment/industry.yaml'))
+          print(f'Garment config OK: {cfg.name}')
+          assert cfg.slug == 'garment'
+          assert len(cfg.users) > 0
+          print('All assertions passed')
+          "
+
+  docker-build:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate docker-compose.yml syntax
+        run: |
+          docker compose -f infra/docker-compose.yml config --quiet
+        continue-on-error: true
+
+      - name: Build seeder image (dry run)
+        run: |
+          docker build \
+            --file docker/images/seeder/Dockerfile \
+            --tag demostackkit/seeder:ci-test \
+            --no-cache \
+            . || echo "Build failed — this is expected without ERPNext base image in CI"
+        continue-on-error: true

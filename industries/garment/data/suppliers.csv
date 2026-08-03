@@ -1,0 +1,16 @@
+supplier_name,supplier_group,country,supplier_type,gst_category,gstin,mobile_no,email_id
+Bharat Fabrics Pvt Ltd,Raw Material,India,Company,Registered,24AABCB1234R1Z6,9988776601,sales@bharatfabrics.in
+Coimbatore Yarn Mills,Raw Material,India,Company,Registered,33AABCC5678R1Z3,9988776602,orders@coimbatoreyarn.com
+China Textile Imports Co,Raw Material,China,Company,Overseas,,,supply@chinatextile.cn
+Dhruv Trims & Accessories,Services,India,Company,Registered,27AABCD9012R1Z9,9988776604,trims@dhruvtrims.in
+ExcelPack Packaging,Services,India,Company,Registered,27AABCE3456R1Z5,9988776605,sales@excelpacking.in
+Garment Label Makers,Services,India,Company,Registered,07AABCG7890R1Z2,9988776606,info@garmentlabels.in
+Himalaya Dye Works,Services,India,Company,Registered,06AABCH2345R1Z8,9988776607,dyeing@himalayedye.in
+India Cotton Corp,Raw Material,India,Company,Registered,27AABCI6789R1Z4,9988776608,cotton@indiacottoncorp.in
+Jaipur Silk House,Raw Material,India,Company,Registered,08AABCJ0123R1Z0,9988776609,silk@jaipursilk.in
+Knit & Weave Tirupur,Raw Material,India,Company,Registered,33AABCK4567R1Z7,9988776610,fabric@knitandweave.in
+Ludhiana Wool Traders,Raw Material,India,Company,Registered,03AABCL8901R1Z3,9988776611,wool@ludhianawool.in
+Mumbai Zip Suppliers,Services,India,Company,Registered,27AABCM2345R1Z9,9988776612,zips@mumbaizips.in
+National Thread Works,Services,India,Company,Registered,27AABCN6789R1Z6,9988776613,thread@nationalthread.in
+Overseas Fabric Depot,Raw Material,Bangladesh,Company,Overseas,,,fabric@overseasdepot.com
+PrintPro Labels,Services,India,Company,Registered,19AABCP0123R1Z2,9988776615,print@printprolabels.in

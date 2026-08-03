@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install *)",
+      "Bash(python3 -m pip install -e \".[dev]\" -q)",
+      "Bash(python3 *)",
+      "Bash(demostackkit --help)",
+      "Bash(demostackkit list *)",
+      "Bash(demostackkit validate *)",
+      "Bash(git add *)"
+    ]
+  }
+}

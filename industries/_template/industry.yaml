@@ -1,0 +1,104 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# TEMPLATE: industry.yaml
+# Copy this file to industries/<your-industry>/ and customise.
+#
+# Rules:
+#   - `slug` MUST match the directory name exactly
+#   - `site.name` MUST be "<slug>.localhost"
+#   - `seed.random_seed` MUST be a unique integer across all industries
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Identity ──────────────────────────────────────────────────────────────────
+name: "My Industry Name"
+slug: "myindustry"              # lowercase, no spaces, matches directory name
+version: "1.0.0"
+description: "One paragraph describing this industry demo."
+maintainer: "Your Name or Org"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+  # - my_custom_app   # Add any extra Frappe apps here
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "Demo Company Pvt Ltd"
+  abbr: "DCP"                   # 2-10 characters, must be unique in ERPNext
+  currency: "INR"               # ISO 4217 code: USD, EUR, INR, GBP, ...
+  country: "India"              # Must match ERPNext's country list exactly
+  default_letter_head: ""
+  tax_id: ""
+  fiscal_year_start: "01-01"   # MM-DD format
+
+# ── Site ──────────────────────────────────────────────────────────────────────
+site:
+  name: "myindustry.localhost"  # MUST be "<slug>.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "UTC"               # e.g. Asia/Kolkata, America/New_York
+
+# ── Modules ───────────────────────────────────────────────────────────────────
+# List only the modules relevant to this industry
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+
+# ── Seed Configuration ────────────────────────────────────────────────────────
+seed:
+  random_seed: 99990101         # CHANGE THIS: unique integer for your industry
+  volumes:
+    customers: 20
+    suppliers: 15
+    sales_orders: 50
+    purchase_orders: 30
+    production_orders: 0        # Set to 0 if not used
+    stock_entries: 50
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixtures ──────────────────────────────────────────────────────────────────
+fixtures:
+  load_order:
+    - custom_fields.json
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "manager@myindustry.demo"
+    full_name: "Demo Manager"
+    roles:
+      - Stock Manager
+
+# ── Dashboards ────────────────────────────────────────────────────────────────
+dashboards:
+  default: ""
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+reports:
+  featured: []
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: ""
+
+# ── Validation Thresholds (used by `demostackkit validate`) ───────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 10
+  min_customers: 10
+  required_doctypes: []

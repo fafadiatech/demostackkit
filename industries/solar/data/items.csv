@@ -1,0 +1,21 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+SLR-PNL-MON-001,Monocrystalline Panel 400W,Solar Panels,Nos,400W monocrystalline solar panel,1,12500.00
+SLR-PNL-MON-002,Monocrystalline Panel 540W,Solar Panels,Nos,540W half-cut monocrystalline panel,1,16800.00
+SLR-PNL-PLY-003,Polycrystalline Panel 330W,Solar Panels,Nos,330W standard polycrystalline panel,1,9200.00
+SLR-PNL-BFX-004,Bifacial Panel 550W,Solar Panels,Nos,550W bifacial dual-glass panel,1,19500.00
+SLR-PNL-FLX-005,Flexible Panel 200W,Solar Panels,Nos,200W flexible thin-film panel,1,8500.00
+SLR-PNL-BLD-006,BIPV Panel 300W,Solar Panels,Nos,Building integrated PV panel,1,22000.00
+SLR-INV-STR-001,String Inverter 10KW,Inverters,Nos,Grid-tie string inverter 10kW,1,48000.00
+SLR-INV-STR-002,String Inverter 25KW,Inverters,Nos,Grid-tie string inverter 25kW,1,95000.00
+SLR-INV-HYB-003,Hybrid Inverter 5KW,Inverters,Nos,Hybrid solar inverter with battery,1,38000.00
+SLR-INV-MCR-004,Microinverter 600W,Inverters,Nos,Module-level microinverter,1,8500.00
+SLR-MNT-RTF-001,Rooftop Mounting Rail 4M,Mounting Structures,Nos,Aluminium mounting rail 4 meter,1,1200.00
+SLR-MNT-GRD-002,Ground Mount Structure 10KW,Mounting Structures,Nos,Hot-dip galvanized ground mount,1,28000.00
+SLR-MNT-CLM-003,Carport Structure 20KW,Mounting Structures,Nos,Solar carport steel structure,1,85000.00
+SLR-BOS-CAB-001,DC Solar Cable 6mm2,DC Components,Meter,UV-resistant DC solar cable,1,38.00
+SLR-BOS-CAB-002,AC Cable 10mm2,AC Components,Meter,Flexible AC output cable,1,52.00
+SLR-BOS-MCB-003,DC MCB 32A 1000V,DC Components,Nos,DC miniature circuit breaker,1,1850.00
+SLR-BOS-SPD-004,Surge Protection Device,AC Components,Nos,Type 2 surge protection,1,3200.00
+SLR-BAT-LFP-001,LFP Battery 100Ah 48V,Batteries,Nos,Lithium iron phosphate battery,1,45000.00
+SLR-BAT-LFP-002,LFP Battery 200Ah 48V,Batteries,Nos,Large capacity LFP battery pack,1,85000.00
+SLR-BAT-GEL-003,Gel Battery 150Ah,Batteries,Nos,Maintenance-free gel battery,1,18500.00

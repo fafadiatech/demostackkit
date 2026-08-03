@@ -1,0 +1,67 @@
+# Healthcare & Pharma Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up healthcare
+# URL: http://healthcare.localhost  (admin / admin)
+
+name: "Healthcare & Pharma"
+slug: "healthcare"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for healthcare and pharmaceutical distributors.
+  Covers medicine procurement, medical device stock, pharmacy dispensing,
+  hospital supply chain, and customer invoicing.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "MedCare Healthcare Pvt Ltd"
+  abbr: "MCH"
+  currency: "INR"
+  country: "India"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "healthcare.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Healthcare
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240108
+  volumes:
+    customers: 12
+    suppliers: 10
+    sales_orders: 50
+    purchase_orders: 30
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"

@@ -1,0 +1,13 @@
+customer_name,customer_group,territory,customer_type
+Apollo Hospital Mumbai,Hospitals,Maharashtra,Company
+Fortis Hospital Delhi,Hospitals,Delhi,Company
+Max Healthcare Bangalore,Hospitals,Karnataka,Company
+KIMS Hospital Hyderabad,Hospitals,Andhra Pradesh,Company
+Medanta Hospital Gurgaon,Hospitals,Haryana,Company
+City Clinic Mumbai,Clinics,Maharashtra,Company
+LifeCare Clinic Chennai,Clinics,Tamil Nadu,Company
+Healthy Life Clinic Pune,Clinics,Maharashtra,Company
+MedPlus Pharmacy Mumbai,Pharmacies,Maharashtra,Company
+Apollo Pharmacy Delhi,Pharmacies,Delhi,Company
+Wellness Pharmacy Bangalore,Pharmacies,Karnataka,Company
+Netmeds Pharmacy Hyderabad,Pharmacies,Andhra Pradesh,Company

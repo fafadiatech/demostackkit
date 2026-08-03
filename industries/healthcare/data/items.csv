@@ -1,0 +1,22 @@
+item_code,item_name,item_group,stock_uom,is_stock_item,valuation_rate,description
+MED-PARA-500,Paracetamol 500mg Strip,Medicines,Strip,1,25.00,Paracetamol 500mg tablets strip of 10
+MED-AMOX-250,Amoxicillin 250mg Strip,Medicines,Strip,1,45.00,Amoxicillin 250mg capsules strip of 10
+MED-METF-500,Metformin 500mg Strip,Medicines,Strip,1,30.00,Metformin 500mg tablets strip of 10 for diabetes management
+MED-OMEP-20,Omeprazole 20mg Strip,Medicines,Strip,1,38.00,Omeprazole 20mg capsules strip of 10 for acidity
+MED-ATOR-10,Atorvastatin 10mg Strip,Medicines,Strip,1,55.00,Atorvastatin 10mg tablets strip of 10 for cholesterol
+MED-AZIT-500,Azithromycin 500mg Strip,Medicines,Strip,1,85.00,Azithromycin 500mg tablets strip of 3 antibiotic
+MED-CETI-10,Cetirizine 10mg Strip,Medicines,Strip,1,20.00,Cetirizine 10mg tablets strip of 10 antihistamine
+MED-PANT-40,Pantoprazole 40mg Strip,Medicines,Strip,1,42.00,Pantoprazole 40mg tablets strip of 10
+DEV-BPMON,BP Monitor Digital,Medical Devices,Nos,1,1200.00,Digital blood pressure monitor with memory function
+DEV-GLUCO,Glucometer Kit,Medical Devices,Nos,1,850.00,Blood glucose monitoring kit with 10 test strips
+DEV-POXIM,Pulse Oximeter,Medical Devices,Nos,1,650.00,Fingertip pulse oximeter with SpO2 and heart rate display
+DEV-STETH,Stethoscope,Medical Devices,Nos,1,1800.00,Dual-head stethoscope for clinical use
+DGN-COVID,Rapid COVID Test Kit,Diagnostics,Box,1,120.00,Rapid antigen test kit for COVID-19 box of 25
+DGN-BGSTR,Blood Glucose Strips Box,Diagnostics,Box,1,350.00,Blood glucose test strips compatible with standard glucometers box of 50
+DGN-URINE,Urine Test Strips Box,Diagnostics,Box,1,180.00,Multi-parameter urine test strips box of 100
+SUR-GLOVE,Sterile Gloves Box,Surgical Supplies,Box,1,280.00,Sterile latex examination gloves box of 100
+SUR-BLADE,Surgical Blade Box,Surgical Supplies,Box,1,150.00,Sterile surgical blades assorted sizes box of 100
+PPE-N95MK,N95 Mask Box,PPE,Box,1,320.00,N95 respirator masks box of 25
+PPE-SURGMK,Surgical Mask Box,PPE,Box,1,90.00,3-ply surgical face masks box of 50
+CON-IVCAN,IV Cannula Box,Hospital Consumables,Box,1,420.00,Intravenous cannula assorted gauges box of 50
+CON-SYR10,Syringe 10ml Box,Hospital Consumables,Box,1,180.00,Disposable 10ml syringes with needle box of 100

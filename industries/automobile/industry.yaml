@@ -1,0 +1,111 @@
+# Automobile Dealership & Service Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up automobile
+# URL: http://automobile.localhost  (admin / admin)
+
+name: "Automobile Dealership & Service"
+slug: "automobile"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for automobile dealerships and service centres.
+  Covers vehicle sales, spare parts procurement, lubricants, tyres,
+  fleet customer management and service workshop operations.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "AutoDrive Motors Pvt Ltd"
+  abbr: "ADM"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "automobile.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240106
+  volumes:
+    customers: 20
+    suppliers: 15
+    sales_orders: 50
+    purchase_orders: 30
+    production_orders: 0
+    stock_entries: 50
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "sales.exec@automobile.demo"
+    full_name: "Rahul Mehta"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "purchase.manager@automobile.demo"
+    full_name: "Anita Desai"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@automobile.demo"
+    full_name: "Sunita Patel"
+    roles:
+      - Accounts Manager
+
+# ── Dashboards ────────────────────────────────────────────────────────────────
+dashboards:
+  default: "sales_dashboard"
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+reports:
+  featured:
+    - "Vehicle Sales Report"
+    - "Spare Parts Consumption"
+    - "Stock Ageing"
+    - "Sales Analytics"
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: "Automobile Dealership"
+
+# ── Validation Thresholds ─────────────────────────────────────────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 15
+  min_customers: 10
+  required_doctypes:
+    - Item Group
+    - Warehouse

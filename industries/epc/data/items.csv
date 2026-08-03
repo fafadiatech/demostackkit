@@ -1,0 +1,21 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+EPC-CIV-CEM-001,OPC Cement 53 Grade,Civil Materials,Bag,Portland cement 53 grade 50kg bag,1,420.00
+EPC-CIV-STL-002,TMT Rebar 12mm Fe500,Structural Steel,MT,Thermo-mechanically treated rebar,1,58000.00
+EPC-CIV-STL-003,MS Plate 10mm,Structural Steel,MT,Mild steel plate 10mm thickness,1,65000.00
+EPC-CIV-PIP-004,GI Pipe 2 inch Class B,Pipes & Fittings,Meter,Galvanized iron pipe medium class,1,380.00
+EPC-CIV-AGG-005,Crushed Stone Aggregate 20mm,Civil Materials,MT,Crushed granite aggregate,1,1200.00
+EPC-ELE-TRF-001,Distribution Transformer 100KVA,Electrical Equipment,Nos,11KV/415V distribution transformer,1,185000.00
+EPC-ELE-CAB-002,XLPE Cable 3x95mm2,Cables & Wiring,Meter,Armoured XLPE power cable,1,1250.00
+EPC-ELE-CAB-003,Control Cable 12 Core,Cables & Wiring,Meter,Multicore instrumentation cable,1,185.00
+EPC-ELE-SWG-004,HT Switchgear Panel 11KV,Electrical Equipment,Nos,Indoor VCB panel 11KV,1,425000.00
+EPC-ELE-LGT-005,LED Street Light 100W,Electrical Equipment,Nos,Industrial LED streetlight fitting,1,8500.00
+EPC-MEC-PMP-001,Centrifugal Pump 50HP,Mechanical Equipment,Nos,End suction centrifugal pump,1,85000.00
+EPC-MEC-FAN-002,Industrial Axial Fan 1000mm,Mechanical Equipment,Nos,Heavy duty industrial fan,1,45000.00
+EPC-MEC-VLV-003,Gate Valve 4 inch PN16,Mechanical Equipment,Nos,Cast iron gate valve flanged,1,3200.00
+EPC-MEC-PIP-004,MS ERW Pipe 6 inch,Pipes & Fittings,Meter,Electric resistance welded pipe,1,2800.00
+EPC-MEC-STR-005,Steel Structure Column H-Beam,Structural Steel,MT,H-beam structural column,1,72000.00
+EPC-INS-FLW-001,Electromagnetic Flow Meter 4inch,Instruments & Controls,Nos,Full bore EM flow meter,1,42000.00
+EPC-INS-PRS-002,Pressure Transmitter 4-20mA,Instruments & Controls,Nos,Smart pressure transmitter,1,18500.00
+EPC-INS-LVL-003,Radar Level Transmitter,Instruments & Controls,Nos,Non-contact radar level sensor,1,35000.00
+EPC-SRV-CIV-001,Civil Construction Labour,Project Services,Nos,Civil work per man-day,0,850.00
+EPC-SRV-ELE-002,Electrical Erection Labour,Project Services,Nos,Electrical work per man-day,0,1200.00

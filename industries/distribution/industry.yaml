@@ -1,0 +1,115 @@
+# FMCG Distribution Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up distribution
+# URL: http://distribution.localhost  (admin / admin)
+
+name: "FMCG Distribution"
+slug: "distribution"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for FMCG distributors.
+  Covers procurement from FMCG brands, stock management across warehouses,
+  order fulfilment for supermarket chains and retail customers.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "QuickMove Distributors Pvt Ltd"
+  abbr: "QMD"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "distribution.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240107
+  volumes:
+    customers: 20
+    suppliers: 15
+    sales_orders: 50
+    purchase_orders: 30
+    production_orders: 0
+    stock_entries: 50
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "sales.exec@distribution.demo"
+    full_name: "Ravi Kumar"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "purchase.manager@distribution.demo"
+    full_name: "Meena Joshi"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@distribution.demo"
+    full_name: "Vijay Nair"
+    roles:
+      - Accounts Manager
+  - email: "warehouse.manager@distribution.demo"
+    full_name: "Arun Singh"
+    roles:
+      - Stock Manager
+
+# ── Dashboards ────────────────────────────────────────────────────────────────
+dashboards:
+  default: "distribution_dashboard"
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+reports:
+  featured:
+    - "Stock Ageing"
+    - "Sales Analytics"
+    - "Purchase Analytics"
+    - "Delivery Note Trends"
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: "FMCG Distribution"
+
+# ── Validation Thresholds ─────────────────────────────────────────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 15
+  min_customers: 10
+  required_doctypes:
+    - Item Group
+    - Warehouse

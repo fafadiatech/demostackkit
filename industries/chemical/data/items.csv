@@ -1,0 +1,21 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+CHM-RAW-SUL-001,Sulphuric Acid 98%,Raw Chemicals,Kg,Industrial grade sulphuric acid,1,45.00
+CHM-RAW-HCL-002,Hydrochloric Acid 35%,Raw Chemicals,Kg,Technical grade HCl solution,1,22.00
+CHM-RAW-NaOH-003,Sodium Hydroxide Flakes,Raw Chemicals,Kg,Caustic soda flakes 99% purity,1,38.00
+CHM-RAW-TOL-004,Toluene Technical Grade,Solvents,Litre,Aromatic solvent toluene,1,95.00
+CHM-RAW-ACE-005,Acetone Technical Grade,Solvents,Litre,Industrial acetone solvent,1,75.00
+CHM-RAW-IPA-006,Isopropyl Alcohol 99%,Solvents,Litre,IPA pharmaceutical grade,1,125.00
+CHM-INT-ACT-007,Acetic Anhydride,Intermediates,Kg,Chemical intermediate for synthesis,1,180.00
+CHM-INT-DMS-008,Dimethyl Sulphoxide,Intermediates,Kg,High purity DMSO solvent,1,320.00
+CHM-FIN-CLN-001,Industrial Cleaner Pro,Finished Products,Litre,Heavy duty industrial degreaser,1,280.00
+CHM-FIN-CLN-002,Alkaline Degreaser 5X,Finished Products,Litre,Concentrated alkaline cleaner,1,320.00
+CHM-FIN-TRT-003,Rust Inhibitor Concentrate,Finished Products,Litre,Corrosion protection formula,1,450.00
+CHM-FIN-TRT-004,Water Treatment Chemical,Finished Products,Kg,Effluent treatment compound,1,185.00
+CHM-FIN-COT-005,Textile Softener Base,Finished Products,Kg,Cationic softener for textiles,1,240.00
+CHM-FIN-PNT-006,Paint Thinner Premium,Finished Products,Litre,Nitrocellulose paint thinner,1,165.00
+CHM-FIN-AGR-007,Agricultural Surfactant,Finished Products,Litre,Wetting agent for pesticides,1,210.00
+CHM-FIN-PHR-008,Pharma Grade Ethanol 96%,Finished Products,Litre,Pharmaceutical ethanol,1,520.00
+PKG-DRM-200-001,HDPE Drum 200L,Packaging Materials,Nos,High density polyethylene drum,1,850.00
+PKG-CAN-020-002,Metal Jerry Can 20L,Packaging Materials,Nos,Galvanized steel jerry can,1,185.00
+PKG-BAG-025-003,PP Woven Bag 25kg,Packaging Materials,Nos,Polypropylene woven sack,1,28.00
+PKG-BTL-001-004,HDPE Bottle 1L,Packaging Materials,Nos,Chemical resistant HDPE bottle,1,18.00

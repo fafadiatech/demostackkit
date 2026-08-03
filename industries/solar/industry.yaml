@@ -1,0 +1,104 @@
+# Solar Energy Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up solar
+# URL: http://solar.localhost  (admin / admin)
+
+name: "Solar Energy"
+slug: "solar"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for solar energy equipment distributors and EPC
+  contractors. Covers panel and inverter procurement, balance-of-system
+  components, battery storage, project services, and customer installations.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "SunPower Solar Pvt Ltd"
+  abbr: "SPS"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "solar.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Projects
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240104
+  volumes:
+    customers: 12
+    suppliers: 10
+    sales_orders: 50
+    purchase_orders: 30
+    stock_entries: 60
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "projects.manager@solar.demo"
+    full_name: "Arun Nair"
+    roles:
+      - Projects Manager
+      - Stock Manager
+  - email: "sales.exec@solar.demo"
+    full_name: "Deepika Rao"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "purchase.manager@solar.demo"
+    full_name: "Vijay Kumar"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@solar.demo"
+    full_name: "Meena Iyer"
+    roles:
+      - Accounts Manager
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: "Solar Energy"
+
+# ── Validation Thresholds ─────────────────────────────────────────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 18
+  min_customers: 10
+  required_doctypes:
+    - Item Group
+    - Warehouse

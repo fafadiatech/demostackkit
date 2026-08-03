@@ -1,0 +1,120 @@
+# EPC (Engineering, Procurement & Construction) Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up epc
+# URL: http://epc.localhost  (admin / admin)
+
+name: "EPC (Engineering, Procurement & Construction)"
+slug: "epc"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for EPC companies.
+  Covers material procurement, project management, equipment tracking,
+  site logistics, billing and customer invoicing.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "BuildRight EPC Pvt Ltd"
+  abbr: "BRE"
+  currency: "INR"
+  country: "India"
+  default_letter_head: "BuildRight EPC Letter Head"
+  tax_id: "27AABCU9603R3ZZ"
+  fiscal_year_start: "04-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "epc.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Projects
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240103
+  volumes:
+    customers: 12
+    suppliers: 10
+    sales_orders: 50
+    purchase_orders: 30
+    stock_entries: 60
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  load_order:
+    - custom_fields.json
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "project.manager@epc.demo"
+    full_name: "Vikram Reddy"
+    roles:
+      - Projects Manager
+      - Stock Manager
+  - email: "sales.exec@epc.demo"
+    full_name: "Pooja Krishnan"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "purchase.manager@epc.demo"
+    full_name: "Anil Verma"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@epc.demo"
+    full_name: "Deepa Menon"
+    roles:
+      - Accounts Manager
+
+# ── Dashboards ────────────────────────────────────────────────────────────────
+dashboards:
+  default: "project_dashboard"
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+reports:
+  featured:
+    - "Project Costing Report"
+    - "Material Procurement Summary"
+    - "Stock Ageing"
+    - "Sales Analytics"
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: "EPC Projects"
+
+# ── Validation Thresholds ─────────────────────────────────────────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 20
+  min_customers: 10
+  required_doctypes:
+    - Item Group
+    - Warehouse

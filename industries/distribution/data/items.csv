@@ -1,0 +1,21 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+DST-FDS-BIS-001,Bourbon Biscuits 100g,Snacks & Confectionery,Box,Chocolate cream biscuits box of 12,1,85.00
+DST-FDS-CHI-002,Potato Chips 50g,Snacks & Confectionery,Box,Salted potato chips box of 24,1,960.00
+DST-FDS-NUD-003,Instant Noodles 70g,Dairy & Packaged Foods,Carton,Masala instant noodles carton of 48,1,1440.00
+DST-FDS-OAT-004,Rolled Oats 500g,Dairy & Packaged Foods,Box,Quick cook oats box of 12,1,1560.00
+DST-FDS-JAM-005,Mixed Fruit Jam 500g,Dairy & Packaged Foods,Box,Fruit preserve box of 12,1,2160.00
+DST-FDS-ATF-006,Atta Flour 5kg,Dairy & Packaged Foods,Box,Whole wheat atta box of 5,1,1750.00
+DST-BVR-TEA-001,Premium Tea 250g,Beverages,Box,CTC black tea box of 24,1,1920.00
+DST-BVR-COF-002,Instant Coffee 100g,Beverages,Box,Freeze dried coffee box of 12,1,2880.00
+DST-BVR-JCE-003,Mixed Fruit Juice 1L,Beverages,Carton,Tetrapak juice carton of 12,1,1320.00
+DST-BVR-EDE-004,Energy Drink 250ml,Beverages,Carton,Carbonated energy drink carton of 24,1,1680.00
+DST-PRC-SHP-001,Shampoo Anti-Dandruff 200ml,Hair Care,Box,Anti-dandruff shampoo box of 12,1,1440.00
+DST-PRC-CON-002,Hair Conditioner 180ml,Hair Care,Box,Repair conditioner box of 12,1,1320.00
+DST-PRC-FCW-003,Face Wash 100ml,Skin Care,Box,Foaming face wash box of 12,1,1560.00
+DST-PRC-MOS-004,Moisturiser SPF 50 50ml,Skin Care,Box,Daily moisturiser box of 12,1,2160.00
+DST-PRC-DEO-005,Roll-on Deodorant 50ml,FMCG Personal Care,Box,Antiperspirant roll-on box of 12,1,1080.00
+DST-PRC-TPT-006,Toothpaste 100g,FMCG Personal Care,Box,Fluoride toothpaste box of 12,1,840.00
+DST-HMC-DIS-001,Dishwash Liquid 500ml,Home Care,Box,Concentrated dish cleaner box of 12,1,960.00
+DST-HMC-FLR-002,Floor Cleaner 1L,Home Care,Box,Disinfectant floor cleaner box of 6,1,780.00
+DST-HMC-DET-003,Detergent Powder 1kg,Home Care,Carton,Front-load detergent carton of 12,1,1560.00
+DST-HMC-AIR-004,Air Freshener 300ml,Home Care,Box,Aerosol air freshener box of 12,1,2160.00

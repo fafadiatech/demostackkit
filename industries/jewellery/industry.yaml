@@ -1,0 +1,104 @@
+# Jewellery Manufacturing Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up jewellery
+# URL: http://jewellery.localhost  (admin / admin)
+
+name: "Jewellery Manufacturing"
+slug: "jewellery"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for jewellery manufacturers and wholesalers.
+  Covers gold, silver, diamond and platinum jewellery, raw material
+  procurement, gemstone inventory, manufacturing orders and retail sales.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "GoldStar Jewellers Pvt Ltd"
+  abbr: "GSJ"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "jewellery.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Manufacturing
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240105
+  volumes:
+    customers: 12
+    suppliers: 10
+    sales_orders: 50
+    purchase_orders: 30
+    stock_entries: 60
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "production.manager@jewellery.demo"
+    full_name: "Ravi Mehta"
+    roles:
+      - Manufacturing Manager
+      - Stock Manager
+  - email: "sales.exec@jewellery.demo"
+    full_name: "Pooja Sharma"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "purchase.manager@jewellery.demo"
+    full_name: "Suresh Pillai"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@jewellery.demo"
+    full_name: "Kavitha Nair"
+    roles:
+      - Accounts Manager
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: "Jewellery Manufacturing"
+
+# ── Validation Thresholds ─────────────────────────────────────────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 18
+  min_customers: 10
+  required_doctypes:
+    - Item Group
+    - Warehouse

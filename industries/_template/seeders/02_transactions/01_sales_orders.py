@@ -8,7 +8,6 @@ Never call random.random() directly — that breaks deterministic resets.
 from __future__ import annotations
 
 import json
-import subprocess
 from datetime import date, timedelta
 
 from demostackkit.seeder.base import BaseTransactionSeeder
@@ -49,6 +48,37 @@ class SalesOrderSeeder(BaseTransactionSeeder):
             })
 
         orders_json = json.dumps(orders)
-        # ... submit via docker exec bench execute
-        # See industries/garment/seeders/02_transactions/02_sales_orders.py
-        # for a complete implementation example.
+        script = f"""
+import frappe, json
+frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
+frappe.connect()
+
+company = '{company}'
+orders = json.loads('''{orders_json}''')
+created = 0
+for o in orders:
+    try:
+        so = frappe.get_doc({{
+            'doctype': 'Sales Order',
+            'company': company,
+            'customer': o['customer'],
+            'transaction_date': o['transaction_date'],
+            'delivery_date': o['delivery_date'],
+            'order_type': 'Sales',
+            'items': [{{
+                'item_code': o.get('item_code', ''),
+                'qty': o['qty'],
+                'rate': o['rate'],
+                'delivery_date': o['delivery_date'],
+            }}],
+        }})
+        so.insert(ignore_permissions=True)
+        so.submit()
+        created += 1
+    except Exception as e:
+        print(f'WARN SO: {{e}}')
+
+frappe.db.commit()
+print(f'Sales Orders created: {{created}}')
+"""
+        self._exec(script, timeout=300)

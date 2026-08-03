@@ -1,0 +1,21 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+VHL-SED-STD-001,Sedan Standard 1.2L Petrol,Sedans,Nos,Entry level petrol sedan,1,750000.00
+VHL-SED-PRE-002,Sedan Premium 1.5L Diesel,Sedans,Nos,Premium diesel sedan,1,1250000.00
+VHL-SUV-CMP-003,Compact SUV 1.5L Petrol,SUVs,Nos,Compact petrol SUV,1,1450000.00
+VHL-SUV-MID-004,Mid-Size SUV 2.0L Diesel,SUVs,Nos,Mid-size diesel SUV,1,2200000.00
+VHL-HCH-001,Hatchback 1.0L Petrol,Hatchbacks,Nos,Entry hatchback petrol,1,580000.00
+VHL-EV-001,Electric Hatchback,Hatchbacks,Nos,Electric vehicle 250km range,1,1350000.00
+SPR-ENG-OIL-001,Engine Oil Filter,Engine Parts,Nos,OEM oil filter cartridge,1,350.00
+SPR-ENG-SPK-002,Spark Plug Set 4,Engine Parts,Nos,Iridium spark plug set of 4,1,1200.00
+SPR-BDY-BRP-003,Brake Pad Set Front,Body Parts,Nos,Ceramic front brake pad set,1,1800.00
+SPR-BDY-BRD-004,Brake Disc Front Pair,Body Parts,Nos,Vented front brake disc pair,1,4500.00
+SPR-ENG-AIR-005,Air Filter Element,Engine Parts,Nos,OEM engine air filter,1,480.00
+SPR-ENG-FUL-006,Fuel Filter,Engine Parts,Nos,Inline fuel filter assembly,1,650.00
+LUB-ENG-5W30-001,Engine Oil 5W-30 1L,Lubricants,Litre,Fully synthetic engine oil,1,580.00
+LUB-ENG-10W40-002,Engine Oil 10W-40 1L,Lubricants,Litre,Semi-synthetic engine oil,1,420.00
+LUB-GBX-001,Gearbox Oil 1L,Lubricants,Litre,Manual transmission fluid,1,380.00
+LUB-BRK-001,Brake Fluid DOT4 500ml,Lubricants,Nos,Brake hydraulic fluid,1,280.00
+TYR-185-65-001,Tyre 185/65R15,Tyres & Wheels,Nos,Tubeless radial tyre,1,3800.00
+TYR-205-55-002,Tyre 205/55R16,Tyres & Wheels,Nos,Performance radial tyre,1,5200.00
+TYR-215-60-003,Tyre 215/60R17 SUV,Tyres & Wheels,Nos,SUV all-terrain tyre,1,6800.00
+WHL-ALY-001,Alloy Wheel 16 inch,Tyres & Wheels,Nos,Diamond cut alloy wheel,1,8500.00

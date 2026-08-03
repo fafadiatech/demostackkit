@@ -179,11 +179,36 @@ services:
     restart: unless-stopped
 
   # ── Industry Seeders (one per industry, activated via profiles) ─────
-  # Each seeder container runs once, seeds the site, then exits.
-  # Profile name matches the industry slug.
+  #
+  # These containers are for the DIRECT docker compose path:
+  #   docker compose --profile garment up -d
+  #
+  # When using the CLI (`demostackkit up garment`), the seeder containers
+  # are NOT started — the CLI seeds via `docker exec` on the backend container.
+  #
+  # The image is built locally from docker/images/seeder/. Run:
+  #   make build-seeder
+  # before using profiles directly.
+  #
+  # build: + image: means: build locally and tag as demostackkit/seeder:latest.
+  # No Docker Hub pull is attempted.
+
+  x-seeder-base: &seeder-base
+    build:
+      context: ..
+      dockerfile: docker/images/seeder/Dockerfile
+    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+      - ../industries:/demostackkit/industries:ro
+      - logs:/home/frappe/frappe-bench/logs
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: "no"
 
   seeder-garment:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["garment"]
     environment:
       <<: *erpnext-env
@@ -193,17 +218,9 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240101}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-chemical:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["chemical"]
     environment:
       <<: *erpnext-env
@@ -213,17 +230,9 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240102}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-epc:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["epc"]
     environment:
       <<: *erpnext-env
@@ -233,17 +242,9 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240103}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-solar:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["solar"]
     environment:
       <<: *erpnext-env
@@ -253,17 +254,9 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240104}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-jewellery:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["jewellery"]
     environment:
       <<: *erpnext-env
@@ -273,17 +266,9 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240105}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-automobile:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["automobile"]
     environment:
       <<: *erpnext-env
@@ -293,17 +278,9 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240106}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-distribution:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["distribution"]
     environment:
       <<: *erpnext-env
@@ -313,17 +290,9 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240107}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
   seeder-healthcare:
-    image: demostackkit/seeder:${DEMOSTACKKIT_VERSION:-latest}
+    <<: *seeder-base
     profiles: ["healthcare"]
     environment:
       <<: *erpnext-env
@@ -333,14 +302,6 @@ services:
       DSK_RANDOM_SEED: ${DSK_RANDOM_SEED:-20240108}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-erpnext}
       SITE_ADMIN_PASSWORD: ${SITE_ADMIN_PASSWORD:-admin}
-    volumes:
-      - sites:/home/frappe/frappe-bench/sites
-      - ./industries:/demostackkit/industries:ro
-      - logs:/home/frappe/frappe-bench/logs
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: "no"
 
 volumes:
   db-data:

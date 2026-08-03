@@ -81,17 +81,32 @@ class ComposeRunner:
             raise DockerError(str(cmd), result.returncode, result.stderr)
         return result.stdout.strip()
 
-    def up(self, profile: str, *, detach: bool = True) -> None:
-        """Start services for the given industry profile."""
-        args = ["--profile", profile, "up"]
+    def up(self, profile: str | None = None, *, detach: bool = True) -> None:
+        """
+        Start services.
+
+        When `profile` is None, only profile-less (shared) services are started.
+        This is the correct mode for the CLI path: shared infra only, seeders
+        run on the host via `docker exec`.
+
+        When `profile` is set, services tagged with that profile are also started.
+        Use this only when the seeder image has been built locally first.
+        """
+        args = []
+        if profile:
+            args += ["--profile", profile]
+        args += ["up"]
         if detach:
             args.append("-d")
         args.append("--remove-orphans")
         self._run(args, stream=not detach)
 
-    def down(self, profile: str, *, volumes: bool = False) -> None:
-        """Stop services for the given industry profile."""
-        args = ["--profile", profile, "down"]
+    def down(self, profile: str | None = None, *, volumes: bool = False) -> None:
+        """Stop services. Pass profile=None to stop only shared services."""
+        args = []
+        if profile:
+            args += ["--profile", profile]
+        args += ["down"]
         if volumes:
             args.append("-v")
         self._run(args, stream=True)

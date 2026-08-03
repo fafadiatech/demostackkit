@@ -47,7 +47,11 @@ def up(
     console.print(f"  Site: [bold]{config.site.name}[/bold]")
     console.print(f"  ERPNext: [bold]{config.erpnext_version}[/bold]")
 
-    runner.up(profile=industry, detach=detach)
+    # Start shared infrastructure only (no profile).
+    # The seeder containers in docker-compose.yml require a locally-built image
+    # and are intended for direct `docker compose --profile <slug> up` usage.
+    # The CLI handles seeding itself via `docker exec` (see _run_seed below).
+    runner.up(profile=None, detach=detach)
 
     if detach and seed:
         console.print("\n[dim]Waiting for ERPNext to be ready before seeding...[/dim]")

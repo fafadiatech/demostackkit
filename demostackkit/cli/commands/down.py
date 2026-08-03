@@ -36,5 +36,5 @@ def down(
             raise typer.Abort()
 
     console.print(f"[bold]Stopping '{config.name}'...[/bold]")
-    runner.down(profile=industry, volumes=volumes)
+    runner.down(profile=None, volumes=volumes)
     console.print(f"[green]Done.[/green]")

@@ -65,3 +65,20 @@ data:
   items: "data/items.csv"
   customers: "data/customers.csv"
   suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "doctor.admin@healthcare.demo"
+    full_name: "Dr. Ananya Krishnan"
+    roles:
+      - Accounts Manager
+      - Purchase Manager
+  - email: "pharmacy.manager@healthcare.demo"
+    full_name: "Sanjay Pillai"
+    roles:
+      - Stock Manager
+  - email: "sales.exec@healthcare.demo"
+    full_name: "Rekha Verma"
+    roles:
+      - Sales Manager
+      - CRM Manager

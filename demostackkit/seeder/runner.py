@@ -36,7 +36,12 @@ class SeedRunner:
     def __init__(self, industry_dir: Path, ctx: SeedContext) -> None:
         self.industry_dir = industry_dir
         self.ctx = ctx
-        self._seeder_classes = discover_seeders(industry_dir)
+        # Resolve demostackkit/seeders/ relative to this file (demostackkit/seeder/runner.py)
+        shared_dir = Path(__file__).resolve().parent.parent / "seeders"
+        self._seeder_classes = discover_seeders(
+            industry_dir,
+            shared_dirs=[shared_dir] if shared_dir.is_dir() else None,
+        )
         self._seeders = instantiate_seeders(self._seeder_classes, ctx)
 
     def run(self, phase: str = "all") -> "SeedResult":

@@ -56,9 +56,13 @@ def _load_module_from_path(path: Path, module_name: str) -> object:
     return module
 
 
-def discover_seeders(industry_dir: Path) -> list[type[BaseSeeder]]:
+def discover_seeders(
+    industry_dir: Path,
+    shared_dirs: list[Path] | None = None,
+) -> list[type[BaseSeeder]]:
     """
-    Discover all concrete BaseSeeder subclasses in an industry directory.
+    Discover all concrete BaseSeeder subclasses in an industry directory,
+    and optionally from additional shared directories.
 
     Returns a list sorted by:
     1. Phase (01_master before 02_transactions)
@@ -67,33 +71,42 @@ def discover_seeders(industry_dir: Path) -> list[type[BaseSeeder]]:
 
     Args:
         industry_dir: Path to the industry directory (e.g. industries/garment/)
+        shared_dirs: Extra seeders/ roots to scan alongside the industry directory.
+            They follow the same phase convention (01_master, 02_transactions).
 
     Returns:
         Ordered list of seeder classes ready to be instantiated with a SeedContext
     """
-    seeders_root = industry_dir / "seeders"
-    if not seeders_root.is_dir():
-        return []
+    seeders_roots = [industry_dir / "seeders"]
+    if shared_dirs:
+        seeders_roots.extend(shared_dirs)
 
     collected: list[tuple[int, int, str, type[BaseSeeder]]] = []
 
-    for phase_idx, phase_dir_name in enumerate(_PHASE_DIRS):
-        phase_dir = seeders_root / phase_dir_name
-        if not phase_dir.is_dir():
+    for seeders_root in seeders_roots:
+        if not seeders_root.is_dir():
             continue
 
-        for py_file in sorted(phase_dir.glob("*.py")):
-            if py_file.name.startswith("_"):
+        # Namespace prefix prevents sys.modules key collisions between shared and industry seeders
+        ns = "shared" if seeders_root.parent.name == "demostackkit" else f"industry_{industry_dir.name}"
+
+        for phase_idx, phase_dir_name in enumerate(_PHASE_DIRS):
+            phase_dir = seeders_root / phase_dir_name
+            if not phase_dir.is_dir():
                 continue
 
-            module_name = f"_dsk_industry_{industry_dir.name}_{phase_dir_name}_{py_file.stem}"
-            try:
-                module = _load_module_from_path(py_file, module_name)
-            except Exception as exc:
-                raise ImportError(f"Failed to load seeder module {py_file}: {exc}") from exc
+            for py_file in sorted(phase_dir.glob("*.py")):
+                if py_file.name.startswith("_"):
+                    continue
 
-            for _name, obj in inspect.getmembers(module, _is_concrete_seeder):
-                collected.append((phase_idx, obj.priority, py_file.name, obj))
+                module_name = f"_dsk_{ns}_{phase_dir_name}_{py_file.stem}"
+                try:
+                    module = _load_module_from_path(py_file, module_name)
+                except Exception as exc:
+                    raise ImportError(f"Failed to load seeder module {py_file}: {exc}") from exc
+
+                for _name, obj in inspect.getmembers(module, _is_concrete_seeder):
+                    collected.append((phase_idx, obj.priority, py_file.name, obj))
 
     # Sort: phase → priority → filename
     collected.sort(key=lambda t: (t[0], t[1], t[2]))

@@ -66,6 +66,10 @@ class SeedConfig(BaseModel):
         default=20240101,
         description="Integer seed for deterministic random data generation",
     )
+    demo_password: str = Field(
+        default="Demo@1234",
+        description="Password set for all seeded demo users",
+    )
     volumes: SeedVolumes = Field(default_factory=SeedVolumes)
     date_range: SeedDateRange = Field(default_factory=SeedDateRange)
 

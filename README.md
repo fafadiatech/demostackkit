@@ -82,6 +82,9 @@ demostackkit validate          # Validate all industry configs
 demostackkit validate garment  # Validate one industry
 demostackkit purge             # Destroy all containers and volumes
 demostackkit purge --images    # Also remove pulled ERPNext images
+demostackkit install-app garment hrms                          # Install app from frappe.io
+demostackkit install-app garment hrms --source github --url … # Install from GitHub
+demostackkit install-app garment myapp --source local --path … # Install from local directory
 ```
 
 ### Switching ERPNext Versions
@@ -126,6 +129,43 @@ demostackkit use v16
 demostackkit purge --yes    # clear old site data
 demostackkit up garment     # fresh v16 site
 ```
+
+### Installing Extra Apps
+
+Each industry can declare additional Frappe apps in `industry.yaml` under `extra_apps`. These are fetched via `bench get-app` and installed automatically on every `up`, `create`, and `reset`.
+
+```yaml
+# industries/garment/industry.yaml
+extra_apps:
+  - name: hrms          # from frappe.io
+    source: frappe
+    branch: version-15
+
+  - name: hrms          # from GitHub
+    source: github
+    url: https://github.com/frappe/hrms
+    branch: version-15
+
+  - name: my_custom_app  # from a local directory on the host
+    source: local
+    host_path: /Users/me/projects/my_custom_app
+```
+
+To install an app into a **running stack** without modifying `industry.yaml`:
+
+```bash
+# From frappe.io
+demostackkit install-app garment hrms
+demostackkit install-app garment hrms --branch version-15
+
+# From GitHub
+demostackkit install-app garment hrms --source github --url https://github.com/frappe/hrms
+
+# From a local directory
+demostackkit install-app garment my_app --source local --path /Users/me/projects/my_app
+```
+
+If the app is already present in the bench, `get-app` is skipped and only `install-app` is run (idempotent).
 
 ## Architecture
 

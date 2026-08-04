@@ -19,6 +19,12 @@ required_apps:
   - frappe
   - erpnext
 
+# Extra apps fetched at runtime via bench get-app
+extra_apps:
+  - name: hrms
+    source: frappe
+    branch: version-15
+
 # ── Company ───────────────────────────────────────────────────────────────────
 company:
   name: "Alpha Garments Pvt Ltd"

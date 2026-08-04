@@ -59,6 +59,10 @@ def up(
     if detach and seed:
         console.print("\n[dim]Waiting for ERPNext to be ready before seeding...[/dim]")
         _wait_for_backend(runner, timeout_seconds=180)
+        if config.extra_apps:
+            from demostackkit.erpnext.bench import BenchClient
+            bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
+            _fetch_extra_apps(config, bench)
         _create_site_if_needed(config, repo_root)
         console.print(f"[bold cyan]Running seeders...[/bold cyan]")
         _run_seed(industry, repo_root)
@@ -66,6 +70,21 @@ def up(
     console.print(f"\n[bold green]Demo environment ready![/bold green]")
     console.print(f"  URL: [bold]http://{config.site.name}[/bold]")
     console.print(f"  Login: [bold]Administrator[/bold] / [bold]{config.site.admin_password}[/bold]")
+
+
+def _fetch_extra_apps(config: "object", bench: "object") -> None:
+    """Fetch all extra_apps into the bench via bench get-app (before site creation)."""
+    from demostackkit.core.config import IndustryConfig
+    from demostackkit.erpnext.bench import BenchClient
+    assert isinstance(config, IndustryConfig)
+    assert isinstance(bench, BenchClient)
+    for entry in config.extra_apps:
+        if bench.app_exists_in_bench(entry.name):
+            console.print(f"[dim]App '{entry.name}' already in bench, skipping get-app.[/dim]")
+            continue
+        console.print(f"[bold cyan]Fetching app '{entry.name}' (source={entry.source})...[/bold cyan]")
+        bench.get_app(entry)
+        console.print(f"[green]App '{entry.name}' fetched.[/green]")
 
 
 def _wait_for_backend(runner: "ComposeRunner", timeout_seconds: int = 180) -> None:
@@ -144,11 +163,16 @@ def _create_site_if_needed(config: "object", repo_root: Path) -> None:
     if result.returncode != 0:
         raise RuntimeError(f"bench new-site failed for {site}")
 
-    console.print(f"[bold cyan]Installing ERPNext on {site}...[/bold cyan]")
-    install_cmd = f"cd {bench_path} && bench --site {site} install-app erpnext"
-    result = subprocess.run(["docker", "exec", container, "bash", "-c", install_cmd])
-    if result.returncode != 0:
-        raise RuntimeError(f"bench install-app erpnext failed for {site}")
+    apps_to_install = [a for a in config.required_apps if a != "frappe"]
+    apps_to_install += [e.name for e in config.extra_apps]
+    for app_name in apps_to_install:
+        console.print(f"[bold cyan]Installing {app_name} on {site}...[/bold cyan]")
+        result = subprocess.run(
+            ["docker", "exec", container, "bash", "-c",
+             f"cd {bench_path} && bench --site {site} install-app {app_name}"]
+        )
+        if result.returncode != 0:
+            raise RuntimeError(f"bench install-app {app_name} failed for {site}")
 
     console.print(f"[bold cyan]Running ERPNext setup wizard for {site}...[/bold cyan]")
     company = config.company

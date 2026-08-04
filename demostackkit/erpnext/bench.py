@@ -27,7 +27,7 @@ class BenchClient:
         self.site = site
         self.bench_path = bench_path
 
-    def _docker_exec(self, cmd: list[str], *, input_data: str | None = None) -> str:
+    def _docker_exec(self, cmd: list[str], *, input_data: str | None = None, timeout: int = 300) -> str:
         """Run a command inside the container and return stdout."""
         full_cmd = ["docker", "exec", "-i", self.container] + cmd
         try:
@@ -36,10 +36,10 @@ class BenchClient:
                 capture_output=True,
                 text=True,
                 input=input_data,
-                timeout=300,
+                timeout=timeout,
             )
         except subprocess.TimeoutExpired as exc:
-            raise BenchError(str(full_cmd), -1, "Command timed out after 300 seconds") from exc
+            raise BenchError(str(full_cmd), -1, f"Command timed out after {timeout} seconds") from exc
 
         if result.returncode != 0:
             raise BenchError(str(full_cmd), result.returncode, result.stderr or result.stdout)
@@ -142,6 +142,57 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
         """Install a Frappe app on the site."""
         cmd = f"cd {self.bench_path} && bench --site {self.site} install-app {app_name}"
         self._docker_exec(["bash", "-c", cmd])
+
+    def app_exists_in_bench(self, app_name: str) -> bool:
+        """Return True if the app directory already exists in the bench."""
+        result = self._docker_exec(
+            ["bash", "-c", f"test -d {self.bench_path}/apps/{app_name} && echo yes || echo no"]
+        )
+        return result.strip() == "yes"
+
+    def copy_app_from_host(self, host_path: str, app_name: str) -> str:
+        """Copy a local app directory from the host into /tmp/<app_name> in the container.
+
+        Returns the container-side path for use with bench get-app.
+        """
+        from pathlib import Path
+        src = Path(host_path)
+        if not src.exists():
+            raise BenchError(f"docker cp {host_path}", -1, f"Path does not exist: {host_path}")
+        dest = f"/tmp/{app_name}"
+        result = subprocess.run(
+            ["docker", "cp", str(src), f"{self.container}:{dest}"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        if result.returncode != 0:
+            raise BenchError(f"docker cp {host_path}", result.returncode, result.stderr)
+        return dest
+
+    def get_app(self, entry: "AppEntry") -> None:
+        """Fetch a Frappe app into the bench via bench get-app.
+
+        Handles three source types:
+          frappe — bench get-app <name>  (fetches from frappe.io)
+          github — bench get-app <url>   (fetches from GitHub)
+          local  — docker cp host_path into container, then bench get-app /tmp/<name>
+        """
+        from demostackkit.core.config import AppEntry  # local import avoids circular
+
+        if entry.source == "local":
+            fetch_target = self.copy_app_from_host(entry.host_path, entry.name)
+        elif entry.source == "github":
+            fetch_target = entry.url
+        else:
+            fetch_target = entry.name
+
+        cmd = f"cd {self.bench_path} && bench get-app {fetch_target}"
+        if entry.branch and entry.source != "local":
+            cmd += f" --branch {entry.branch}"
+
+        # bench get-app can be slow for large repos; allow up to 10 minutes
+        self._docker_exec(["bash", "-c", cmd], timeout=600)
 
     def drop_site(self, db_root_password: str) -> None:
         """Drop the Frappe site (destructive)."""

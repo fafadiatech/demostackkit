@@ -27,11 +27,18 @@ def create(
 
     bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
 
+    for entry in config.extra_apps:
+        if bench.app_exists_in_bench(entry.name):
+            console.print(f"[dim]App '{entry.name}' already in bench, skipping get-app.[/dim]")
+            continue
+        console.print(f"[bold]Fetching app '{entry.name}' (source={entry.source})...[/bold]")
+        bench.get_app(entry)
+
     console.print(f"[bold]Creating site {config.site.name}...[/bold]")
     bench.new_site(
         admin_password=admin_pw,
         db_root_password=db_root_pw,
-        install_apps=[a for a in config.required_apps if a != "frappe"],
+        install_apps=[a for a in config.required_apps if a != "frappe"] + [e.name for e in config.extra_apps],
     )
     console.print(f"[green]Site created: http://{config.site.name}[/green]")
     console.print(f"Run [bold]demostackkit seed {industry}[/bold] to load demo data.")

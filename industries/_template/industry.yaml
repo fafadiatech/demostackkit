@@ -18,10 +18,36 @@ license: "MIT"
 
 # ── ERPNext ───────────────────────────────────────────────────────────────────
 erpnext_version: "v15"
+
+# Apps already baked into the Docker image — only bench install-app is run, no fetch needed.
 required_apps:
   - frappe
   - erpnext
-  # - my_custom_app   # Add any extra Frappe apps here
+
+# ── Extra Apps (fetched at runtime via bench get-app) ─────────────────────────
+# Apps listed here are NOT pre-baked in the Docker image.
+# They are fetched and installed each time `demostackkit up` / `create` is run.
+#
+# Three source types are supported:
+#
+# extra_apps:
+#   # 1. From frappe.io (default)
+#   - name: hrms
+#     source: frappe
+#     branch: version-15          # optional
+#
+#   # 2. From a GitHub URL
+#   - name: hrms
+#     source: github
+#     url: https://github.com/frappe/hrms
+#     branch: version-15          # optional
+#
+#   # 3. From a local directory on the HOST machine
+#   - name: my_custom_app
+#     source: local
+#     host_path: /absolute/path/on/host
+#
+extra_apps: []
 
 # ── Company ───────────────────────────────────────────────────────────────────
 company:

@@ -48,15 +48,23 @@ def reset(
     except Exception as exc:
         console.print(f"[yellow]Could not drop site (may not exist): {exc}[/yellow]")
 
-    # 2. Create site
+    # 2. Fetch extra apps (bench get-app) before creating site
+    for entry in config.extra_apps:
+        if bench.app_exists_in_bench(entry.name):
+            console.print(f"[dim]App '{entry.name}' already in bench, skipping get-app.[/dim]")
+            continue
+        console.print(f"[bold]Fetching app '{entry.name}' (source={entry.source})...[/bold]")
+        bench.get_app(entry)
+
+    # 3. Create site
     console.print(f"[bold]Creating site {config.site.name}...[/bold]")
     bench.new_site(
         admin_password=admin_pw,
         db_root_password=db_root_pw,
-        install_apps=[a for a in config.required_apps if a != "frappe"],
+        install_apps=[a for a in config.required_apps if a != "frappe"] + [e.name for e in config.extra_apps],
     )
 
-    # 3. Reseed
+    # 4. Reseed
     console.print(f"[bold cyan]Running seeders...[/bold cyan]")
     from demostackkit.cli.commands.seed import _do_seed
     _do_seed(industry, phase="all", repo_root=industries_root.parent)

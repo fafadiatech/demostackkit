@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 import yaml
 from pydantic import BaseModel, Field, model_validator, field_validator
@@ -115,6 +115,31 @@ class ValidateConfig(BaseModel):
     required_doctypes: list[str] = Field(default_factory=list)
 
 
+# ── App entry ─────────────────────────────────────────────────────────────────
+
+_RESERVED_APPS = {"frappe"}
+
+
+class AppEntry(BaseModel):
+    """A Frappe app to fetch (bench get-app) and install at site-creation time."""
+
+    name: str
+    source: Literal["frappe", "github", "local"] = "frappe"
+    url: str | None = None        # required when source="github"
+    branch: str | None = None     # optional for frappe/github; ignored for local
+    host_path: str | None = None  # required when source="local" (absolute host path)
+
+    @model_validator(mode="after")
+    def validate_source_fields(self) -> "AppEntry":
+        if self.source == "github" and not self.url:
+            raise ValueError("url is required when source='github'")
+        if self.source == "local" and not self.host_path:
+            raise ValueError("host_path is required when source='local'")
+        if self.source == "frappe" and self.url:
+            raise ValueError("url must not be set when source='frappe'")
+        return self
+
+
 # ── Root model ────────────────────────────────────────────────────────────────
 
 
@@ -135,7 +160,11 @@ class IndustryConfig(BaseModel):
     erpnext_version: str = Field(default="v15", description="ERPNext image tag")
     required_apps: list[str] = Field(
         default_factory=lambda: ["frappe", "erpnext"],
-        description="Frappe apps to install",
+        description="Frappe apps already in the Docker image (install-only, no fetch needed).",
+    )
+    extra_apps: list[AppEntry] = Field(
+        default_factory=list,
+        description="Apps to fetch (bench get-app) and install; NOT pre-baked in the Docker image.",
     )
 
     # Sub-configs
@@ -167,6 +196,21 @@ class IndustryConfig(BaseModel):
                 f"site.name must be '{expected}' (got '{self.site.name}'). "
                 "This convention ensures consistent routing."
             )
+        return self
+
+    @model_validator(mode="after")
+    def validate_extra_apps(self) -> "IndustryConfig":
+        extra_names = [e.name for e in self.extra_apps]
+        for name in extra_names:
+            if name in _RESERVED_APPS:
+                raise ValueError(f"'{name}' is a reserved app and cannot appear in extra_apps")
+            if name in self.required_apps:
+                raise ValueError(
+                    f"App '{name}' appears in both required_apps and extra_apps. "
+                    "Remove it from required_apps; extra_apps handles fetching + installing."
+                )
+        if len(extra_names) != len(set(extra_names)):
+            raise ValueError("extra_apps contains duplicate app names")
         return self
 
     @model_validator(mode="after")

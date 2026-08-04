@@ -1,0 +1,110 @@
+"""
+Seeder: Purchase Orders for Drones Manufacturing.
+
+Uses deterministic random (self.ctx.random) for reproducibility.
+Running `demostackkit reset drones` always produces identical POs.
+"""
+
+from __future__ import annotations
+
+import json
+from datetime import date, timedelta
+
+from demostackkit.seeder.base import BaseTransactionSeeder
+
+
+class PurchaseOrderSeeder(BaseTransactionSeeder):
+    label = "Purchase Orders"
+    priority = 210
+    _volume_attr = "purchase_orders"
+
+    def validate(self) -> list[str]:
+        errors = []
+        if not self.ctx.cache_get("supplier_names"):
+            errors.append("supplier_names not in cache — run SupplierSeeder first")
+        if not self.ctx.cache_get("rm_item_codes"):
+            errors.append("rm_item_codes not in cache — run ItemSeeder first")
+        return errors
+
+    def run(self) -> None:
+        rng = self.ctx.random
+        company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
+        suppliers = self.ctx.cache_get("supplier_names", [])
+        rm_items = self.ctx.cache_get("rm_item_codes", [])
+
+        if not suppliers or not rm_items:
+            return
+
+        cfg = self.ctx.industry_config.seed
+        start_date = _parse_relative_date(cfg.date_range.start)
+        end_date = _parse_relative_date(cfg.date_range.end)
+        span = (end_date - start_date).days
+
+        orders = []
+        for i in range(self.volume):
+            order_date = start_date + timedelta(days=rng.randint(0, span))
+            required_date = order_date + timedelta(days=rng.randint(7, 21))
+            supplier = rng.choice(suppliers)
+            n_items = rng.randint(1, 4)
+            chosen_items = rng.sample(rm_items, min(n_items, len(rm_items)))
+            items = []
+            for item_code in chosen_items:
+                items.append({
+                    "item_code": item_code,
+                    "qty": rng.randint(5, 50),
+                    "rate": round(rng.uniform(50, 15000), 2),
+                    "schedule_date": required_date.isoformat(),
+                })
+            orders.append({
+                "supplier": supplier,
+                "transaction_date": order_date.isoformat(),
+                "schedule_date": required_date.isoformat(),
+                "items": items,
+            })
+
+        orders_json = json.dumps(orders)
+        script = f"""
+import frappe, json
+frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
+frappe.connect()
+
+company = '{company}'
+orders = json.loads('''{orders_json}''')
+created = 0
+for o in orders:
+    try:
+        po = frappe.get_doc({{
+            'doctype': 'Purchase Order',
+            'company': company,
+            'supplier': o['supplier'],
+            'transaction_date': o['transaction_date'],
+            'schedule_date': o['schedule_date'],
+            'items': [{{
+                'item_code': it['item_code'],
+                'qty': it['qty'],
+                'rate': it['rate'],
+                'schedule_date': it['schedule_date'],
+                'uom': 'Nos',
+                'stock_uom': 'Nos',
+                'conversion_factor': 1,
+            }} for it in o['items']],
+        }})
+        po.insert(ignore_permissions=True)
+        po.submit()
+        created += 1
+    except Exception as e:
+        print(f'WARN PO: {{e}}')
+
+frappe.db.commit()
+print(f'Purchase Orders created: {{created}}')
+"""
+        self._exec(script, timeout=300)
+
+
+def _parse_relative_date(value: str) -> date:
+    """Parse -180d style relative dates or YYYY-MM-DD absolute dates."""
+    today = date.today()
+    if value.startswith("-") and value.endswith("d"):
+        days = int(value[1:-1])
+        return today - timedelta(days=days)
+    return date.fromisoformat(value)

@@ -74,10 +74,6 @@ def write_generated_compose(config: IndustryConfig, industries_root: Path, outpu
 
     compose_doc = {
         "services": build_seeder_service(config, industries_root),
-        "volumes": {
-            "sites": {"external": True},
-            "logs": {"external": True},
-        },
     }
 
     output_path.write_text(yaml.dump(compose_doc, default_flow_style=False), encoding="utf-8")

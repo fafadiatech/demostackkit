@@ -1,0 +1,23 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+CLY-STN-001,Stoneware Clay 25kg,Raw Material,Kg,High-fire stoneware clay body 25kg bag,1,450.00
+CLY-ERT-001,Earthenware Clay 25kg,Raw Material,Kg,Low-fire red earthenware clay 25kg bag,1,320.00
+CLY-POR-001,Porcelain Clay 10kg,Raw Material,Kg,Fine white porcelain casting slip 10kg,1,1200.00
+GLZ-WH-001,White Glossy Glaze 5kg,Raw Material,Kg,Food-safe glossy white glaze 5kg,1,850.00
+GLZ-BL-002,Cobalt Blue Glaze 1kg,Raw Material,Kg,Cobalt blue underglaze 1kg,1,950.00
+GLZ-GR-003,Celadon Green Glaze 1kg,Raw Material,Kg,Traditional celadon green glaze 1kg,1,900.00
+GLZ-TM-004,Terracotta Matt Glaze 1kg,Raw Material,Kg,Matt terracotta brown glaze 1kg,1,780.00
+KWL-FBR-001,Kiln Wash / Fiber Board,Raw Material,Piece,Kiln shelf wash and fiber insulation board,1,350.00
+PLS-BND-001,Plasticiser Binder 1L,Consumable,Litre,Deflocculant and plasticiser for slip casting,1,420.00
+SND-PPR-001,Sandpaper 220 Grit Sheet,Consumable,Piece,Wet and dry sandpaper 220 grit for smoothing greenware,1,15.00
+SPG-WET-001,Natural Sea Sponge,Consumable,Piece,Natural sea sponge for throwing and finishing,1,80.00
+LBL-STK-001,Ceramic Brand Label Sticker,Consumable,Piece,Waterproof brand label for bottom of piece,1,4.00
+PKG-BOX-SGL,Single Piece Gift Box,Packaging,Piece,Rigid lid gift box for single crockery piece with tissue,1,65.00
+PKG-BOX-SET,6-Piece Set Gift Box,Packaging,Piece,6-piece dinnerware gift box with dividers,1,180.00
+PKG-BUB-001,Bubble Wrap Roll 1m,Packaging,Roll,500mm wide bubble wrap roll 1 metre,1,25.00
+CRK-DIN-PLT-27,Dinner Plate 27cm White,Finished Goods,Piece,Stoneware dinner plate 27cm glossy white glaze,1,480.00
+CRK-DIN-PLT-22,Side Plate 22cm White,Finished Goods,Piece,Stoneware side plate 22cm glossy white glaze,1,320.00
+CRK-DIN-BWL-16,Soup Bowl 16cm White,Finished Goods,Piece,Stoneware deep soup bowl 16cm white,1,360.00
+CRK-DRK-MUG-300,Coffee Mug 300ml Blue,Finished Goods,Piece,Stoneware coffee mug 300ml cobalt blue,1,380.00
+CRK-DRK-CUP-150,Espresso Cup 150ml,Finished Goods,Piece,Porcelain espresso cup 150ml with saucer,1,550.00
+CRK-SRV-PLT-35,Serving Platter 35cm,Finished Goods,Piece,Large oval serving platter 35cm celadon green,1,850.00
+CRK-SRV-BWL-25,Salad Bowl 25cm,Finished Goods,Piece,Stoneware salad bowl 25cm terracotta matt,1,650.00

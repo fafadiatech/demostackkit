@@ -1,15 +1,15 @@
-# Garment Manufacturing Industry Demo
+# Drones Manufacturing Industry Demo
 # ─────────────────────────────────────────────────────────────────────────────
-# Run: demostackkit up garment
-# URL: http://garment.localhost  (admin / admin)
+# Run: demostackkit up drones
+# URL: http://drones.localhost  (admin / admin)
 
-name: "Garment Manufacturing"
-slug: "garment"
+name: "Drones Manufacturing"
+slug: "drones"
 version: "1.0.0"
 description: >
-  Full-featured ERPNext demo for apparel and garment manufacturers.
-  Covers fabric procurement, cut-make-trim production, quality inspection,
-  finished goods dispatch and customer invoicing.
+  Full-featured ERPNext demo for drone manufacturers.
+  Covers component procurement, PCB assembly, frame build, firmware calibration,
+  flight testing, quality inspection, finished goods dispatch and customer invoicing.
 maintainer: "DemoStackKit Contributors"
 license: "MIT"
 
@@ -27,17 +27,17 @@ extra_apps:
 
 # ── Company ───────────────────────────────────────────────────────────────────
 company:
-  name: "Alpha Garments Pvt Ltd"
-  abbr: "AGA"
+  name: "SkyForge Drones Pvt Ltd"
+  abbr: "SFD"
   currency: "INR"
   country: "India"
-  default_letter_head: "Alpha Garments Letter Head"
-  tax_id: "27AABCU9603R1ZX"
+  default_letter_head: "SkyForge Drones Letter Head"
+  tax_id: "27AABCS1234R1ZX"
   fiscal_year_start: "04-01"
 
 # ── Site ─────────────────────────────────────────────────────────────────────
 site:
-  name: "garment.localhost"
+  name: "drones.localhost"
   admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
   language: "en"
   timezone: "Asia/Kolkata"
@@ -55,15 +55,15 @@ modules:
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:
-  random_seed: 20240101
+  random_seed: 20240201
   volumes:
-    customers: 20
-    suppliers: 15
-    sales_orders: 50
-    purchase_orders: 30
-    production_orders: 25
-    stock_entries: 80
-    quality_inspections: 30
+    customers: 15
+    suppliers: 10
+    sales_orders: 40
+    purchase_orders: 25
+    production_orders: 20
+    stock_entries: 60
+    quality_inspections: 25
   date_range:
     start: "-180d"
     end: "-1d"
@@ -85,23 +85,23 @@ data:
 
 # ── Sample Users ──────────────────────────────────────────────────────────────
 users:
-  - email: "production.manager@garment.demo"
-    full_name: "Priya Sharma"
+  - email: "production.manager@drone.demo"
+    full_name: "Vikram Nair"
     roles:
       - Manufacturing Manager
       - Stock Manager
-  - email: "sales.exec@garment.demo"
-    full_name: "Rahul Mehta"
+  - email: "sales.exec@drone.demo"
+    full_name: "Pooja Krishnan"
     roles:
       - Sales Manager
       - CRM Manager
-  - email: "purchase.manager@garment.demo"
-    full_name: "Anita Desai"
+  - email: "purchase.manager@drone.demo"
+    full_name: "Arjun Pillai"
     roles:
       - Purchase Manager
       - Stock Manager
-  - email: "accounts@garment.demo"
-    full_name: "Sunita Patel"
+  - email: "accounts@drone.demo"
+    full_name: "Meena Iyer"
     roles:
       - Accounts Manager
 
@@ -112,20 +112,20 @@ dashboards:
 # ── Reports ───────────────────────────────────────────────────────────────────
 reports:
   featured:
-    - "Fabric Consumption Report"
-    - "Production Summary"
+    - "Drone Assembly Report"
+    - "Component Consumption Report"
     - "Stock Ageing"
     - "Sales Analytics"
 
 # ── Workspaces ────────────────────────────────────────────────────────────────
 workspaces:
-  default: "Garment Manufacturing"
+  default: "Drones Manufacturing"
 
 # ── Validation Thresholds ─────────────────────────────────────────────────────
 validate:
   min_sales_orders: 40
-  min_items: 30
-  min_customers: 15
+  min_items: 20
+  min_customers: 10
   required_doctypes:
     - BOM
     - Workstation

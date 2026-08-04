@@ -1,0 +1,26 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+MTR-BLDC-2212,BLDC Motor 2212 KV920,Raw Material,Nos,Brushless DC motor 2212 size 920KV for multirotor,1,850.00
+ESC-30A-001,30A Electronic Speed Controller,Raw Material,Nos,30A ESC with BEC for drone motor control,1,650.00
+BAT-LIPO-4S,LiPo Battery 4S 5000mAh,Raw Material,Nos,4S 14.8V 5000mAh lithium polymer battery,1,3500.00
+FRM-CF-450,Carbon Fibre Frame 450mm,Raw Material,Nos,450mm wheelbase carbon fibre quadcopter frame,1,2200.00
+FRM-CF-650,Carbon Fibre Frame 650mm,Raw Material,Nos,650mm wheelbase hexacopter carbon fibre frame,1,4500.00
+FCS-PIX-001,Flight Controller Pixhawk 6C,Raw Material,Nos,Pixhawk 6C autopilot flight controller with GPS,1,8500.00
+FCS-F4-001,F4 Flight Controller Mini,Raw Material,Nos,F4 stack mini flight controller for racing drones,1,1200.00
+PRO-CF-10IN,Carbon Fibre Propeller 10 inch,Raw Material,Nos,10 inch carbon fibre self-tightening propeller pair,1,350.00
+PRO-CF-15IN,Carbon Fibre Propeller 15 inch,Raw Material,Nos,15 inch carbon fibre folding propeller pair,1,850.00
+CAM-4K-001,4K Gimbal Camera Module,Raw Material,Nos,3-axis stabilised 4K camera with gimbal,1,12000.00
+GPS-M8N-001,GPS Module M8N,Raw Material,Nos,u-blox M8N GPS with compass module,1,1800.00
+RCV-868-001,868MHz Radio Receiver,Raw Material,Nos,868MHz telemetry radio receiver module,1,950.00
+SPR-TANK-5L,Sprayer Tank 5 Litre,Raw Material,Nos,Agricultural spray tank 5 litre capacity,1,1200.00
+SPR-PUMP-001,Electric Spray Pump,Raw Material,Nos,12V electric centrifugal spray pump,1,800.00
+LDG-GEAR-001,Landing Gear Set,Raw Material,Nos,Retractable carbon fibre landing gear set,1,1500.00
+SCW-M3-SS,M3 Stainless Steel Screw Set,Consumable,Set,M3 stainless screw and nut assortment 100 pcs,1,120.00
+THR-SLD-001,Lead-Free Solder Wire 100g,Consumable,Roll,0.8mm lead-free solder wire 100g roll,1,180.00
+ADH-EP2-001,Epoxy Adhesive 2-Part,Consumable,Piece,2-part epoxy adhesive 50ml pack,1,95.00
+LBL-QR-001,QR Code Asset Label,Consumable,Piece,Laser printable QR code asset label,1,5.00
+PKG-BOX-DRN,Drone Shipping Box,Packaging,Piece,Heavy-duty corrugated drone shipping box with foam insert,1,350.00
+PKG-FOM-001,Foam Padding Insert,Packaging,Piece,Custom cut foam insert for drone packaging,1,120.00
+DRN-AGR-5L,Agricultural Spray Drone 5L,Finished Goods,Nos,Hexacopter agricultural spray drone 5 litre tank,1,85000.00
+DRN-SRV-4K,4K Surveillance Drone,Finished Goods,Nos,Quadcopter surveillance drone with 4K gimbal camera,1,55000.00
+DRN-DLV-P5,Delivery Drone P5,Finished Goods,Nos,Autonomous delivery drone 5kg payload,1,120000.00
+DRN-RCG-FPV,FPV Racing Drone 5-inch,Finished Goods,Nos,High-speed FPV racing quadcopter 5 inch,1,18000.00

@@ -26,6 +26,8 @@ demostackkit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | Chemical Manufacturing | `chemical` | http://chemical.localhost | ✓ |
 | Solar Manufacturing | `solar` | http://solar.localhost | ✓ |
 | Jewellery Manufacturing | `jewellery` | http://jewellery.localhost | ✓ |
+| Drones Manufacturing | `drones` | http://drones.localhost | ✓ |
+| Crockery Manufacturing | `crockery` | http://crockery.localhost | ✓ |
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
 | Distribution | `distribution` | http://distribution.localhost | — |

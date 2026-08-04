@@ -10,7 +10,7 @@
 
 demostackkit makes it trivial to spin up a **fully seeded** ERPNext demo environment for any industry vertical. After one command, you get:
 
-- ERPNext v15 installed and running
+- ERPNext v15 or v16 installed and running
 - A demo company configured
 - Master data loaded (customers, suppliers, items, warehouses, BOMs)
 - Transactional data seeded (sales orders, purchase orders, stock entries)
@@ -68,6 +68,7 @@ demostackkit up garment
 demostackkit init              # First-time setup (creates infra/.env)
 demostackkit list              # Show all available industries
 demostackkit doctor            # Check host prerequisites
+demostackkit use v16           # Switch active ERPNext version (v15 or v16)
 demostackkit create garment    # Create Frappe site (no seeding)
 demostackkit up garment        # Start stack + seed data
 demostackkit down garment      # Stop stack
@@ -79,6 +80,51 @@ demostackkit backup garment    # bench backup
 demostackkit restore garment <file>  # bench restore
 demostackkit validate          # Validate all industry configs
 demostackkit validate garment  # Validate one industry
+demostackkit purge             # Destroy all containers and volumes
+demostackkit purge --images    # Also remove pulled ERPNext images
+```
+
+### Switching ERPNext Versions
+
+You can run industries on either ERPNext v15 or v16. The version applies to the entire stack (all active industries share one ERPNext installation).
+
+```bash
+# Switch to v16
+demostackkit use v16
+
+# Bring down any running industry and restart it
+demostackkit down garment
+demostackkit up garment
+
+# Switch back to v15 later
+demostackkit use v15
+demostackkit down garment
+demostackkit up garment
+```
+
+The active version is stored in `infra/.env` as `ERPNEXT_VERSION`. Docker Compose uses this to pull the correct `frappe/erpnext` image tag automatically on the next `up`.
+
+### Full Wipe (purge)
+
+`demostackkit purge` destroys all containers and Docker volumes (all site data). Add `--images` to also remove the cached ERPNext image layers.
+
+```bash
+# Wipe data, keep images cached (faster next startup)
+demostackkit purge
+
+# Wipe everything including images
+demostackkit purge --images
+
+# Skip confirmation
+demostackkit purge --yes --images
+```
+
+Recommended workflow when switching versions:
+
+```bash
+demostackkit use v16
+demostackkit purge --yes    # clear old site data
+demostackkit up garment     # fresh v16 site
 ```
 
 ## Architecture

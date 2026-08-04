@@ -59,6 +59,8 @@ from demostackkit.cli.commands import (  # noqa: E402
     validate,
     list_cmd,
     doctor,
+    use,
+    purge,
 )
 
 app.add_typer(init.app, name="init")
@@ -72,6 +74,8 @@ app.command("restore")(restore.restore)
 app.command("validate")(validate.validate)
 app.command("list")(list_cmd.list_industries)
 app.command("doctor")(doctor.doctor)
+app.command("use")(use.use)
+app.command("purge")(purge.purge)
 
 
 @app.callback(invoke_without_command=True)

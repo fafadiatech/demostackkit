@@ -1,8 +1,9 @@
 # demostackkit seeder image
-# Based on ERPNext v15 so seeder scripts can import frappe directly.
+# Based on ERPNext (version controlled via ERPNEXT_VERSION build arg).
 # demostackkit is installed on top for the CLI and seeder framework.
 
-FROM frappe/erpnext:v15
+ARG ERPNEXT_VERSION=v15
+FROM frappe/erpnext:${ERPNEXT_VERSION}
 
 USER root
 

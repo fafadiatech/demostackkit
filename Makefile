@@ -85,14 +85,21 @@ backup-garment:  ## Backup garment site
 
 # ── Docker ────────────────────────────────────────────────────────────────────
 
-build-seeder:  ## Build the demostackkit seeder Docker image
+build-seeder:  ## Build the demostackkit seeder Docker image (respects ERPNEXT_VERSION from infra/.env)
+	$(eval ERPNEXT_VERSION ?= $(shell grep -E '^ERPNEXT_VERSION=' infra/.env 2>/dev/null | cut -d= -f2 | tr -d '[:space:]'))
+	$(eval ERPNEXT_VERSION ?= v15)
 	docker build \
 		--file docker/images/seeder/Dockerfile \
+		--build-arg ERPNEXT_VERSION=$(ERPNEXT_VERSION) \
+		--tag demostackkit/seeder:$(ERPNEXT_VERSION) \
 		--tag demostackkit/seeder:latest \
 		.
 
 docker-pull:  ## Pull latest ERPNext images
 	docker compose -f $(COMPOSE_DIR)/docker-compose.yml pull
+
+purge:  ## Destroy all containers, volumes and images (full wipe)
+	$(DSK) purge --yes --images
 
 docker-ps:  ## Show running containers
 	docker compose -f $(COMPOSE_DIR)/docker-compose.yml ps

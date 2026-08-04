@@ -43,9 +43,12 @@ def up(
         extra_compose_files=extra_files,
     )
 
+    env_vars = _load_env_file(env_file)
+    active_version = env_vars.get("ERPNEXT_VERSION", "v15")
+
     console.print(f"[bold cyan]Starting '{config.name}' demo environment...[/bold cyan]")
     console.print(f"  Site: [bold]{config.site.name}[/bold]")
-    console.print(f"  ERPNext: [bold]{config.erpnext_version}[/bold]")
+    console.print(f"  ERPNext: [bold]{active_version}[/bold]")
 
     # Start shared infrastructure only (no profile).
     # The seeder containers in docker-compose.yml require a locally-built image

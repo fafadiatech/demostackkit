@@ -20,6 +20,7 @@ def seed(
     dry_run: Annotated[bool, typer.Option("--dry-run", help="Show what would run without executing")] = False,
     verbose: Annotated[bool, typer.Option("--verbose", "-v")] = False,
     random_seed: Annotated[int | None, typer.Option("--seed", help="Override random seed")] = None,
+    currency: Annotated[str | None, typer.Option("--currency", help="Override currency ISO 4217 code, e.g. USD, INR")] = None,
 ) -> None:
     """Run master and/or transactional data seeders for an industry."""
     from demostackkit.core.discovery import get_industries_root
@@ -29,7 +30,7 @@ def seed(
         raise typer.Exit(1)
 
     repo_root = get_industries_root().parent
-    _do_seed(industry, phase=phase, repo_root=repo_root, dry_run=dry_run, verbose=verbose, random_seed=random_seed)
+    _do_seed(industry, phase=phase, repo_root=repo_root, dry_run=dry_run, verbose=verbose, random_seed=random_seed, currency=currency)
 
 
 def _do_seed(
@@ -40,6 +41,7 @@ def _do_seed(
     dry_run: bool = False,
     verbose: bool = False,
     random_seed: int | None = None,
+    currency: str | None = None,
 ) -> None:
     """Internal seed runner, callable from other commands (e.g. up)."""
     from demostackkit.core.discovery import IndustryRegistry
@@ -49,6 +51,8 @@ def _do_seed(
     industries_root = repo_root / "industries"
     registry = IndustryRegistry.from_root(industries_root)
     config = registry.get(industry)
+    if currency:
+        config.company.currency = currency
 
     ctx = build_seed_context(
         config,

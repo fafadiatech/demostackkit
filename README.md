@@ -13,23 +13,23 @@ demostackkit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 - ERPNext v15 or v16 installed and running
 - A demo company configured
 - Master data loaded (customers, suppliers, items, warehouses, BOMs)
-- Transactional data seeded (sales orders, purchase orders, stock entries)
+- Transactional data seeded (sales orders, purchase orders, stock entries, quality inspections)
 - Sample users with appropriate roles
 - Dashboards, reports, workspaces and print formats
 - **Ready to demonstrate immediately**
 
 ## Supported Industries
 
-| Industry | Slug | URL |
-|---|---|---|
-| Garment Manufacturing | `garment` | http://garment.localhost |
-| Chemical Manufacturing | `chemical` | http://chemical.localhost |
-| Engineering Procurement & Construction | `epc` | http://epc.localhost |
-| Solar Manufacturing | `solar` | http://solar.localhost |
-| Jewellery Manufacturing | `jewellery` | http://jewellery.localhost |
-| Automobile Dealership | `automobile` | http://automobile.localhost |
-| Distribution | `distribution` | http://distribution.localhost |
-| Healthcare | `healthcare` | http://healthcare.localhost |
+| Industry | Slug | URL | Quality Inspections |
+|---|---|---|---|
+| Garment Manufacturing | `garment` | http://garment.localhost | ✓ |
+| Chemical Manufacturing | `chemical` | http://chemical.localhost | ✓ |
+| Solar Manufacturing | `solar` | http://solar.localhost | ✓ |
+| Jewellery Manufacturing | `jewellery` | http://jewellery.localhost | ✓ |
+| Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
+| Automobile Dealership | `automobile` | http://automobile.localhost | — |
+| Distribution | `distribution` | http://distribution.localhost | — |
+| Healthcare | `healthcare` | http://healthcare.localhost | — |
 
 ## Quick Start
 
@@ -76,6 +76,8 @@ demostackkit reset garment     # Destroy and rebuild (deterministic)
 demostackkit seed garment      # Re-run seeders
 demostackkit seed garment --phase master       # Master data only
 demostackkit seed garment --phase transactions # Transactions only
+demostackkit up jewellery --currency USD       # Override currency at startup
+demostackkit seed garment --currency INR       # Override currency for seeding
 demostackkit backup garment    # bench backup
 demostackkit restore garment <file>  # bench restore
 demostackkit validate          # Validate all industry configs
@@ -106,6 +108,21 @@ demostackkit up garment
 ```
 
 The active version is stored in `infra/.env` as `ERPNEXT_VERSION`. Docker Compose uses this to pull the correct `frappe/erpnext` image tag automatically on the next `up`.
+
+### Using Different Currencies per Industry
+
+Each industry's default currency is set in its `industry.yaml` under `company.currency`. You can override it at runtime with `--currency` (ISO 4217 code) without touching any config files:
+
+```bash
+# Spin up Jewellery with USD, Garment with INR
+demostackkit up jewellery --currency USD
+demostackkit up garment --currency INR
+
+# Override currency when re-running seeders on an existing site
+demostackkit seed jewellery --currency USD
+```
+
+The override applies to both the ERPNext setup wizard (company default currency) and all seeders.
 
 ### Full Wipe (purge)
 

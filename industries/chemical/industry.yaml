@@ -55,6 +55,7 @@ seed:
     purchase_orders: 30
     production_orders: 20
     stock_entries: 60
+    quality_inspections: 25
   date_range:
     start: "-180d"
     end: "-1d"

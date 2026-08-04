@@ -16,6 +16,7 @@ def up(
     industry: Annotated[str, typer.Argument(help="Industry slug, e.g. garment")],
     detach: Annotated[bool, typer.Option("--detach/--no-detach", "-d", help="Run in background")] = True,
     seed: Annotated[bool, typer.Option("--seed/--no-seed", help="Run seeders after startup")] = True,
+    currency: Annotated[str | None, typer.Option("--currency", help="Override currency ISO 4217 code, e.g. USD, INR")] = None,
 ) -> None:
     """Start the ERPNext demo environment for the given industry."""
     from demostackkit.core.discovery import IndustryRegistry, get_industries_root
@@ -25,6 +26,8 @@ def up(
     industries_root = get_industries_root()
     registry = IndustryRegistry.from_root(industries_root)
     config = registry.get(industry)
+    if currency:
+        config.company.currency = currency
 
     repo_root = industries_root.parent
     compose_file = repo_root / "infra" / "docker-compose.yml"
@@ -65,7 +68,7 @@ def up(
             _fetch_extra_apps(config, bench)
         _create_site_if_needed(config, repo_root)
         console.print(f"[bold cyan]Running seeders...[/bold cyan]")
-        _run_seed(industry, repo_root)
+        _run_seed(industry, repo_root, currency=currency)
 
     console.print(f"\n[bold green]Demo environment ready![/bold green]")
     console.print(f"  URL: [bold]http://{config.site.name}[/bold]")
@@ -207,7 +210,7 @@ def _load_env_file(env_file: Path) -> dict:
     return env_vars
 
 
-def _run_seed(industry: str, repo_root: Path) -> None:
+def _run_seed(industry: str, repo_root: Path, *, currency: str | None = None) -> None:
     """Invoke the seed command programmatically."""
     from demostackkit.cli.commands.seed import _do_seed
-    _do_seed(industry, phase="all", repo_root=repo_root)
+    _do_seed(industry, phase="all", repo_root=repo_root, currency=currency)

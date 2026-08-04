@@ -53,6 +53,7 @@ class SeedVolumes(BaseModel):
     stock_entries: int = Field(default=100, ge=1)
     customers: int = Field(default=20, ge=1)
     suppliers: int = Field(default=15, ge=1)
+    quality_inspections: int = Field(default=30, ge=1)
 
 
 class SeedDateRange(BaseModel):

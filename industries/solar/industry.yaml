@@ -41,6 +41,7 @@ modules:
   - Selling
   - Stock
   - Projects
+  - Manufacturing
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:
@@ -102,3 +103,6 @@ validate:
   required_doctypes:
     - Item Group
     - Warehouse
+    - BOM
+    - Workstation
+    - Operation

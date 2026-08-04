@@ -19,3 +19,6 @@ SLR-BOS-SPD-004,Surge Protection Device,AC Components,Nos,Type 2 surge protectio
 SLR-BAT-LFP-001,LFP Battery 100Ah 48V,Batteries,Nos,Lithium iron phosphate battery,1,45000.00
 SLR-BAT-LFP-002,LFP Battery 200Ah 48V,Batteries,Nos,Large capacity LFP battery pack,1,85000.00
 SLR-BAT-GEL-003,Gel Battery 150Ah,Batteries,Nos,Maintenance-free gel battery,1,18500.00
+SLR-SYS-RTF-5KW,5KW Rooftop Solar System,Finished Goods,Nos,Fully assembled 5kW grid-tie rooftop solar system,1,185000.00
+SLR-SYS-RTF-10KW,10KW Rooftop Solar System,Finished Goods,Nos,Fully assembled 10kW grid-tie rooftop solar system,1,350000.00
+SLR-SYS-GRD-25KW,25KW Ground Mount Solar System,Finished Goods,Nos,Fully assembled 25kW ground-mount solar system,1,850000.00

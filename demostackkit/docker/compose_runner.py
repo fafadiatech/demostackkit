@@ -135,6 +135,11 @@ class ComposeRunner:
         """Pull latest images."""
         self._run(["pull"], stream=True)
 
+    def restart(self, *services: str) -> None:
+        """Restart one or more compose services (all services if none given)."""
+        args = ["restart", *services] if services else ["restart"]
+        self._run(args, stream=True)
+
     def is_running(self, service: str) -> bool:
         """Return True if the named service is currently running."""
         try:

@@ -34,8 +34,10 @@ def install_app(
       # From a local directory on this machine
       demostackkit install-app garment my_app --source local --path /Users/me/projects/my_app
     """
+    from demostackkit.cli.commands.up import _reload_frappe_services
     from demostackkit.core.config import AppEntry
     from demostackkit.core.discovery import IndustryRegistry, get_industries_root
+    from demostackkit.docker.compose_runner import ComposeRunner
     from demostackkit.erpnext.bench import BenchClient
 
     # Construct AppEntry — reuses all Pydantic validation (missing url, missing path, etc.)
@@ -58,4 +60,12 @@ def install_app(
 
     console.print(f"[bold cyan]Installing '{app}' on {config.site.name}...[/bold cyan]")
     bench.install_app(app)
+
+    repo_root = industries_root.parent
+    runner = ComposeRunner(
+        compose_file=repo_root / "infra" / "docker-compose.yml",
+        env_file=repo_root / "infra" / ".env",
+    )
+    _reload_frappe_services(runner)
+
     console.print(f"[bold green]Done. '{app}' installed on {config.site.name}.[/bold green]")

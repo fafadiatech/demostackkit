@@ -15,7 +15,9 @@ def create(
     industry: Annotated[str, typer.Argument(help="Industry slug, e.g. garment")],
 ) -> None:
     """Create the Frappe site for the given industry (without seeding)."""
+    from demostackkit.cli.commands.up import _reload_frappe_services
     from demostackkit.core.discovery import IndustryRegistry, get_industries_root
+    from demostackkit.docker.compose_runner import ComposeRunner
     from demostackkit.erpnext.bench import BenchClient
 
     industries_root = get_industries_root()
@@ -40,5 +42,13 @@ def create(
         db_root_password=db_root_pw,
         install_apps=[a for a in config.required_apps if a != "frappe"] + [e.name for e in config.extra_apps],
     )
+
+    repo_root = industries_root.parent
+    runner = ComposeRunner(
+        compose_file=repo_root / "infra" / "docker-compose.yml",
+        env_file=repo_root / "infra" / ".env",
+    )
+    _reload_frappe_services(runner)
+
     console.print(f"[green]Site created: http://{config.site.name}[/green]")
     console.print(f"Run [bold]demostackkit seed {industry}[/bold] to load demo data.")

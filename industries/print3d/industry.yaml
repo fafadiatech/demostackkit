@@ -24,8 +24,11 @@ extra_apps:
   - name: hrms
     source: frappe
     branch: version-15
+  - name: telephony
+    source: frappe
   - name: helpdesk
     source: frappe
+    branch: v1.28.0
 
 company:
   name: "PrintForge 3D Services Inc"
@@ -75,7 +78,6 @@ users:
     full_name: "Alex Chen"
     roles:
       - Sales Manager
-      - CRM Manager
   - email: "supply@print3d.demo"
     full_name: "Morgan Patel"
     roles:

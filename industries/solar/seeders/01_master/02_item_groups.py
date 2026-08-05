@@ -21,6 +21,10 @@ class ItemGroupSeeder(BaseMasterSeeder):
         groups_json = __import__("json").dumps(_ITEM_GROUPS)
         script = f"""
 import json
+if not frappe.db.exists('Item Group', 'All Item Groups'):
+    frappe.get_doc({{'doctype': 'Item Group', 'item_group_name': 'All Item Groups', 'is_group': 1}}).insert(ignore_permissions=True)
+    frappe.db.commit()
+    print('CREATED: Item Group All Item Groups (root)')
 groups = json.loads('''{groups_json}''')
 for grp in groups:
     if not frappe.db.exists('Item Group', grp['item_group_name']):

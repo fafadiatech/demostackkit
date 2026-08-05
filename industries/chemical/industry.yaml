@@ -24,8 +24,11 @@ extra_apps:
   - name: hrms
     source: frappe
     branch: version-15
+  - name: telephony
+    source: frappe
   - name: helpdesk
     source: frappe
+    branch: v1.28.0
 
 # ── Company ───────────────────────────────────────────────────────────────────
 company:
@@ -94,7 +97,6 @@ users:
     full_name: "Meena Gupta"
     roles:
       - Sales Manager
-      - CRM Manager
   - email: "purchase.manager@chemical.demo"
     full_name: "Arvind Nair"
     roles:

@@ -25,8 +25,11 @@ extra_apps:
   - name: hrms
     source: frappe
     branch: version-15
+  - name: telephony
+    source: frappe
   - name: helpdesk
     source: frappe
+    branch: v1.28.0
 
 company:
   name: "Voltara EV Manufacturing Pvt Ltd"
@@ -80,7 +83,6 @@ users:
     full_name: "Arjun Kapoor"
     roles:
       - Sales Manager
-      - CRM Manager
   - email: "purchase@evmfg.demo"
     full_name: "Neha Joshi"
     roles:

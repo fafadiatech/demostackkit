@@ -19,6 +19,14 @@ required_apps:
   - frappe
   - erpnext
 
+# Extra apps fetched at runtime via bench get-app
+extra_apps:
+  - name: hrms
+    source: frappe
+    branch: version-15
+  - name: helpdesk
+    source: frappe
+
 # ── Company ───────────────────────────────────────────────────────────────────
 company:
   name: "QuickMove Distributors Pvt Ltd"

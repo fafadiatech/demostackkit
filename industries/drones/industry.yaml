@@ -24,6 +24,8 @@ extra_apps:
   - name: hrms
     source: frappe
     branch: version-15
+  - name: helpdesk
+    source: frappe
 
 # ── Company ───────────────────────────────────────────────────────────────────
 company:

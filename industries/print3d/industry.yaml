@@ -19,6 +19,14 @@ required_apps:
   - frappe
   - erpnext
 
+# Extra apps fetched at runtime via bench get-app
+extra_apps:
+  - name: hrms
+    source: frappe
+    branch: version-15
+  - name: helpdesk
+    source: frappe
+
 company:
   name: "PrintForge 3D Services Inc"
   abbr: "PF3"

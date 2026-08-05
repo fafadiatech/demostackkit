@@ -1,0 +1,70 @@
+# Vanilla Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up vanilla
+# URL: http://vanilla.localhost  (admin / admin)
+#
+# Minimal ERPNext environment: company + demo users only.
+# No items, customers, suppliers, or transactions are seeded.
+# Useful as a clean starting point or for demonstrations that
+# need a fresh ERPNext instance with user accounts ready to go.
+
+name: "Vanilla"
+slug: "vanilla"
+version: "1.0.0"
+description: >
+  Minimal ERPNext demo environment with only a company and demo users created.
+  No master data or transactions are seeded. Use this as a clean slate for
+  custom demonstrations or onboarding sessions.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "Acme Corp"
+  abbr: "AC"
+  currency: "USD"
+  country: "United States"
+  fiscal_year_start: "01-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "vanilla.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "America/New_York"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20240101
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "accounts@vanilla.demo"
+    full_name: "Alex Johnson"
+    roles:
+      - Accounts Manager
+  - email: "sales@vanilla.demo"
+    full_name: "Jordan Smith"
+    roles:
+      - Sales Manager
+  - email: "purchase@vanilla.demo"
+    full_name: "Morgan Lee"
+    roles:
+      - Purchase Manager
+  - email: "stock@vanilla.demo"
+    full_name: "Taylor Brown"
+    roles:
+      - Stock Manager

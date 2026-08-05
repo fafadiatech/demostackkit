@@ -36,29 +36,120 @@ demostackkit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | Healthcare | `healthcare` | http://healthcare.localhost | — |
 | Vanilla (clean slate) | `vanilla` | http://vanilla.localhost | — |
 
+### Garment Manufacturing (`garment`)
+
+Alpha Garments Pvt Ltd — apparel manufacturer producing T-shirts, shirts, jeans, jackets, and dresses through a complete cut-make-trim workflow. Includes:
+
+- **7 workstations** — Cutting Table, Sewing Machine, Overlock Machine, Button Machine, Pressing Station, QC Table, Packaging Station
+- **Single CMT routing** — 7 sequential operations totalling ~2.5 hrs per garment
+- **11 finished-goods BOMs** — fabric + thread + trims + packaging per garment type
+- **Quality inspections** — thread count, tensile strength, colour fastness, shrinkage (30 QIs, 85% pass rate)
+- **HR & Payroll enabled** — 20 customers, 15 suppliers, 50 sales orders, 30 purchase orders
+
+### Chemical Manufacturing (`chemical`)
+
+Alpha Chemicals Pvt Ltd — batch-process chemical manufacturer covering raw material procurement, formulation, quality testing, and finished goods dispatch. Includes:
+
+- **Batch production** — manufacture orders against BOMs with raw material consumption by weight and volume
+- **Quality management** — chemical composition, viscosity, pH, and purity inspection parameters
+- **50 sales orders, 30 purchase orders** — industrial buyers and chemical raw material vendors seeded over 180 days
+- **25 quality inspections** across incoming, in-process, and outgoing stages
+
+### Solar Energy (`solar`)
+
+SunPower Solar Pvt Ltd — solar equipment distributor and EPC contractor. Covers panel and inverter procurement, balance-of-system components, battery storage, and project-based customer installations. Includes:
+
+- **Projects module** — project-linked sales orders with milestone billing for installation contracts
+- **BOMs with routing** — panel assembly workstations and operations for system integration
+- **Items across technologies** — monocrystalline panels, string/micro inverters, MPPT charge controllers, lithium battery banks, mounting structures
+- **12 customers, 10 suppliers** — EPC contractors, housing societies, commercial buyers, equipment vendors
+
+### Jewellery Manufacturing (`jewellery`)
+
+GoldStar Jewellers Pvt Ltd — jewellery manufacturer and wholesaler producing gold, silver, diamond, and platinum pieces. Covers precious metal procurement by weight, gemstone inventory, manufacturing orders, and retail/wholesale sales. Includes:
+
+- **Precious metal procurement** — gold alloy, silver granules, platinum by gram and troy oz
+- **Gemstone inventory** — diamonds, rubies, emeralds, sapphires tracked by carat and quality grade
+- **Manufacturing BOMs** — rings, necklaces, bangles, earrings with metal + stone + setting components
+- **50 sales orders** — retail boutiques and wholesale buyers across 180 days
+
+### Drones Manufacturing (`drones`)
+
+SkyForge Drones Pvt Ltd — drone manufacturer covering component procurement, PCB and frame assembly, firmware calibration, flight testing, quality inspection, and dispatch. Includes:
+
+- **Full assembly routing** — from component sourcing through PCB assembly, frame build, calibration, and flight test
+- **Quality inspections** — flight performance, sensor accuracy, communication range, hover stability (25 QIs)
+- **HR & Payroll enabled** — 15 customers, 10 suppliers, 40 sales orders, 25 purchase orders
+- **Featured reports** — Drone Assembly Report, Component Consumption Report
+
+### Crockery Manufacturing (`crockery`)
+
+PotteryPro Ceramics Pvt Ltd — ceramics and crockery manufacturer covering clay procurement, throwing, casting, bisque firing, glazing, and kiln firing. Includes:
+
+- **Multi-stage kiln routing** — throwing/casting → bisque firing → glaze application → glaze firing → QC inspection
+- **Quality inspections** — glaze coverage, dimensional tolerance, chip resistance, colour consistency (20 QIs)
+- **HR & Payroll enabled** — 12 customers, 8 suppliers, 40 sales orders, 20 purchase orders
+- **Featured reports** — Kiln Firing Report, Glaze Consumption Report
+
+### 3D Printing Services (`print3d`)
+
+A 3D print farm (PrintForge 3D Services) taking customer orders for parts printed via FDM (fused deposition modeling) and SLA (stereolithography) technologies. Includes:
+
+- **Printers modelled as workstations** — FDM Printer Bank, SLA Printer Bank, Washing Station, UV Curing Chamber, Post-Processing Bench
+- **Two production routings** — FDM Standard Route (5 steps) and SLA Standard Route (7 steps, adding IPA washing and UV curing)
+- **Material procurement** — filaments (PLA, ABS, PETG, TPU) and resins (standard, engineering, ABS-like) with correct UOM per material (Kg / Litre)
+- **9 finished-goods BOMs** — small/medium/large prototypes, functional parts, display models, each linked to its routing
+- **Quality inspections** — dimensional accuracy (mm), surface roughness Ra (μm), layer adhesion, print completion (%)
+
 ### EV Manufacturing (`evmfg`)
 
-An Indian electric vehicle manufacturer (Voltara EV) producing both electric cars and electric bikes. The central demo story is **shared component procurement** — items like the DC-DC converter, CCS2 charging port, instrument cluster, HV contactor, HV fuse, disc brake assemblies, copper busbars, and thermal pads all appear in BOMs for both vehicle families, naturally driving consolidated purchasing scenarios. Includes:
+Voltara EV Manufacturing Pvt Ltd — Indian EV manufacturer producing both electric cars and electric bikes. The central demo story is **shared component procurement** — the DC-DC converter, CCS2 charging port, instrument cluster, HV contactor, HV fuse, disc brake assemblies, copper busbars, and thermal pads all appear in BOMs for both vehicle families, naturally driving consolidated purchasing scenarios. Includes:
 
 - **3 electric cars** — Sedan (72 kWh dual-motor), SUV (90 kWh dual-motor), Hatchback (54 kWh single-motor)
 - **3 electric bikes** — Sport, City Commuter, Cargo; each using 18650-cell packs and hub motors
 - **Two manufacturing routings** — EV Car Route (9 steps, ~40 hrs) and EV Bike Route (8 steps, ~6.5 hrs)
-- **6 BOMs with 19-21 components each** — car BOMs use 21700 cells + 60 kW PMSM motors; bike BOMs use 18650 cells + 3 kW hub motors
-- **Split sales order generation** — 40% car orders (qty 1–3, ₹12–22 lakh) and 60% bike orders (qty 1–15, ₹80k–1.8 lakh) with different lead times
+- **6 BOMs with 19–21 components each** — car BOMs use 21700 cells + 60 kW PMSM motors; bike BOMs use 18650 cells + 3 kW hub motors
+- **Split sales order generation** — 40% car orders (qty 1–3, ₹12–22 lakh, 30–90 day lead) and 60% bike orders (qty 1–15, ₹80k–1.8 lakh, 7–30 day lead)
 
-### 3D Printing Services (`print3d`)
+### Engineering Procurement & Construction (`epc`)
 
-A 3D print farm that takes customer orders for parts printed via FDM (fused deposition modeling) and SLA (stereolithography) technologies. Includes:
+BuildRight EPC Pvt Ltd — EPC company running project-based operations covering material procurement per site, equipment tracking, sub-contractor billing, and milestone-based customer invoicing. No manufacturing. Includes:
 
-- **Printers modelled as workstations** — FDM Printer Bank, SLA Printer Bank, UV Curing Chamber, Washing Station
-- **Two production routings** — FDM Standard Route (5 steps) and SLA Standard Route (7 steps, including IPA washing and UV curing)
-- **Material procurement** — filaments (PLA, ABS, PETG, TPU) and resins (standard, engineering, ABS-like) with correct UOM per material (Kg / Litre)
-- **9 finished-goods BOMs** — small/medium/large prototypes, functional parts, and display models, each linked to the correct routing
-- **Quality inspections** — dimensional accuracy, surface roughness Ra, layer adhesion, and print completion parameters
+- **Projects module** — project costing, milestone tracking, and material consumption linked per project
+- **Pure procurement + billing** — no BOMs or production orders; workflow is PO → stock → project billing
+- **50 sales orders, 30 purchase orders** — project milestones and material POs over 180 days
+- **Featured reports** — Project Costing Report, Material Procurement Summary
+
+### Automobile Dealership (`automobile`)
+
+AutoDrive Motors Pvt Ltd — automobile dealership and service centre. Vehicle sales, spare parts procurement, lubricants, tyres, and fleet customer management — no manufacturing. Includes:
+
+- **Sales-focused** — vehicles as stock items sold directly; no BOMs or production orders
+- **Spare parts inventory** — multi-category parts catalogue across vehicle makes and models
+- **20 customers, 15 suppliers** — fleet operators, individual buyers, OEM and aftermarket parts vendors
+- **50 sales orders** — vehicle and parts sales with Featured reports: Vehicle Sales Report, Spare Parts Consumption
+
+### FMCG Distribution (`distribution`)
+
+QuickMove Distributors Pvt Ltd — FMCG distributor procuring from brands and fulfilling orders to supermarket chains and retail customers. No manufacturing. Includes:
+
+- **High-volume trade flow** — 50 sales orders, 30 purchase orders across 20 customers and 15 suppliers
+- **Multi-warehouse stock management** — regional warehouses with dispatch area and stock ageing tracking
+- **Order fulfilment focus** — procurement, stock receipts, and delivery notes as the primary workflow
+- **Featured reports** — Stock Ageing, Delivery Note Trends, Purchase Analytics
+
+### Healthcare & Pharma (`healthcare`)
+
+MedCare Healthcare Pvt Ltd — healthcare and pharmaceutical distributor covering medicine procurement, medical device stock, pharmacy dispensing, and hospital supply chain. Includes:
+
+- **Healthcare module enabled** — patient registration, prescriptions, and clinical procedures
+- **Pharma inventory** — medicines tracked by batch and expiry, controlled substance handling
+- **Medical devices** — surgical instruments, diagnostic equipment, PPE alongside medicines
+- **12 customers** — hospitals, clinics, pharmacies, and institutional buyers
 
 ### Vanilla (`vanilla`)
 
-A minimal environment with only a company and demo users created — no master data or transactions are seeded. Use this as a clean slate for custom demonstrations, onboarding sessions, or interactive workshops where the audience populates data live.
+A minimal environment with only a company (Acme Corp) and demo users created — no master data or transactions are seeded. Use this as a clean slate for custom demonstrations, onboarding sessions, or interactive workshops where the audience populates data live.
 
 ```bash
 demostackkit up vanilla

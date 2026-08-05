@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import shutil
-from pathlib import Path
 
 import typer
 from rich.console import Console
@@ -27,21 +26,23 @@ def init(ctx: typer.Context) -> None:
         (infra_dir / d).mkdir(parents=True, exist_ok=True)
 
     if env_target.exists():
-        console.print(f"[yellow]infra/.env already exists[/yellow] — skipping (edit it manually if needed)")
+        console.print(
+            "[yellow]infra/.env already exists[/yellow] — skipping (edit it manually if needed)"
+        )
     elif env_example.exists():
         shutil.copy(env_example, env_target)
-        console.print(f"[green]Created infra/.env from infra/.env.example[/green]")
-        console.print("[bold]Edit infra/.env to set passwords before running 'demostackkit up'[/bold]")
+        console.print("[green]Created infra/.env from infra/.env.example[/green]")
+        console.print(
+            "[bold]Edit infra/.env to set passwords before running 'demostackkit up'[/bold]"
+        )
     else:
         # Write a minimal .env
         env_target.write_text(
-            "DB_ROOT_PASSWORD=erpnext\n"
-            "SITE_ADMIN_PASSWORD=admin\n"
-            "ERPNEXT_VERSION=v15\n",
+            "DB_ROOT_PASSWORD=erpnext\nSITE_ADMIN_PASSWORD=admin\nERPNEXT_VERSION=v15\n",
             encoding="utf-8",
         )
-        console.print(f"[green]Created infra/.env with default values[/green]")
+        console.print("[green]Created infra/.env with default values[/green]")
 
-    console.print(f"\n[cyan]Run:[/cyan] demostackkit list")
-    console.print(f"[cyan]Run:[/cyan] demostackkit doctor")
-    console.print(f"[cyan]Run:[/cyan] demostackkit up <industry>")
+    console.print("\n[cyan]Run:[/cyan] demostackkit list")
+    console.print("[cyan]Run:[/cyan] demostackkit doctor")
+    console.print("[cyan]Run:[/cyan] demostackkit up <industry>")

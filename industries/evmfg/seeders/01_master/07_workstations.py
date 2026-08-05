@@ -14,17 +14,52 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 WORKSTATIONS = [
-    {"workstation_name": "Battery Assembly Station",   "description": "Cell sorting, spot welding and module assembly",             "hour_rate": 800.0},
-    {"workstation_name": "Pack Integration Bay",       "description": "Module stacking, BMS wiring and pack sealing",              "hour_rate": 650.0},
-    {"workstation_name": "Motor Assembly Bay",         "description": "Motor rotor-stator assembly and bearing press-fit",         "hour_rate": 1000.0},
-    {"workstation_name": "Chassis Welding Station",    "description": "MIG and spot welding of steel monocoque and bike frames",   "hour_rate": 700.0},
-    {"workstation_name": "Body Assembly Line",         "description": "Panel fitting, hemming and body-in-white assembly",         "hour_rate": 800.0},
-    {"workstation_name": "Electrical Integration Bay", "description": "Harness routing, connector crimping and HV system wiring",  "hour_rate": 750.0},
-    {"workstation_name": "PDI & Testing Bay",          "description": "Pre-delivery inspection, software flashing and road test",  "hour_rate": 600.0},
-    {"workstation_name": "Final Assembly Bay",         "description": "Trim, glass, seats and final mechanical assembly",          "hour_rate": 900.0},
-    {"workstation_name": "EV Packing Station",         "description": "Protective wrap, crating and dispatch labelling",           "hour_rate": 300.0},
+    {
+        "workstation_name": "Battery Assembly Station",
+        "description": "Cell sorting, spot welding and module assembly",
+        "hour_rate": 800.0,
+    },
+    {
+        "workstation_name": "Pack Integration Bay",
+        "description": "Module stacking, BMS wiring and pack sealing",
+        "hour_rate": 650.0,
+    },
+    {
+        "workstation_name": "Motor Assembly Bay",
+        "description": "Motor rotor-stator assembly and bearing press-fit",
+        "hour_rate": 1000.0,
+    },
+    {
+        "workstation_name": "Chassis Welding Station",
+        "description": "MIG and spot welding of steel monocoque and bike frames",
+        "hour_rate": 700.0,
+    },
+    {
+        "workstation_name": "Body Assembly Line",
+        "description": "Panel fitting, hemming and body-in-white assembly",
+        "hour_rate": 800.0,
+    },
+    {
+        "workstation_name": "Electrical Integration Bay",
+        "description": "Harness routing, connector crimping and HV system wiring",
+        "hour_rate": 750.0,
+    },
+    {
+        "workstation_name": "PDI & Testing Bay",
+        "description": "Pre-delivery inspection, software flashing and road test",
+        "hour_rate": 600.0,
+    },
+    {
+        "workstation_name": "Final Assembly Bay",
+        "description": "Trim, glass, seats and final mechanical assembly",
+        "hour_rate": 900.0,
+    },
+    {
+        "workstation_name": "EV Packing Station",
+        "description": "Protective wrap, crating and dispatch labelling",
+        "hour_rate": 300.0,
+    },
 ]
 
 

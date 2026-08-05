@@ -14,9 +14,17 @@ import yaml
 
 from demostackkit.core.config import IndustryConfig
 
-
 # These industries have their seeder services baked into the master compose file.
-_BUILTIN_INDUSTRIES = {"garment", "chemical", "epc", "solar", "jewellery", "automobile", "distribution", "healthcare"}
+_BUILTIN_INDUSTRIES = {
+    "garment",
+    "chemical",
+    "epc",
+    "solar",
+    "jewellery",
+    "automobile",
+    "distribution",
+    "healthcare",
+}
 
 _ERPNEXT_ENV_ANCHOR = {
     "FRAPPE_SITE_NAME_HEADER": "$$host",
@@ -55,15 +63,15 @@ def build_seeder_service(config: IndustryConfig, industries_root: Path) -> dict:
                 f"{industries_root}:/demostackkit/industries:ro",
                 "logs:/home/frappe/frappe-bench/logs",
             ],
-            "depends_on": {
-                "backend": {"condition": "service_healthy"}
-            },
+            "depends_on": {"backend": {"condition": "service_healthy"}},
             "restart": "no",
         }
     }
 
 
-def write_generated_compose(config: IndustryConfig, industries_root: Path, output_dir: Path) -> Path:
+def write_generated_compose(
+    config: IndustryConfig, industries_root: Path, output_dir: Path
+) -> Path:
     """
     Write a docker-compose override file for the given industry.
 

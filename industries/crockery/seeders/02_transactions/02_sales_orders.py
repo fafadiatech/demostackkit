@@ -7,7 +7,7 @@ Uses deterministic random for reproducibility.
 from __future__ import annotations
 
 import json
-from datetime import date, timedelta
+from datetime import timedelta
 
 from demostackkit.seeder.base import BaseTransactionSeeder
 from demostackkit.seeder.utils import parse_relative_date
@@ -51,18 +51,22 @@ class SalesOrderSeeder(BaseTransactionSeeder):
             for item_code in chosen_items:
                 qty = rng.randint(10, 200)
                 rate = round(rng.uniform(200, 1200), 2)
-                items.append({
-                    "item_code": item_code,
-                    "qty": qty,
-                    "rate": rate,
+                items.append(
+                    {
+                        "item_code": item_code,
+                        "qty": qty,
+                        "rate": rate,
+                        "delivery_date": delivery_date.isoformat(),
+                    }
+                )
+            orders.append(
+                {
+                    "customer": customer,
+                    "transaction_date": order_date.isoformat(),
                     "delivery_date": delivery_date.isoformat(),
-                })
-            orders.append({
-                "customer": customer,
-                "transaction_date": order_date.isoformat(),
-                "delivery_date": delivery_date.isoformat(),
-                "items": items,
-            })
+                    "items": items,
+                }
+            )
 
         orders_json = json.dumps(orders)
         script = f"""
@@ -100,5 +104,3 @@ frappe.db.commit()
 print(f'Sales Orders created: {{created}}')
 """
         self._exec(script, timeout=300)
-
-

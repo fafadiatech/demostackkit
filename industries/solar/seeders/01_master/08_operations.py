@@ -11,14 +11,43 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 OPERATIONS = [
-    {"name": "Panel Layout Planning",          "workstation": "Panel Assembly Bay",       "description": "Plan panel arrangement and mounting positions", "operating_cost": 50.0},
-    {"name": "Panel Mounting",                 "workstation": "Panel Assembly Bay",       "description": "Fix panels to mounting structure using clamps", "operating_cost": 80.0},
-    {"name": "Cable Routing & Crimping",       "workstation": "Cable Management Station", "description": "Route DC/AC cables and crimp MC4 connectors", "operating_cost": 70.0},
-    {"name": "Inverter Installation",          "workstation": "Inverter Mounting Bay",    "description": "Mount inverter, connect strings and AC output", "operating_cost": 100.0},
-    {"name": "System Commissioning & Testing", "workstation": "System Testing Bay",       "description": "String IV testing, grid sync and performance check", "operating_cost": 150.0},
-    {"name": "Solar QC Sign-off",              "workstation": "QC Inspection Station",    "description": "Safety audit, earthing check and customer handover", "operating_cost": 80.0},
+    {
+        "name": "Panel Layout Planning",
+        "workstation": "Panel Assembly Bay",
+        "description": "Plan panel arrangement and mounting positions",
+        "operating_cost": 50.0,
+    },
+    {
+        "name": "Panel Mounting",
+        "workstation": "Panel Assembly Bay",
+        "description": "Fix panels to mounting structure using clamps",
+        "operating_cost": 80.0,
+    },
+    {
+        "name": "Cable Routing & Crimping",
+        "workstation": "Cable Management Station",
+        "description": "Route DC/AC cables and crimp MC4 connectors",
+        "operating_cost": 70.0,
+    },
+    {
+        "name": "Inverter Installation",
+        "workstation": "Inverter Mounting Bay",
+        "description": "Mount inverter, connect strings and AC output",
+        "operating_cost": 100.0,
+    },
+    {
+        "name": "System Commissioning & Testing",
+        "workstation": "System Testing Bay",
+        "description": "String IV testing, grid sync and performance check",
+        "operating_cost": 150.0,
+    },
+    {
+        "name": "Solar QC Sign-off",
+        "workstation": "QC Inspection Station",
+        "description": "Safety audit, earthing check and customer handover",
+        "operating_cost": 80.0,
+    },
 ]
 
 

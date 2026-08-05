@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Annotated, Any, Literal
 
 import yaml
-from pydantic import BaseModel, Field, model_validator, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 SCHEMA_VERSION = "1"
 
@@ -27,7 +27,9 @@ class CompanyConfig(BaseModel):
     abbr: str = Field(min_length=1, max_length=10, description="Company abbreviation (2-10 chars)")
     currency: str = Field(default="USD", description="ISO 4217 currency code")
     country: str = Field(default="United States", description="Country name as per ERPNext list")
-    default_letter_head: str = Field(default="", description="Name of the default letter head document")
+    default_letter_head: str = Field(
+        default="", description="Name of the default letter head document"
+    )
     tax_id: str = Field(default="", description="Demo tax ID / GST number")
     fiscal_year_start: str = Field(
         default="01-01",
@@ -57,7 +59,9 @@ class SeedVolumes(BaseModel):
 
 
 class SeedDateRange(BaseModel):
-    start: str = Field(default="-180d", description="Relative date like -180d or absolute YYYY-MM-DD")
+    start: str = Field(
+        default="-180d", description="Relative date like -180d or absolute YYYY-MM-DD"
+    )
     end: str = Field(default="-1d")
 
 
@@ -130,12 +134,12 @@ class AppEntry(BaseModel):
 
     name: str
     source: Literal["frappe", "github", "local"] = "frappe"
-    url: str | None = None        # required when source="github"
-    branch: str | None = None     # optional for frappe/github; ignored for local
+    url: str | None = None  # required when source="github"
+    branch: str | None = None  # optional for frappe/github; ignored for local
     host_path: str | None = None  # required when source="local" (absolute host path)
 
     @model_validator(mode="after")
-    def validate_source_fields(self) -> "AppEntry":
+    def validate_source_fields(self) -> AppEntry:
         if self.source == "github" and not self.url:
             raise ValueError("url is required when source='github'")
         if self.source == "local" and not self.host_path:
@@ -189,12 +193,14 @@ class IndustryConfig(BaseModel):
     )
 
     # Runtime-injected (not from YAML)
-    industry_dir: Path = Field(default=Path("."), exclude=True, description="Absolute path to industry directory")
+    industry_dir: Path = Field(
+        default=Path("."), exclude=True, description="Absolute path to industry directory"
+    )
 
     model_config = {"populate_by_name": True}
 
     @model_validator(mode="after")
-    def site_name_matches_slug(self) -> "IndustryConfig":
+    def site_name_matches_slug(self) -> IndustryConfig:
         expected = f"{self.slug}.localhost"
         if self.site.name != expected:
             raise ValueError(
@@ -204,7 +210,7 @@ class IndustryConfig(BaseModel):
         return self
 
     @model_validator(mode="after")
-    def validate_extra_apps(self) -> "IndustryConfig":
+    def validate_extra_apps(self) -> IndustryConfig:
         extra_names = [e.name for e in self.extra_apps]
         for name in extra_names:
             if name in _RESERVED_APPS:
@@ -219,7 +225,7 @@ class IndustryConfig(BaseModel):
         return self
 
     @model_validator(mode="after")
-    def no_duplicate_user_emails(self) -> "IndustryConfig":
+    def no_duplicate_user_emails(self) -> IndustryConfig:
         emails = [u.email for u in self.users]
         if len(emails) != len(set(emails)):
             raise ValueError("users list contains duplicate email addresses")
@@ -266,7 +272,8 @@ def load_industry_config(yaml_path: Path) -> IndustryConfig:
     try:
         config = IndustryConfig.model_validate(raw)
     except Exception as exc:
-        errors = [str(e) for e in getattr(exc, "errors", lambda: [str(exc)])()]
+        raw_errors = getattr(exc, "errors", None)
+        errors = [str(e) for e in raw_errors()] if callable(raw_errors) else [str(exc)]
         raise InvalidIndustryConfigError(str(yaml_path), errors) from exc
 
     config.industry_dir = yaml_path.parent

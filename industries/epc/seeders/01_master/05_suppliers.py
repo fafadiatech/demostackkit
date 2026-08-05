@@ -1,7 +1,11 @@
 from __future__ import annotations
-import csv, json
+
+import csv
+import json
 from pathlib import Path
+
 from demostackkit.seeder.base import BaseMasterSeeder
+
 
 class SupplierSeeder(BaseMasterSeeder):
     label = "Suppliers (from CSV)"
@@ -39,6 +43,7 @@ print(f'Suppliers: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=180)
         self.ctx.cache_set("supplier_names", [r["supplier_name"] for r in rows])
+
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
     with open(path, newline="", encoding="utf-8") as f:

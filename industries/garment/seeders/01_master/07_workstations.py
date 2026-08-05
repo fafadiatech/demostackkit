@@ -11,15 +11,42 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 WORKSTATIONS = [
-    {"workstation_name": "Cutting Table", "description": "Fabric spreading and cutting workstation", "hour_rate": 150.0},
-    {"workstation_name": "Sewing Machine", "description": "Industrial lockstitch sewing machine", "hour_rate": 200.0},
-    {"workstation_name": "Overlock Machine", "description": "Industrial overlock / serger machine", "hour_rate": 180.0},
-    {"workstation_name": "Button Machine", "description": "Button attaching and button-hole machine", "hour_rate": 120.0},
-    {"workstation_name": "Pressing Station", "description": "Steam pressing and ironing table", "hour_rate": 100.0},
-    {"workstation_name": "QC Table", "description": "Quality inspection and measurement table", "hour_rate": 120.0},
-    {"workstation_name": "Packaging Station", "description": "Folding, tagging and poly-bagging station", "hour_rate": 80.0},
+    {
+        "workstation_name": "Cutting Table",
+        "description": "Fabric spreading and cutting workstation",
+        "hour_rate": 150.0,
+    },
+    {
+        "workstation_name": "Sewing Machine",
+        "description": "Industrial lockstitch sewing machine",
+        "hour_rate": 200.0,
+    },
+    {
+        "workstation_name": "Overlock Machine",
+        "description": "Industrial overlock / serger machine",
+        "hour_rate": 180.0,
+    },
+    {
+        "workstation_name": "Button Machine",
+        "description": "Button attaching and button-hole machine",
+        "hour_rate": 120.0,
+    },
+    {
+        "workstation_name": "Pressing Station",
+        "description": "Steam pressing and ironing table",
+        "hour_rate": 100.0,
+    },
+    {
+        "workstation_name": "QC Table",
+        "description": "Quality inspection and measurement table",
+        "hour_rate": 120.0,
+    },
+    {
+        "workstation_name": "Packaging Station",
+        "description": "Folding, tagging and poly-bagging station",
+        "hour_rate": 80.0,
+    },
 ]
 
 

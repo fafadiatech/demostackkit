@@ -32,7 +32,9 @@ class CustomerSeeder(BaseMasterSeeder):
         rows_json = json.dumps(rows)
 
         # Collect customer groups used in the CSV so we can ensure they exist.
-        required_groups = sorted({r.get("customer_group", "Commercial") for r in rows if r.get("customer_group")})
+        required_groups = sorted(
+            {r.get("customer_group", "Commercial") for r in rows if r.get("customer_group")}
+        )
         groups_json = json.dumps(required_groups)
 
         script = f"""

@@ -11,13 +11,32 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 WORKSTATIONS = [
-    {"workstation_name": "Panel Assembly Bay",        "description": "Bay for panel unboxing, inspection and layout planning", "hour_rate": 150.0},
-    {"workstation_name": "Cable Management Station",  "description": "DC/AC cable cutting, crimping and routing station", "hour_rate": 120.0},
-    {"workstation_name": "Inverter Mounting Bay",     "description": "Inverter and electrical panel installation bay", "hour_rate": 180.0},
-    {"workstation_name": "System Testing Bay",        "description": "String testing, commissioning and grid synchronisation", "hour_rate": 250.0},
-    {"workstation_name": "QC Inspection Station",     "description": "Pre-handover quality and safety inspection station", "hour_rate": 200.0},
+    {
+        "workstation_name": "Panel Assembly Bay",
+        "description": "Bay for panel unboxing, inspection and layout planning",
+        "hour_rate": 150.0,
+    },
+    {
+        "workstation_name": "Cable Management Station",
+        "description": "DC/AC cable cutting, crimping and routing station",
+        "hour_rate": 120.0,
+    },
+    {
+        "workstation_name": "Inverter Mounting Bay",
+        "description": "Inverter and electrical panel installation bay",
+        "hour_rate": 180.0,
+    },
+    {
+        "workstation_name": "System Testing Bay",
+        "description": "String testing, commissioning and grid synchronisation",
+        "hour_rate": 250.0,
+    },
+    {
+        "workstation_name": "QC Inspection Station",
+        "description": "Pre-handover quality and safety inspection station",
+        "hour_rate": 200.0,
+    },
 ]
 
 

@@ -13,15 +13,42 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 WORKSTATIONS = [
-    {"workstation_name": "FDM Printer Bank",      "description": "Farm of FDM (fused deposition modeling) printers",        "hour_rate": 15.0},
-    {"workstation_name": "SLA Printer Bank",      "description": "Farm of SLA (stereolithography) resin printers",          "hour_rate": 30.0},
-    {"workstation_name": "Post-Processing Bench", "description": "Workbench for support removal and surface finishing",      "hour_rate": 8.0},
-    {"workstation_name": "Washing Station",       "description": "IPA ultrasonic washing unit for SLA parts",               "hour_rate": 5.0},
-    {"workstation_name": "UV Curing Chamber",     "description": "UV curing chamber for SLA photopolymer parts",            "hour_rate": 5.0},
-    {"workstation_name": "QC Inspection Desk",    "description": "Dimensional and visual quality inspection station",        "hour_rate": 8.0},
-    {"workstation_name": "Packing Station",       "description": "Protective packaging and dispatch labelling station",     "hour_rate": 5.0},
+    {
+        "workstation_name": "FDM Printer Bank",
+        "description": "Farm of FDM (fused deposition modeling) printers",
+        "hour_rate": 15.0,
+    },
+    {
+        "workstation_name": "SLA Printer Bank",
+        "description": "Farm of SLA (stereolithography) resin printers",
+        "hour_rate": 30.0,
+    },
+    {
+        "workstation_name": "Post-Processing Bench",
+        "description": "Workbench for support removal and surface finishing",
+        "hour_rate": 8.0,
+    },
+    {
+        "workstation_name": "Washing Station",
+        "description": "IPA ultrasonic washing unit for SLA parts",
+        "hour_rate": 5.0,
+    },
+    {
+        "workstation_name": "UV Curing Chamber",
+        "description": "UV curing chamber for SLA photopolymer parts",
+        "hour_rate": 5.0,
+    },
+    {
+        "workstation_name": "QC Inspection Desk",
+        "description": "Dimensional and visual quality inspection station",
+        "hour_rate": 8.0,
+    },
+    {
+        "workstation_name": "Packing Station",
+        "description": "Protective packaging and dispatch labelling station",
+        "hour_rate": 5.0,
+    },
 ]
 
 

@@ -13,7 +13,7 @@ from demostackkit.seeder.context import build_seed_context
 
 def _make_config(seed: int):
     """Build a minimal IndustryConfig with the given random seed."""
-    from demostackkit.core.config import IndustryConfig, CompanyConfig, SiteConfig, SeedConfig
+    from demostackkit.core.config import CompanyConfig, IndustryConfig, SeedConfig, SiteConfig
 
     return IndustryConfig(
         name="Test",
@@ -54,7 +54,8 @@ class TestDeterministicRandom:
 
     def test_slug_fallback_is_deterministic(self) -> None:
         """When random_seed=0 in config, slug hash is used — must be stable."""
-        from demostackkit.core.config import IndustryConfig, CompanyConfig, SiteConfig, SeedConfig
+        from demostackkit.core.config import CompanyConfig, IndustryConfig, SeedConfig, SiteConfig
+
         config = IndustryConfig(
             name="Test",
             slug="garment",

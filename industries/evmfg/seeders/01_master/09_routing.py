@@ -22,31 +22,66 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
-CAR_ROUTING  = "EV Car Manufacturing Route"
+CAR_ROUTING = "EV Car Manufacturing Route"
 BIKE_ROUTING = "EV Bike Manufacturing Route"
 
 CAR_OPERATIONS = [
-    {"operation": "Chassis & Frame Welding",        "workstation": "Chassis Welding Station",   "time_in_mins": 480},
-    {"operation": "Battery Cell Assembly",          "workstation": "Battery Assembly Station",  "time_in_mins": 300},
-    {"operation": "Battery Pack Integration",       "workstation": "Pack Integration Bay",      "time_in_mins": 120},
-    {"operation": "Motor Assembly",                 "workstation": "Motor Assembly Bay",        "time_in_mins": 240},
-    {"operation": "Body Panel Fitting",             "workstation": "Body Assembly Line",        "time_in_mins": 360},
-    {"operation": "Electrical Systems Integration", "workstation": "Electrical Integration Bay","time_in_mins": 300},
-    {"operation": "Final Assembly & Trim",          "workstation": "Final Assembly Bay",        "time_in_mins": 480},
-    {"operation": "PDI & Road Test",                "workstation": "PDI & Testing Bay",         "time_in_mins": 120},
-    {"operation": "EV Packing & Dispatch",          "workstation": "EV Packing Station",        "time_in_mins": 30},
+    {
+        "operation": "Chassis & Frame Welding",
+        "workstation": "Chassis Welding Station",
+        "time_in_mins": 480,
+    },
+    {
+        "operation": "Battery Cell Assembly",
+        "workstation": "Battery Assembly Station",
+        "time_in_mins": 300,
+    },
+    {
+        "operation": "Battery Pack Integration",
+        "workstation": "Pack Integration Bay",
+        "time_in_mins": 120,
+    },
+    {"operation": "Motor Assembly", "workstation": "Motor Assembly Bay", "time_in_mins": 240},
+    {"operation": "Body Panel Fitting", "workstation": "Body Assembly Line", "time_in_mins": 360},
+    {
+        "operation": "Electrical Systems Integration",
+        "workstation": "Electrical Integration Bay",
+        "time_in_mins": 300,
+    },
+    {
+        "operation": "Final Assembly & Trim",
+        "workstation": "Final Assembly Bay",
+        "time_in_mins": 480,
+    },
+    {"operation": "PDI & Road Test", "workstation": "PDI & Testing Bay", "time_in_mins": 120},
+    {"operation": "EV Packing & Dispatch", "workstation": "EV Packing Station", "time_in_mins": 30},
 ]
 
 BIKE_OPERATIONS = [
-    {"operation": "Chassis & Frame Welding",        "workstation": "Chassis Welding Station",   "time_in_mins": 60},
-    {"operation": "Battery Cell Assembly",          "workstation": "Battery Assembly Station",  "time_in_mins": 90},
-    {"operation": "Battery Pack Integration",       "workstation": "Pack Integration Bay",      "time_in_mins": 45},
-    {"operation": "Motor Assembly",                 "workstation": "Motor Assembly Bay",        "time_in_mins": 60},
-    {"operation": "Electrical Systems Integration", "workstation": "Electrical Integration Bay","time_in_mins": 90},
-    {"operation": "Final Assembly & Trim",          "workstation": "Final Assembly Bay",        "time_in_mins": 60},
-    {"operation": "PDI & Road Test",                "workstation": "PDI & Testing Bay",         "time_in_mins": 30},
-    {"operation": "EV Packing & Dispatch",          "workstation": "EV Packing Station",        "time_in_mins": 15},
+    {
+        "operation": "Chassis & Frame Welding",
+        "workstation": "Chassis Welding Station",
+        "time_in_mins": 60,
+    },
+    {
+        "operation": "Battery Cell Assembly",
+        "workstation": "Battery Assembly Station",
+        "time_in_mins": 90,
+    },
+    {
+        "operation": "Battery Pack Integration",
+        "workstation": "Pack Integration Bay",
+        "time_in_mins": 45,
+    },
+    {"operation": "Motor Assembly", "workstation": "Motor Assembly Bay", "time_in_mins": 60},
+    {
+        "operation": "Electrical Systems Integration",
+        "workstation": "Electrical Integration Bay",
+        "time_in_mins": 90,
+    },
+    {"operation": "Final Assembly & Trim", "workstation": "Final Assembly Bay", "time_in_mins": 60},
+    {"operation": "PDI & Road Test", "workstation": "PDI & Testing Bay", "time_in_mins": 30},
+    {"operation": "EV Packing & Dispatch", "workstation": "EV Packing Station", "time_in_mins": 15},
 ]
 
 
@@ -55,7 +90,7 @@ class RoutingSeeder(BaseMasterSeeder):
     priority = 60
 
     def run(self) -> None:
-        car_ops_json  = json.dumps(CAR_OPERATIONS)
+        car_ops_json = json.dumps(CAR_OPERATIONS)
         bike_ops_json = json.dumps(BIKE_OPERATIONS)
 
         script = f"""
@@ -105,5 +140,5 @@ else:
     print(f'Routing created: {{bike_routing_name}}')
 """
         self._exec(script, timeout=120)
-        self.ctx.cache_set("car_routing",  CAR_ROUTING)
+        self.ctx.cache_set("car_routing", CAR_ROUTING)
         self.ctx.cache_set("bike_routing", BIKE_ROUTING)

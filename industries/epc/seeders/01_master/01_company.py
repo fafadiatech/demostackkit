@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from demostackkit.seeder.base import BaseMasterSeeder
+
 
 class CompanySeeder(BaseMasterSeeder):
     label = "Company & Fiscal Year"

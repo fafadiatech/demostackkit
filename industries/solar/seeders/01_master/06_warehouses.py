@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import json
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 

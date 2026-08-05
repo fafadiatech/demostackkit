@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import csv
 import json
 from pathlib import Path
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 

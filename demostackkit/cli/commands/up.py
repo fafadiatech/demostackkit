@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import time
 from pathlib import Path
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
+
+if TYPE_CHECKING:
+    from demostackkit.docker.compose_runner import ComposeRunner
 
 import typer
 from rich.console import Console
@@ -14,14 +17,21 @@ console = Console()
 
 def up(
     industry: Annotated[str, typer.Argument(help="Industry slug, e.g. garment")],
-    detach: Annotated[bool, typer.Option("--detach/--no-detach", "-d", help="Run in background")] = True,
-    seed: Annotated[bool, typer.Option("--seed/--no-seed", help="Run seeders after startup")] = True,
-    currency: Annotated[str | None, typer.Option("--currency", help="Override currency ISO 4217 code, e.g. USD, INR")] = None,
+    detach: Annotated[
+        bool, typer.Option("--detach/--no-detach", "-d", help="Run in background")
+    ] = True,
+    seed: Annotated[
+        bool, typer.Option("--seed/--no-seed", help="Run seeders after startup")
+    ] = True,
+    currency: Annotated[
+        str | None,
+        typer.Option("--currency", help="Override currency ISO 4217 code, e.g. USD, INR"),
+    ] = None,
 ) -> None:
     """Start the ERPNext demo environment for the given industry."""
     from demostackkit.core.discovery import IndustryRegistry, get_industries_root
-    from demostackkit.docker.compose_runner import ComposeRunner
     from demostackkit.docker.compose_builder import needs_generated_compose, write_generated_compose
+    from demostackkit.docker.compose_runner import ComposeRunner
 
     industries_root = get_industries_root()
     registry = IndustryRegistry.from_root(industries_root)
@@ -65,17 +75,20 @@ def up(
         apps_fetched = False
         if config.extra_apps:
             from demostackkit.erpnext.bench import BenchClient
+
             bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
             apps_fetched = _fetch_extra_apps(config, bench)
         site_created = _create_site_if_needed(config, repo_root)
         if apps_fetched or site_created:
             _reload_frappe_services(runner)
-        console.print(f"[bold cyan]Running seeders...[/bold cyan]")
+        console.print("[bold cyan]Running seeders...[/bold cyan]")
         _run_seed(industry, repo_root, currency=currency)
 
-    console.print(f"\n[bold green]Demo environment ready![/bold green]")
+    console.print("\n[bold green]Demo environment ready![/bold green]")
     console.print(f"  URL: [bold]http://{config.site.name}[/bold]")
-    console.print(f"  Login: [bold]Administrator[/bold] / [bold]{config.site.admin_password}[/bold]")
+    console.print(
+        f"  Login: [bold]Administrator[/bold] / [bold]{config.site.admin_password}[/bold]"
+    )
 
 
 # Frappe process containers that must reload after get-app / new-site / install-app.
@@ -84,13 +97,14 @@ def up(
 _FRAPPE_PROCESS_SERVICES = ("backend", "websocket", "queue-short", "queue-long", "scheduler")
 
 
-def _fetch_extra_apps(config: "object", bench: "object") -> bool:
+def _fetch_extra_apps(config: object, bench: object) -> bool:
     """Fetch all extra_apps into the bench via bench get-app (before site creation).
 
     Returns True if any app was newly fetched.
     """
     from demostackkit.core.config import IndustryConfig
     from demostackkit.erpnext.bench import BenchClient
+
     assert isinstance(config, IndustryConfig)
     assert isinstance(bench, BenchClient)
     fetched = False
@@ -98,32 +112,44 @@ def _fetch_extra_apps(config: "object", bench: "object") -> bool:
         if bench.app_exists_in_bench(entry.name):
             console.print(f"[dim]App '{entry.name}' already in bench, skipping get-app.[/dim]")
             continue
-        console.print(f"[bold cyan]Fetching app '{entry.name}' (source={entry.source})...[/bold cyan]")
+        console.print(
+            f"[bold cyan]Fetching app '{entry.name}' (source={entry.source})...[/bold cyan]"
+        )
         bench.get_app(entry)
         console.print(f"[green]App '{entry.name}' fetched.[/green]")
         fetched = True
     return fetched
 
 
-def _wait_for_backend(runner: "ComposeRunner", timeout_seconds: int = 180) -> None:
+def _wait_for_backend(runner: ComposeRunner, timeout_seconds: int = 180) -> None:
     """Poll until the backend service is healthy."""
     import subprocess
+
     deadline = time.time() + timeout_seconds
     while time.time() < deadline:
         try:
             result = subprocess.run(
-                ["docker", "inspect", "--format={{.State.Health.Status}}", "demostackkit-backend-1"],
-                capture_output=True, text=True, timeout=5,
+                [
+                    "docker",
+                    "inspect",
+                    "--format={{.State.Health.Status}}",
+                    "demostackkit-backend-1",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=5,
             )
             if result.stdout.strip() == "healthy":
                 return
         except Exception:
             pass
         time.sleep(5)
-    console.print("[yellow]Warning: backend did not report healthy within timeout, proceeding anyway[/yellow]")
+    console.print(
+        "[yellow]Warning: backend did not report healthy within timeout, proceeding anyway[/yellow]"
+    )
 
 
-def _reload_frappe_services(runner: "ComposeRunner", timeout_seconds: int = 180) -> None:
+def _reload_frappe_services(runner: ComposeRunner, timeout_seconds: int = 180) -> None:
     """Restart gunicorn/workers so newly created sites and apps are loaded."""
     console.print("[dim]Restarting backend to load new site/apps...[/dim]")
     runner.restart(*_FRAPPE_PROCESS_SERVICES)
@@ -132,12 +158,13 @@ def _reload_frappe_services(runner: "ComposeRunner", timeout_seconds: int = 180)
     runner.restart("frontend")
 
 
-def _create_site_if_needed(config: "object", repo_root: Path) -> bool:
+def _create_site_if_needed(config: object, repo_root: Path) -> bool:
     """Create the Frappe site if it doesn't already exist, then install ERPNext.
 
     Returns True if the site was created (or recreated) in this run.
     """
     import subprocess
+
     from demostackkit.core.config import IndustryConfig
 
     assert isinstance(config, IndustryConfig)
@@ -153,14 +180,21 @@ def _create_site_if_needed(config: "object", repo_root: Path) -> bool:
     # which the ERPNext setup wizard creates. We can't rely on apps.txt (Frappe v15
     # tracks installs in the DB) or site_config.json (created before install-app runs).
     setup_check = subprocess.run(
-        ["docker", "exec", "-e", "FRAPPE_STREAM_LOGGING=1", container,
-         f"{bench_path}/env/bin/python", "-c",
-         (
-             "import frappe; "
-             f"frappe.init(site='{site}', sites_path='{bench_path}/sites'); "
-             "frappe.connect(); "
-             "print('ready' if frappe.db.exists('Item Group', 'All Item Groups') else 'not_ready')"
-         )],
+        [
+            "docker",
+            "exec",
+            "-e",
+            "FRAPPE_STREAM_LOGGING=1",
+            container,
+            f"{bench_path}/env/bin/python",
+            "-c",
+            (
+                "import frappe; "
+                f"frappe.init(site='{site}', sites_path='{bench_path}/sites'); "
+                "frappe.connect(); "
+                "print('ready' if frappe.db.exists('Item Group', 'All Item Groups') else 'not_ready')"
+            ),
+        ],
         capture_output=True,
         text=True,
     )
@@ -198,8 +232,14 @@ def _create_site_if_needed(config: "object", repo_root: Path) -> bool:
     for app_name in apps_to_install:
         console.print(f"[bold cyan]Installing {app_name} on {site}...[/bold cyan]")
         result = subprocess.run(
-            ["docker", "exec", container, "bash", "-c",
-             f"cd {bench_path} && bench --site {site} install-app {app_name}"]
+            [
+                "docker",
+                "exec",
+                container,
+                "bash",
+                "-c",
+                f"cd {bench_path} && bench --site {site} install-app {app_name}",
+            ]
         )
         if result.returncode != 0:
             raise RuntimeError(f"bench install-app {app_name} failed for {site}")
@@ -217,7 +257,7 @@ def _create_site_if_needed(config: "object", repo_root: Path) -> bool:
     wizard_cmd = (
         f"cd {bench_path} && bench --site {site} execute "
         f"frappe.desk.page.setup_wizard.setup_wizard.setup_complete "
-        f"--args \"{wizard_args}\""
+        f'--args "{wizard_args}"'
     )
     result = subprocess.run(["docker", "exec", container, "bash", "-c", wizard_cmd])
     if result.returncode != 0:
@@ -243,4 +283,5 @@ def _load_env_file(env_file: Path) -> dict:
 def _run_seed(industry: str, repo_root: Path, *, currency: str | None = None) -> None:
     """Invoke the seed command programmatically."""
     from demostackkit.cli.commands.seed import _do_seed
+
     _do_seed(industry, phase="all", repo_root=repo_root, currency=currency)

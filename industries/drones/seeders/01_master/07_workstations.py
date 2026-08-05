@@ -11,15 +11,42 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 WORKSTATIONS = [
-    {"workstation_name": "PCB Assembly Station", "description": "PCB soldering and electronics assembly workstation", "hour_rate": 250.0},
-    {"workstation_name": "Frame Assembly Bench", "description": "Drone frame assembly and structural integration bench", "hour_rate": 200.0},
-    {"workstation_name": "Motor & ESC Integration", "description": "Motor mounting and ESC wiring workstation", "hour_rate": 220.0},
-    {"workstation_name": "Firmware & Calibration Desk", "description": "Flight controller firmware flashing and sensor calibration desk", "hour_rate": 300.0},
-    {"workstation_name": "Flight Test Bay", "description": "Indoor flight test bay for tuning and validation", "hour_rate": 350.0},
-    {"workstation_name": "QC Inspection Table", "description": "Quality inspection and measurement table", "hour_rate": 150.0},
-    {"workstation_name": "Packaging & Labelling Station", "description": "Drone packaging, documentation and labelling station", "hour_rate": 100.0},
+    {
+        "workstation_name": "PCB Assembly Station",
+        "description": "PCB soldering and electronics assembly workstation",
+        "hour_rate": 250.0,
+    },
+    {
+        "workstation_name": "Frame Assembly Bench",
+        "description": "Drone frame assembly and structural integration bench",
+        "hour_rate": 200.0,
+    },
+    {
+        "workstation_name": "Motor & ESC Integration",
+        "description": "Motor mounting and ESC wiring workstation",
+        "hour_rate": 220.0,
+    },
+    {
+        "workstation_name": "Firmware & Calibration Desk",
+        "description": "Flight controller firmware flashing and sensor calibration desk",
+        "hour_rate": 300.0,
+    },
+    {
+        "workstation_name": "Flight Test Bay",
+        "description": "Indoor flight test bay for tuning and validation",
+        "hour_rate": 350.0,
+    },
+    {
+        "workstation_name": "QC Inspection Table",
+        "description": "Quality inspection and measurement table",
+        "hour_rate": 150.0,
+    },
+    {
+        "workstation_name": "Packaging & Labelling Station",
+        "description": "Drone packaging, documentation and labelling station",
+        "hour_rate": 100.0,
+    },
 ]
 
 

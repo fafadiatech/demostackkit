@@ -17,7 +17,7 @@ Uses deterministic random (self.ctx.random) for reproducibility.
 from __future__ import annotations
 
 import json
-from datetime import date, timedelta
+from datetime import timedelta
 
 from demostackkit.seeder.base import BaseTransactionSeeder
 from demostackkit.seeder.utils import parse_relative_date
@@ -42,7 +42,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
         rng = self.ctx.random
         company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
         customers = self.ctx.cache_get("customer_names", [])
-        car_items  = self.ctx.cache_get("car_item_codes", [])
+        car_items = self.ctx.cache_get("car_item_codes", [])
         bike_items = self.ctx.cache_get("bike_item_codes", [])
 
         if not customers or (not car_items and not bike_items):
@@ -54,7 +54,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
         span = (end_date - start_date).days
 
         # Split volume: ~40% cars (low-volume, high-value), ~60% bikes
-        n_car_orders  = max(1, int(self.volume * 0.4))
+        n_car_orders = max(1, int(self.volume * 0.4))
         n_bike_orders = self.volume - n_car_orders
 
         orders = []
@@ -69,17 +69,21 @@ class SalesOrderSeeder(BaseTransactionSeeder):
                 continue
             qty = rng.randint(1, 3)
             rate = round(rng.uniform(1_200_000, 2_200_000), 2)
-            orders.append({
-                "customer": customer,
-                "transaction_date": order_date.isoformat(),
-                "delivery_date": delivery_date.isoformat(),
-                "items": [{
-                    "item_code": item_code,
-                    "qty": qty,
-                    "rate": rate,
+            orders.append(
+                {
+                    "customer": customer,
+                    "transaction_date": order_date.isoformat(),
                     "delivery_date": delivery_date.isoformat(),
-                }],
-            })
+                    "items": [
+                        {
+                            "item_code": item_code,
+                            "qty": qty,
+                            "rate": rate,
+                            "delivery_date": delivery_date.isoformat(),
+                        }
+                    ],
+                }
+            )
 
         # Bike SOs: qty 1-15, rate INR 80,000 - 180,000, delivery 7-30 days
         for _ in range(n_bike_orders):
@@ -91,17 +95,21 @@ class SalesOrderSeeder(BaseTransactionSeeder):
                 continue
             qty = rng.randint(1, 15)
             rate = round(rng.uniform(80_000, 180_000), 2)
-            orders.append({
-                "customer": customer,
-                "transaction_date": order_date.isoformat(),
-                "delivery_date": delivery_date.isoformat(),
-                "items": [{
-                    "item_code": item_code,
-                    "qty": qty,
-                    "rate": rate,
+            orders.append(
+                {
+                    "customer": customer,
+                    "transaction_date": order_date.isoformat(),
                     "delivery_date": delivery_date.isoformat(),
-                }],
-            })
+                    "items": [
+                        {
+                            "item_code": item_code,
+                            "qty": qty,
+                            "rate": rate,
+                            "delivery_date": delivery_date.isoformat(),
+                        }
+                    ],
+                }
+            )
 
         # Shuffle to interleave car and bike orders in the timeline
         rng.shuffle(orders)
@@ -142,5 +150,3 @@ frappe.db.commit()
 print(f'Sales Orders created: {{created}}')
 """
         self._exec(script, timeout=300)
-
-

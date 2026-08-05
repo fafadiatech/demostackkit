@@ -4,8 +4,6 @@ Shared pytest fixtures for demostackkit tests.
 
 from __future__ import annotations
 
-import shutil
-import textwrap
 from pathlib import Path
 
 import pytest
@@ -46,9 +44,7 @@ def minimal_industry_dir(tmp_industries_root: Path, minimal_industry_yaml: dict)
     """Create a minimal but valid industry directory."""
     industry_dir = tmp_industries_root / "test"
     industry_dir.mkdir()
-    (industry_dir / "industry.yaml").write_text(
-        yaml.dump(minimal_industry_yaml), encoding="utf-8"
-    )
+    (industry_dir / "industry.yaml").write_text(yaml.dump(minimal_industry_yaml), encoding="utf-8")
     # Create expected data files (empty CSVs)
     data_dir = industry_dir / "data"
     data_dir.mkdir()

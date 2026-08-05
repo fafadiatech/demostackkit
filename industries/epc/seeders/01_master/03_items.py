@@ -1,7 +1,11 @@
 from __future__ import annotations
-import csv, json
+
+import csv
+import json
 from pathlib import Path
+
 from demostackkit.seeder.base import BaseMasterSeeder
+
 
 class ItemSeeder(BaseMasterSeeder):
     label = "Items (from CSV)"
@@ -17,7 +21,9 @@ class ItemSeeder(BaseMasterSeeder):
         csv_path = self.ctx.industry_config.industry_dir / self.ctx.industry_config.data.items
         items = _read_csv(csv_path)
         items_json = json.dumps(items)
-        required_uoms = sorted({row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")})
+        required_uoms = sorted(
+            {row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")}
+        )
         uoms_json = json.dumps(required_uoms)
         script = f"""
 import json
@@ -50,8 +56,31 @@ print(f'Items: created={{created}}, skipped={{skipped}}')
         self._exec(script, timeout=180)
         item_codes = [row["item_code"] for row in items]
         self.ctx.cache_set("item_codes", item_codes)
-        self.ctx.cache_set("fg_item_codes", [row["item_code"] for row in items if row.get("item_group") in ("Electrical Equipment", "Mechanical Equipment") and row.get("is_stock_item") == "1"])
-        self.ctx.cache_set("rm_item_codes", [row["item_code"] for row in items if row.get("item_group") in ("Civil Materials", "Structural Steel", "Pipes & Fittings", "Cables & Wiring", "Instruments & Controls") and row.get("is_stock_item") == "1"])
+        self.ctx.cache_set(
+            "fg_item_codes",
+            [
+                row["item_code"]
+                for row in items
+                if row.get("item_group") in ("Electrical Equipment", "Mechanical Equipment")
+                and row.get("is_stock_item") == "1"
+            ],
+        )
+        self.ctx.cache_set(
+            "rm_item_codes",
+            [
+                row["item_code"]
+                for row in items
+                if row.get("item_group")
+                in (
+                    "Civil Materials",
+                    "Structural Steel",
+                    "Pipes & Fittings",
+                    "Cables & Wiring",
+                    "Instruments & Controls",
+                )
+                and row.get("is_stock_item") == "1"
+            ],
+        )
         self.ctx.cache_set(
             "rm_items",
             [
@@ -61,9 +90,18 @@ print(f'Items: created={{created}}, skipped={{skipped}}')
                     "valuation_rate": float(row.get("valuation_rate", 0)),
                 }
                 for row in items
-                if row.get("item_group") in ("Civil Materials", "Structural Steel", "Pipes & Fittings", "Cables & Wiring", "Instruments & Controls") and row.get("is_stock_item") == "1"
+                if row.get("item_group")
+                in (
+                    "Civil Materials",
+                    "Structural Steel",
+                    "Pipes & Fittings",
+                    "Cables & Wiring",
+                    "Instruments & Controls",
+                )
+                and row.get("is_stock_item") == "1"
             ],
         )
+
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
     with open(path, newline="", encoding="utf-8") as f:

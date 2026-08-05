@@ -10,7 +10,9 @@ class IndustryNotFoundError(DemoStackKitError):
 
     def __init__(self, slug: str) -> None:
         self.slug = slug
-        super().__init__(f"Industry '{slug}' not found. Run 'demostackkit list' to see available industries.")
+        super().__init__(
+            f"Industry '{slug}' not found. Run 'demostackkit list' to see available industries."
+        )
 
 
 class InvalidIndustryConfigError(DemoStackKitError):

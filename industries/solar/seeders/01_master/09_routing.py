@@ -11,16 +11,27 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Solar System Assembly Route"
 
 ROUTING_OPERATIONS = [
-    {"operation": "Panel Layout Planning",          "workstation": "Panel Assembly Bay",       "time_in_mins": 60},
-    {"operation": "Panel Mounting",                 "workstation": "Panel Assembly Bay",       "time_in_mins": 180},
-    {"operation": "Cable Routing & Crimping",       "workstation": "Cable Management Station", "time_in_mins": 120},
-    {"operation": "Inverter Installation",          "workstation": "Inverter Mounting Bay",    "time_in_mins": 90},
-    {"operation": "System Commissioning & Testing", "workstation": "System Testing Bay",       "time_in_mins": 120},
-    {"operation": "Solar QC Sign-off",              "workstation": "QC Inspection Station",    "time_in_mins": 60},
+    {"operation": "Panel Layout Planning", "workstation": "Panel Assembly Bay", "time_in_mins": 60},
+    {"operation": "Panel Mounting", "workstation": "Panel Assembly Bay", "time_in_mins": 180},
+    {
+        "operation": "Cable Routing & Crimping",
+        "workstation": "Cable Management Station",
+        "time_in_mins": 120,
+    },
+    {
+        "operation": "Inverter Installation",
+        "workstation": "Inverter Mounting Bay",
+        "time_in_mins": 90,
+    },
+    {
+        "operation": "System Commissioning & Testing",
+        "workstation": "System Testing Bay",
+        "time_in_mins": 120,
+    },
+    {"operation": "Solar QC Sign-off", "workstation": "QC Inspection Station", "time_in_mins": 60},
 ]
 
 

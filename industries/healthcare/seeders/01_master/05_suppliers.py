@@ -27,7 +27,13 @@ class SupplierSeeder(BaseMasterSeeder):
         rows_json = json.dumps(rows)
 
         # Collect supplier groups used in the CSV so we can ensure they exist.
-        required_groups = sorted({r.get("supplier_group", "All Supplier Groups") for r in rows if r.get("supplier_group")})
+        required_groups = sorted(
+            {
+                r.get("supplier_group", "All Supplier Groups")
+                for r in rows
+                if r.get("supplier_group")
+            }
+        )
         groups_json = json.dumps(required_groups)
 
         script = f"""

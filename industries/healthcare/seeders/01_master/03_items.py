@@ -30,7 +30,9 @@ class ItemSeeder(BaseMasterSeeder):
         items_json = json.dumps(items)
 
         # Collect all UOMs used in the CSV so we can ensure they exist.
-        required_uoms = sorted({row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")})
+        required_uoms = sorted(
+            {row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")}
+        )
         uoms_json = json.dumps(required_uoms)
 
         script = f"""
@@ -72,11 +74,19 @@ print(f'Items: created={{created}}, skipped={{skipped}}')
         self.ctx.cache_set("item_codes", item_codes)
         self.ctx.cache_set(
             "fg_item_codes",
-            [row["item_code"] for row in items if row.get("item_group") in ("Medicines", "Medical Devices")],
+            [
+                row["item_code"]
+                for row in items
+                if row.get("item_group") in ("Medicines", "Medical Devices")
+            ],
         )
         self.ctx.cache_set(
             "rm_item_codes",
-            [row["item_code"] for row in items if row.get("item_group") in ("Surgical Supplies", "Hospital Consumables")],
+            [
+                row["item_code"]
+                for row in items
+                if row.get("item_group") in ("Surgical Supplies", "Hospital Consumables")
+            ],
         )
         self.ctx.cache_set(
             "rm_items",

@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import json
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 
@@ -15,7 +17,10 @@ class WarehouseSeeder(BaseMasterSeeder):
             {"warehouse_name": "Cold Storage", "parent_warehouse": f"All Warehouses - {abbr}"},
             {"warehouse_name": "Dispatch Bay", "parent_warehouse": f"All Warehouses - {abbr}"},
             {"warehouse_name": "Returns Area", "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Damaged Goods Store", "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Damaged Goods Store",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
             {"warehouse_name": "Staging Area", "parent_warehouse": f"All Warehouses - {abbr}"},
         ]
         wh_json = json.dumps(warehouses)

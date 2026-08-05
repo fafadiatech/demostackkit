@@ -13,16 +13,55 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 OPERATIONS = [
-    {"name": "FDM Printing",        "workstation": "FDM Printer Bank",      "description": "Print part layer-by-layer using fused deposition modeling",  "operating_cost": 15.0},
-    {"name": "SLA Printing",        "workstation": "SLA Printer Bank",      "description": "Print high-detail part using stereolithography resin",       "operating_cost": 30.0},
-    {"name": "Support Removal",     "workstation": "Post-Processing Bench", "description": "Remove support structures from printed part",                "operating_cost": 8.0},
-    {"name": "IPA Washing",         "workstation": "Washing Station",       "description": "Wash SLA part in isopropyl alcohol to remove uncured resin", "operating_cost": 5.0},
-    {"name": "UV Curing",           "workstation": "UV Curing Chamber",     "description": "Post-cure SLA part under UV light for full strength",        "operating_cost": 5.0},
-    {"name": "Sanding & Finishing", "workstation": "Post-Processing Bench", "description": "Sand and smooth part surface to required finish",            "operating_cost": 8.0},
-    {"name": "Print QC Inspection", "workstation": "QC Inspection Desk",   "description": "Dimensional check and visual inspection of finished part",   "operating_cost": 8.0},
-    {"name": "Packing & Dispatch",  "workstation": "Packing Station",       "description": "Wrap, box and label part for customer dispatch",             "operating_cost": 5.0},
+    {
+        "name": "FDM Printing",
+        "workstation": "FDM Printer Bank",
+        "description": "Print part layer-by-layer using fused deposition modeling",
+        "operating_cost": 15.0,
+    },
+    {
+        "name": "SLA Printing",
+        "workstation": "SLA Printer Bank",
+        "description": "Print high-detail part using stereolithography resin",
+        "operating_cost": 30.0,
+    },
+    {
+        "name": "Support Removal",
+        "workstation": "Post-Processing Bench",
+        "description": "Remove support structures from printed part",
+        "operating_cost": 8.0,
+    },
+    {
+        "name": "IPA Washing",
+        "workstation": "Washing Station",
+        "description": "Wash SLA part in isopropyl alcohol to remove uncured resin",
+        "operating_cost": 5.0,
+    },
+    {
+        "name": "UV Curing",
+        "workstation": "UV Curing Chamber",
+        "description": "Post-cure SLA part under UV light for full strength",
+        "operating_cost": 5.0,
+    },
+    {
+        "name": "Sanding & Finishing",
+        "workstation": "Post-Processing Bench",
+        "description": "Sand and smooth part surface to required finish",
+        "operating_cost": 8.0,
+    },
+    {
+        "name": "Print QC Inspection",
+        "workstation": "QC Inspection Desk",
+        "description": "Dimensional check and visual inspection of finished part",
+        "operating_cost": 8.0,
+    },
+    {
+        "name": "Packing & Dispatch",
+        "workstation": "Packing Station",
+        "description": "Wrap, box and label part for customer dispatch",
+        "operating_cost": 5.0,
+    },
 ]
 
 

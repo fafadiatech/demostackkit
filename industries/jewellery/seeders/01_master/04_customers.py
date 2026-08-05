@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import csv
 import json
 from pathlib import Path
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 
@@ -19,7 +21,9 @@ class CustomerSeeder(BaseMasterSeeder):
         csv_path = self.ctx.industry_config.industry_dir / self.ctx.industry_config.data.customers
         rows = _read_csv(csv_path)
         rows_json = json.dumps(rows)
-        required_groups = sorted({r.get("customer_group", "Commercial") for r in rows if r.get("customer_group")})
+        required_groups = sorted(
+            {r.get("customer_group", "Commercial") for r in rows if r.get("customer_group")}
+        )
         groups_json = json.dumps(required_groups)
         script = f"""
 import json

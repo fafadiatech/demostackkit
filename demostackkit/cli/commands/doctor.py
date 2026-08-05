@@ -7,7 +7,6 @@ import shutil
 import socket
 import subprocess
 import sys
-from pathlib import Path
 
 from rich.console import Console
 from rich.table import Table
@@ -25,12 +24,22 @@ CheckResult = tuple[bool, str, str]  # (ok, label, detail)
 
 def _check_docker() -> CheckResult:
     if not shutil.which("docker"):
-        return False, "Docker Engine", "Not found in PATH. Install from https://docs.docker.com/get-docker/"
+        return (
+            False,
+            "Docker Engine",
+            "Not found in PATH. Install from https://docs.docker.com/get-docker/",
+        )
     try:
-        out = subprocess.check_output(["docker", "version", "--format", "{{.Server.Version}}"], text=True).strip()
+        out = subprocess.check_output(
+            ["docker", "version", "--format", "{{.Server.Version}}"], text=True
+        ).strip()
         parts = tuple(int(x) for x in out.split(".")[:3])
         if parts < _MIN_DOCKER_VERSION:
-            return False, "Docker Engine", f"Found {out}, need >= {'.'.join(map(str, _MIN_DOCKER_VERSION))}"
+            return (
+                False,
+                "Docker Engine",
+                f"Found {out}, need >= {'.'.join(map(str, _MIN_DOCKER_VERSION))}",
+            )
         return True, "Docker Engine", f"v{out}"
     except Exception as exc:
         return False, "Docker Engine", f"Cannot query version: {exc}"
@@ -38,10 +47,16 @@ def _check_docker() -> CheckResult:
 
 def _check_compose() -> CheckResult:
     try:
-        out = subprocess.check_output(["docker", "compose", "version", "--short"], text=True).strip()
+        out = subprocess.check_output(
+            ["docker", "compose", "version", "--short"], text=True
+        ).strip()
         parts = tuple(int(x) for x in out.lstrip("v").split(".")[:3])
         if parts < _MIN_COMPOSE_VERSION:
-            return False, "Docker Compose", f"Found {out}, need >= {'.'.join(map(str, _MIN_COMPOSE_VERSION))}"
+            return (
+                False,
+                "Docker Compose",
+                f"Found {out}, need >= {'.'.join(map(str, _MIN_COMPOSE_VERSION))}",
+            )
         return True, "Docker Compose", f"v{out}"
     except Exception as exc:
         return False, "Docker Compose", f"Cannot query version: {exc}"
@@ -50,15 +65,20 @@ def _check_compose() -> CheckResult:
 def _check_python() -> CheckResult:
     ver = sys.version_info[:2]
     if ver < _MIN_PYTHON:
-        return False, "Python", f"Found {'.'.join(map(str, ver))}, need >= {'.'.join(map(str, _MIN_PYTHON))}"
+        return (
+            False,
+            "Python",
+            f"Found {'.'.join(map(str, ver))}, need >= {'.'.join(map(str, _MIN_PYTHON))}",
+        )
     return True, "Python", f"{sys.version.split()[0]}"
 
 
 def _check_disk() -> CheckResult:
     try:
         import shutil as _shutil
+
         total, used, free = _shutil.disk_usage("/")
-        free_gb = free / 1024 ** 3
+        free_gb = free / 1024**3
         if free_gb < _MIN_DISK_GB:
             return False, "Disk Space", f"{free_gb:.1f} GB free (need >= {_MIN_DISK_GB} GB)"
         return True, "Disk Space", f"{free_gb:.1f} GB free"
@@ -70,14 +90,15 @@ def _check_ram() -> CheckResult:
     try:
         if platform.system() == "Darwin":
             import subprocess
+
             out = subprocess.check_output(["sysctl", "-n", "hw.memsize"], text=True).strip()
-            ram_gb = int(out) / 1024 ** 3
+            ram_gb = int(out) / 1024**3
         else:
             with open("/proc/meminfo") as f:
                 for line in f:
                     if line.startswith("MemTotal"):
                         ram_kb = int(line.split()[1])
-                        ram_gb = ram_kb / 1024 ** 2
+                        ram_gb = ram_kb / 1024**2
                         break
                 else:
                     return True, "RAM", "Cannot read /proc/meminfo"
@@ -101,6 +122,7 @@ def _check_port(port: int, label: str) -> CheckResult:
 
 def _check_env_file() -> CheckResult:
     from demostackkit.core.discovery import get_industries_root
+
     env_path = get_industries_root().parent / "infra" / ".env"
     if env_path.exists():
         return True, ".env file", str(env_path)
@@ -111,12 +133,17 @@ def _check_env_file() -> CheckResult:
 
 def _check_industries() -> CheckResult:
     from demostackkit.core.discovery import IndustryRegistry, get_industries_root
+
     root = get_industries_root()
     registry = IndustryRegistry.from_root(root, skip_invalid=True)
     n = len(registry)
     errors = registry.errors()
     if errors:
-        return False, "Industry Configs", f"{n} valid, {len(errors)} invalid: {', '.join(errors.keys())}"
+        return (
+            False,
+            "Industry Configs",
+            f"{n} valid, {len(errors)} invalid: {', '.join(errors.keys())}",
+        )
     return True, "Industry Configs", f"{n} valid"
 
 
@@ -152,5 +179,7 @@ def doctor() -> None:
     if all_ok:
         console.print("\n[bold green]All checks passed. Ready to run demostackkit.[/bold green]")
     else:
-        console.print("\n[bold red]Some checks failed. Fix the issues above before continuing.[/bold red]")
+        console.print(
+            "\n[bold red]Some checks failed. Fix the issues above before continuing.[/bold red]"
+        )
         raise SystemExit(1)

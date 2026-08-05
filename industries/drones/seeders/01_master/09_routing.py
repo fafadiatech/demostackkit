@@ -11,17 +11,32 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Drone Standard Route"
 
 ROUTING_OPERATIONS = [
-    {"operation": "PCB Soldering & Testing",   "workstation": "PCB Assembly Station",        "time_in_mins": 45},
-    {"operation": "Frame Assembly",             "workstation": "Frame Assembly Bench",         "time_in_mins": 60},
-    {"operation": "Motor & ESC Integration",   "workstation": "Motor & ESC Integration",      "time_in_mins": 30},
-    {"operation": "Firmware Flash & Calibration", "workstation": "Firmware & Calibration Desk", "time_in_mins": 40},
-    {"operation": "Test Flight & Tuning",      "workstation": "Flight Test Bay",              "time_in_mins": 30},
-    {"operation": "QC Final Inspection",       "workstation": "QC Inspection Table",          "time_in_mins": 20},
-    {"operation": "Packaging & Documentation", "workstation": "Packaging & Labelling Station", "time_in_mins": 10},
+    {
+        "operation": "PCB Soldering & Testing",
+        "workstation": "PCB Assembly Station",
+        "time_in_mins": 45,
+    },
+    {"operation": "Frame Assembly", "workstation": "Frame Assembly Bench", "time_in_mins": 60},
+    {
+        "operation": "Motor & ESC Integration",
+        "workstation": "Motor & ESC Integration",
+        "time_in_mins": 30,
+    },
+    {
+        "operation": "Firmware Flash & Calibration",
+        "workstation": "Firmware & Calibration Desk",
+        "time_in_mins": 40,
+    },
+    {"operation": "Test Flight & Tuning", "workstation": "Flight Test Bay", "time_in_mins": 30},
+    {"operation": "QC Final Inspection", "workstation": "QC Inspection Table", "time_in_mins": 20},
+    {
+        "operation": "Packaging & Documentation",
+        "workstation": "Packaging & Labelling Station",
+        "time_in_mins": 10,
+    },
 ]
 
 

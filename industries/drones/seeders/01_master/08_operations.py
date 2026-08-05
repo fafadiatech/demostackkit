@@ -11,15 +11,49 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 OPERATIONS = [
-    {"name": "PCB Soldering & Testing", "workstation": "PCB Assembly Station", "description": "Solder and test all PCB assemblies and electronics", "operating_cost": 120.0},
-    {"name": "Frame Assembly", "workstation": "Frame Assembly Bench", "description": "Assemble drone frame, arms and structural components", "operating_cost": 100.0},
-    {"name": "Motor & ESC Integration", "workstation": "Motor & ESC Integration", "description": "Mount motors and wire electronic speed controllers", "operating_cost": 110.0},
-    {"name": "Firmware Flash & Calibration", "workstation": "Firmware & Calibration Desk", "description": "Flash flight controller firmware and calibrate all sensors", "operating_cost": 150.0},
-    {"name": "Test Flight & Tuning", "workstation": "Flight Test Bay", "description": "Conduct test flights and tune PID parameters", "operating_cost": 200.0},
-    {"name": "QC Final Inspection", "workstation": "QC Inspection Table", "description": "Final quality inspection of completed drone", "operating_cost": 80.0},
-    {"name": "Packaging & Documentation", "workstation": "Packaging & Labelling Station", "description": "Pack drone with accessories and prepare documentation", "operating_cost": 50.0},
+    {
+        "name": "PCB Soldering & Testing",
+        "workstation": "PCB Assembly Station",
+        "description": "Solder and test all PCB assemblies and electronics",
+        "operating_cost": 120.0,
+    },
+    {
+        "name": "Frame Assembly",
+        "workstation": "Frame Assembly Bench",
+        "description": "Assemble drone frame, arms and structural components",
+        "operating_cost": 100.0,
+    },
+    {
+        "name": "Motor & ESC Integration",
+        "workstation": "Motor & ESC Integration",
+        "description": "Mount motors and wire electronic speed controllers",
+        "operating_cost": 110.0,
+    },
+    {
+        "name": "Firmware Flash & Calibration",
+        "workstation": "Firmware & Calibration Desk",
+        "description": "Flash flight controller firmware and calibrate all sensors",
+        "operating_cost": 150.0,
+    },
+    {
+        "name": "Test Flight & Tuning",
+        "workstation": "Flight Test Bay",
+        "description": "Conduct test flights and tune PID parameters",
+        "operating_cost": 200.0,
+    },
+    {
+        "name": "QC Final Inspection",
+        "workstation": "QC Inspection Table",
+        "description": "Final quality inspection of completed drone",
+        "operating_cost": 80.0,
+    },
+    {
+        "name": "Packaging & Documentation",
+        "workstation": "Packaging & Labelling Station",
+        "description": "Pack drone with accessories and prepare documentation",
+        "operating_cost": 50.0,
+    },
 ]
 
 

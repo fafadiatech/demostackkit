@@ -7,8 +7,7 @@ All operations are idempotent — safe to run multiple times.
 
 from __future__ import annotations
 
-import json
-from demostackkit.seeder.base import BaseMasterSeeder, SeedContext
+from demostackkit.seeder.base import BaseMasterSeeder
 
 
 class CompanySeeder(BaseMasterSeeder):
@@ -51,4 +50,3 @@ frappe.db.commit()
         self.ctx.cache_set("company_name", company.name)
         self.ctx.cache_set("company_abbr", company.abbr)
         self.ctx.cache_set("currency", company.currency)
-

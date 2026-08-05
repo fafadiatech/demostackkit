@@ -11,16 +11,15 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Jewellery Standard Route"
 
 ROUTING_OPERATIONS = [
-    {"operation": "Metal Melting",         "workstation": "Melting Furnace",    "time_in_mins": 45},
-    {"operation": "Wax Casting",           "workstation": "Casting Machine",    "time_in_mins": 90},
-    {"operation": "Filing & Shaping",      "workstation": "Filing Bench",       "time_in_mins": 60},
-    {"operation": "Stone Setting",         "workstation": "Stone Setting Bench","time_in_mins": 30},
-    {"operation": "Polishing & Finishing", "workstation": "Polishing Machine",  "time_in_mins": 20},
-    {"operation": "Quality Hallmarking",   "workstation": "QC Station",         "time_in_mins": 15},
+    {"operation": "Metal Melting", "workstation": "Melting Furnace", "time_in_mins": 45},
+    {"operation": "Wax Casting", "workstation": "Casting Machine", "time_in_mins": 90},
+    {"operation": "Filing & Shaping", "workstation": "Filing Bench", "time_in_mins": 60},
+    {"operation": "Stone Setting", "workstation": "Stone Setting Bench", "time_in_mins": 30},
+    {"operation": "Polishing & Finishing", "workstation": "Polishing Machine", "time_in_mins": 20},
+    {"operation": "Quality Hallmarking", "workstation": "QC Station", "time_in_mins": 15},
 ]
 
 

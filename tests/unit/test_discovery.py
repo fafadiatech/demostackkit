@@ -16,12 +16,22 @@ from demostackkit.core.exceptions import IndustryNotFoundError
 def _make_industry(root: Path, slug: str, name: str = "Test") -> Path:
     d = root / slug
     d.mkdir(parents=True)
-    (d / "industry.yaml").write_text(yaml.dump({
-        "name": name,
-        "slug": slug,
-        "company": {"name": f"{name} Co", "abbr": slug[:3].upper(), "currency": "USD", "country": "United States"},
-        "site": {"name": f"{slug}.localhost"},
-    }), encoding="utf-8")
+    (d / "industry.yaml").write_text(
+        yaml.dump(
+            {
+                "name": name,
+                "slug": slug,
+                "company": {
+                    "name": f"{name} Co",
+                    "abbr": slug[:3].upper(),
+                    "currency": "USD",
+                    "country": "United States",
+                },
+                "site": {"name": f"{slug}.localhost"},
+            }
+        ),
+        encoding="utf-8",
+    )
     return d
 
 

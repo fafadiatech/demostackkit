@@ -11,15 +11,49 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 OPERATIONS = [
-    {"name": "Metal Melting",        "workstation": "Melting Furnace",    "description": "Melt and alloy precious metals to required karat", "operating_cost": 200.0},
-    {"name": "Rolling & Drawing",    "workstation": "Rolling Mill",        "description": "Roll metal into sheets or draw into wire", "operating_cost": 120.0},
-    {"name": "Wax Casting",          "workstation": "Casting Machine",     "description": "Investment casting from wax model", "operating_cost": 160.0},
-    {"name": "Filing & Shaping",     "workstation": "Filing Bench",        "description": "Hand file, shape and assemble components", "operating_cost": 140.0},
-    {"name": "Stone Setting",        "workstation": "Stone Setting Bench", "description": "Set gemstones using prong, bezel or pave technique", "operating_cost": 250.0},
-    {"name": "Polishing & Finishing","workstation": "Polishing Machine",   "description": "Polish, buff and rhodium plate finished piece", "operating_cost": 100.0},
-    {"name": "Quality Hallmarking",  "workstation": "QC Station",          "description": "Inspect, weigh, hallmark and certify finished jewellery", "operating_cost": 80.0},
+    {
+        "name": "Metal Melting",
+        "workstation": "Melting Furnace",
+        "description": "Melt and alloy precious metals to required karat",
+        "operating_cost": 200.0,
+    },
+    {
+        "name": "Rolling & Drawing",
+        "workstation": "Rolling Mill",
+        "description": "Roll metal into sheets or draw into wire",
+        "operating_cost": 120.0,
+    },
+    {
+        "name": "Wax Casting",
+        "workstation": "Casting Machine",
+        "description": "Investment casting from wax model",
+        "operating_cost": 160.0,
+    },
+    {
+        "name": "Filing & Shaping",
+        "workstation": "Filing Bench",
+        "description": "Hand file, shape and assemble components",
+        "operating_cost": 140.0,
+    },
+    {
+        "name": "Stone Setting",
+        "workstation": "Stone Setting Bench",
+        "description": "Set gemstones using prong, bezel or pave technique",
+        "operating_cost": 250.0,
+    },
+    {
+        "name": "Polishing & Finishing",
+        "workstation": "Polishing Machine",
+        "description": "Polish, buff and rhodium plate finished piece",
+        "operating_cost": 100.0,
+    },
+    {
+        "name": "Quality Hallmarking",
+        "workstation": "QC Station",
+        "description": "Inspect, weigh, hallmark and certify finished jewellery",
+        "operating_cost": 80.0,
+    },
 ]
 
 

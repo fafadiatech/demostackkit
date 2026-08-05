@@ -15,7 +15,6 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Jewellery Standard Route"
 
 # Each BOM: finished jewellery item → raw materials (metals + gems)
@@ -45,8 +44,8 @@ BOMS = [
         "item": "JWL-GLD-RNG-004",  # 18K Gold Diamond Ring (~4g gold + 0.5ct diamond)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-18K-002", "qty": 4.0,  "uom": "Gram",  "rate": 4800.0},
-            {"item_code": "RM-DMD-RND-004", "qty": 0.5,  "uom": "Carat", "rate": 25000.0},
+            {"item_code": "RM-GLD-18K-002", "qty": 4.0, "uom": "Gram", "rate": 4800.0},
+            {"item_code": "RM-DMD-RND-004", "qty": 0.5, "uom": "Carat", "rate": 25000.0},
         ],
     },
     {
@@ -95,16 +94,16 @@ BOMS = [
         "item": "JWL-DMD-EAR-002",  # Diamond Stud Earrings 0.3ct (~2g gold + 2× 0.15ct)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-18K-002", "qty": 2.0,  "uom": "Gram",  "rate": 4800.0},
-            {"item_code": "RM-DMD-RND-004", "qty": 0.3,  "uom": "Carat", "rate": 25000.0},
+            {"item_code": "RM-GLD-18K-002", "qty": 2.0, "uom": "Gram", "rate": 4800.0},
+            {"item_code": "RM-DMD-RND-004", "qty": 0.3, "uom": "Carat", "rate": 25000.0},
         ],
     },
     {
         "item": "JWL-DMD-PDN-003",  # Diamond Pendant 0.2ct (~3g gold + 0.2ct)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-18K-002", "qty": 3.0,  "uom": "Gram",  "rate": 4800.0},
-            {"item_code": "RM-DMD-RND-004", "qty": 0.2,  "uom": "Carat", "rate": 25000.0},
+            {"item_code": "RM-GLD-18K-002", "qty": 3.0, "uom": "Gram", "rate": 4800.0},
+            {"item_code": "RM-DMD-RND-004", "qty": 0.2, "uom": "Carat", "rate": 25000.0},
         ],
     },
 ]

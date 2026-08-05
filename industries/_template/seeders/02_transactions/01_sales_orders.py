@@ -39,13 +39,15 @@ class SalesOrderSeeder(BaseTransactionSeeder):
         for _ in range(self.volume):
             order_date = today - timedelta(days=rng.randint(1, 180))
             delivery_date = order_date + timedelta(days=rng.randint(14, 45))
-            orders.append({
-                "customer": rng.choice(customers),
-                "transaction_date": order_date.isoformat(),
-                "delivery_date": delivery_date.isoformat(),
-                "rate": round(rng.uniform(100, 5000), 2),
-                "qty": rng.randint(10, 100),
-            })
+            orders.append(
+                {
+                    "customer": rng.choice(customers),
+                    "transaction_date": order_date.isoformat(),
+                    "delivery_date": delivery_date.isoformat(),
+                    "rate": round(rng.uniform(100, 5000), 2),
+                    "qty": rng.randint(10, 100),
+                }
+            )
 
         orders_json = json.dumps(orders)
         script = f"""

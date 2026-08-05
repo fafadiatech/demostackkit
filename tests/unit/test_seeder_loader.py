@@ -12,15 +12,20 @@ import pytest
 from demostackkit.seeder.loader import discover_seeders
 
 
-def _write_seeder(path: Path, class_name: str, base: str = "BaseMasterSeeder", priority: int = 100) -> None:
+def _write_seeder(
+    path: Path, class_name: str, base: str = "BaseMasterSeeder", priority: int = 100
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(textwrap.dedent(f"""
+    path.write_text(
+        textwrap.dedent(f"""
         from demostackkit.seeder.base import {base}
         class {class_name}({base}):
             label = "{class_name}"
             priority = {priority}
             def run(self): pass
-    """), encoding="utf-8")
+    """),
+        encoding="utf-8",
+    )
 
 
 @pytest.mark.unit
@@ -74,5 +79,6 @@ class TestDiscoverSeeders:
         _write_seeder(industry_dir / "seeders" / "01_master" / "concrete.py", "ConcreteSeeder")
         classes = discover_seeders(industry_dir)
         from demostackkit.seeder.base import BaseMasterSeeder, BaseSeeder
+
         for cls in classes:
             assert cls not in (BaseMasterSeeder, BaseSeeder)

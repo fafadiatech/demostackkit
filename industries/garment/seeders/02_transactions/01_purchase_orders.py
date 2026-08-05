@@ -8,7 +8,7 @@ Running `demostackkit reset garment` always produces identical POs.
 from __future__ import annotations
 
 import json
-from datetime import date, timedelta
+from datetime import timedelta
 
 from demostackkit.seeder.base import BaseTransactionSeeder
 from demostackkit.seeder.utils import parse_relative_date
@@ -50,19 +50,23 @@ class PurchaseOrderSeeder(BaseTransactionSeeder):
             chosen = rng.sample(rm_items, min(n_items, len(rm_items)))
             items = []
             for rm in chosen:
-                items.append({
-                    "item_code": rm["item_code"],
-                    "qty": rng.randint(50, 500),
-                    "rate": round(rm["valuation_rate"] * rng.uniform(0.88, 1.12), 2),
-                    "uom": rm["stock_uom"],
+                items.append(
+                    {
+                        "item_code": rm["item_code"],
+                        "qty": rng.randint(50, 500),
+                        "rate": round(rm["valuation_rate"] * rng.uniform(0.88, 1.12), 2),
+                        "uom": rm["stock_uom"],
+                        "schedule_date": required_date.isoformat(),
+                    }
+                )
+            orders.append(
+                {
+                    "supplier": supplier,
+                    "transaction_date": order_date.isoformat(),
                     "schedule_date": required_date.isoformat(),
-                })
-            orders.append({
-                "supplier": supplier,
-                "transaction_date": order_date.isoformat(),
-                "schedule_date": required_date.isoformat(),
-                "items": items,
-            })
+                    "items": items,
+                }
+            )
 
         orders_json = json.dumps(orders)
         script = f"""

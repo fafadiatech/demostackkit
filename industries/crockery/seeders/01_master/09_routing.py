@@ -11,18 +11,29 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Crockery Standard Route"
 
 ROUTING_OPERATIONS = [
-    {"operation": "Clay Preparation & Wedging", "workstation": "Throwing & Casting Station",  "time_in_mins": 20},
-    {"operation": "Throwing or Casting",        "workstation": "Throwing & Casting Station",  "time_in_mins": 45},
-    {"operation": "Trimming & Drying",          "workstation": "Trimming & Finishing Bench",  "time_in_mins": 30},
-    {"operation": "Bisque Firing",              "workstation": "Bisque Kiln",                 "time_in_mins": 480},
-    {"operation": "Glazing",                    "workstation": "Glazing Station",             "time_in_mins": 30},
-    {"operation": "Glaze Firing",               "workstation": "Glaze Kiln",                 "time_in_mins": 480},
-    {"operation": "QC Inspection",              "workstation": "QC Inspection Table",         "time_in_mins": 15},
-    {"operation": "Packing & Labelling",        "workstation": "Packaging Station",           "time_in_mins": 10},
+    {
+        "operation": "Clay Preparation & Wedging",
+        "workstation": "Throwing & Casting Station",
+        "time_in_mins": 20,
+    },
+    {
+        "operation": "Throwing or Casting",
+        "workstation": "Throwing & Casting Station",
+        "time_in_mins": 45,
+    },
+    {
+        "operation": "Trimming & Drying",
+        "workstation": "Trimming & Finishing Bench",
+        "time_in_mins": 30,
+    },
+    {"operation": "Bisque Firing", "workstation": "Bisque Kiln", "time_in_mins": 480},
+    {"operation": "Glazing", "workstation": "Glazing Station", "time_in_mins": 30},
+    {"operation": "Glaze Firing", "workstation": "Glaze Kiln", "time_in_mins": 480},
+    {"operation": "QC Inspection", "workstation": "QC Inspection Table", "time_in_mins": 15},
+    {"operation": "Packing & Labelling", "workstation": "Packaging Station", "time_in_mins": 10},
 ]
 
 

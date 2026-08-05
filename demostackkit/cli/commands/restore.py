@@ -13,7 +13,9 @@ console = Console()
 
 def restore(
     industry: Annotated[str, typer.Argument(help="Industry slug, e.g. garment")],
-    backup_file: Annotated[str, typer.Argument(help="Path to .sql.gz backup file (inside container)")],
+    backup_file: Annotated[
+        str, typer.Argument(help="Path to .sql.gz backup file (inside container)")
+    ],
 ) -> None:
     """Restore the industry site from a bench backup file."""
     from demostackkit.core.discovery import IndustryRegistry, get_industries_root
@@ -28,4 +30,4 @@ def restore(
     bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
     console.print(f"[bold]Restoring {config.site.name} from {backup_file}...[/bold]")
     bench.restore(backup_file, db_root_password=db_root_pw)
-    console.print(f"[green]Restore complete.[/green]")
+    console.print("[green]Restore complete.[/green]")

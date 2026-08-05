@@ -101,7 +101,9 @@ class ComposeRunner:
         args.append("--remove-orphans")
         self._run(args, stream=not detach)
 
-    def down(self, profile: str | None = None, *, volumes: bool = False, remove_images: bool = False) -> None:
+    def down(
+        self, profile: str | None = None, *, volumes: bool = False, remove_images: bool = False
+    ) -> None:
         """Stop services. Pass profile=None to stop only shared services."""
         args = []
         if profile:

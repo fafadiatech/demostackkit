@@ -11,16 +11,15 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Garment Standard Route"
 
 ROUTING_OPERATIONS = [
-    {"operation": "Fabric Cutting",    "workstation": "Cutting Table",     "time_in_mins": 30},
-    {"operation": "Sewing Assembly",   "workstation": "Sewing Machine",    "time_in_mins": 60},
-    {"operation": "Overlocking",       "workstation": "Overlock Machine",  "time_in_mins": 20},
-    {"operation": "Button Attachment", "workstation": "Button Machine",    "time_in_mins": 15},
-    {"operation": "Pressing & Ironing","workstation": "Pressing Station",  "time_in_mins": 10},
-    {"operation": "QC Inspection",     "workstation": "QC Table",          "time_in_mins": 10},
+    {"operation": "Fabric Cutting", "workstation": "Cutting Table", "time_in_mins": 30},
+    {"operation": "Sewing Assembly", "workstation": "Sewing Machine", "time_in_mins": 60},
+    {"operation": "Overlocking", "workstation": "Overlock Machine", "time_in_mins": 20},
+    {"operation": "Button Attachment", "workstation": "Button Machine", "time_in_mins": 15},
+    {"operation": "Pressing & Ironing", "workstation": "Pressing Station", "time_in_mins": 10},
+    {"operation": "QC Inspection", "workstation": "QC Table", "time_in_mins": 10},
     {"operation": "Garment Packaging", "workstation": "Packaging Station", "time_in_mins": 5},
 ]
 

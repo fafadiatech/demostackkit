@@ -45,9 +45,7 @@ def use(
     env_file = repo_root / "infra" / ".env"
 
     if not env_file.exists():
-        console.print(
-            "[red]infra/.env not found. Run [bold]demostackkit init[/bold] first.[/red]"
-        )
+        console.print("[red]infra/.env not found. Run [bold]demostackkit init[/bold] first.[/red]")
         raise typer.Exit(code=1)
 
     current = _read_version(env_file)
@@ -58,11 +56,11 @@ def use(
     _write_version(env_file, version)
     console.print(f"[bold green]Switched ERPNext version: {current} → {version}[/bold green]")
     console.print("\nNext steps:")
-    console.print(f"  1. Restart any running industry stack:")
-    console.print(f"       [bold]demostackkit down <industry>[/bold]")
-    console.print(f"       [bold]demostackkit up <industry>[/bold]")
-    console.print(f"  2. (Optional) Rebuild seeder image if using compose profiles:")
-    console.print(f"       [bold]make build-seeder[/bold]")
+    console.print("  1. Restart any running industry stack:")
+    console.print("       [bold]demostackkit down <industry>[/bold]")
+    console.print("       [bold]demostackkit up <industry>[/bold]")
+    console.print("  2. (Optional) Rebuild seeder image if using compose profiles:")
+    console.print("       [bold]make build-seeder[/bold]")
 
 
 def _read_version(env_file: Path) -> str:

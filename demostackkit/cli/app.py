@@ -31,6 +31,7 @@ _state: dict = {}
 
 def _get_industries_root() -> Path:
     from demostackkit.core.discovery import get_industries_root
+
     return get_industries_root()
 
 
@@ -48,20 +49,20 @@ def _get_env_file() -> Path:
 # ── Sub-command imports (late to avoid circular imports) ───────────────────────
 
 from demostackkit.cli.commands import (  # noqa: E402
-    init,
-    create,
-    up,
-    down,
-    reset,
-    seed,
     backup,
-    restore,
-    validate,
-    list_cmd,
+    create,
     doctor,
-    use,
-    purge,
+    down,
+    init,
     install_app,
+    list_cmd,
+    purge,
+    reset,
+    restore,
+    seed,
+    up,
+    use,
+    validate,
 )
 
 app.add_typer(init.app, name="init")

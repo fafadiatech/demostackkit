@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import typer
 from rich.console import Console
 from rich.table import Table
-import typer
 
 console = Console()
 
@@ -21,7 +21,11 @@ def list_industries() -> None:
         console.print(f"Expected industry directories under: [bold]{industries_root}[/bold]")
         raise typer.Exit(1)
 
-    table = Table(title=f"Available Industries ({len(registry)} found)", show_header=True, header_style="bold cyan")
+    table = Table(
+        title=f"Available Industries ({len(registry)} found)",
+        show_header=True,
+        header_style="bold cyan",
+    )
     table.add_column("Slug", style="bold", min_width=16)
     table.add_column("Name")
     table.add_column("Version", justify="center")

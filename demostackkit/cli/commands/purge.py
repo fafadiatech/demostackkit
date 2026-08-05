@@ -12,7 +12,9 @@ console = Console()
 
 def purge(
     yes: Annotated[bool, typer.Option("--yes", "-y", help="Skip confirmation prompt")] = False,
-    images: Annotated[bool, typer.Option("--images", help="Also remove pulled ERPNext Docker images")] = False,
+    images: Annotated[
+        bool, typer.Option("--images", help="Also remove pulled ERPNext Docker images")
+    ] = False,
 ) -> None:
     """Destroy all containers, volumes (all site data), and optionally images.
 
@@ -41,6 +43,8 @@ def purge(
 
     console.print("[bold green]Purge complete.[/bold green]")
     if images:
-        console.print("[dim]Run [bold]demostackkit up <industry>[/bold] to pull fresh images and start again.[/dim]")
+        console.print(
+            "[dim]Run [bold]demostackkit up <industry>[/bold] to pull fresh images and start again.[/dim]"
+        )
     else:
         console.print("[dim]Run [bold]demostackkit up <industry>[/bold] to start again.[/dim]")

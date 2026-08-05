@@ -7,8 +7,7 @@ All operations are idempotent — safe to run multiple times.
 
 from __future__ import annotations
 
-import json
-from demostackkit.seeder.base import BaseMasterSeeder, SeedContext
+from demostackkit.seeder.base import BaseMasterSeeder
 
 
 class CompanySeeder(BaseMasterSeeder):

@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import json
-from datetime import date, timedelta
+from datetime import timedelta
+
 from demostackkit.seeder.base import BaseTransactionSeeder
 from demostackkit.seeder.utils import parse_relative_date
 
@@ -35,8 +37,24 @@ class PurchaseOrderSeeder(BaseTransactionSeeder):
             required_date = order_date + timedelta(days=rng.randint(7, 21))
             supplier = rng.choice(suppliers)
             chosen = rng.sample(rm_items, min(rng.randint(1, 4), len(rm_items)))
-            items = [{"item_code": rm["item_code"], "qty": rng.randint(10, 200), "rate": round(rm["valuation_rate"] * rng.uniform(0.88, 1.12), 2), "uom": rm["stock_uom"], "schedule_date": required_date.isoformat()} for rm in chosen]
-            orders.append({"supplier": supplier, "transaction_date": order_date.isoformat(), "schedule_date": required_date.isoformat(), "items": items})
+            items = [
+                {
+                    "item_code": rm["item_code"],
+                    "qty": rng.randint(10, 200),
+                    "rate": round(rm["valuation_rate"] * rng.uniform(0.88, 1.12), 2),
+                    "uom": rm["stock_uom"],
+                    "schedule_date": required_date.isoformat(),
+                }
+                for rm in chosen
+            ]
+            orders.append(
+                {
+                    "supplier": supplier,
+                    "transaction_date": order_date.isoformat(),
+                    "schedule_date": required_date.isoformat(),
+                    "items": items,
+                }
+            )
         orders_json = json.dumps(orders)
         script = f"""
 import json

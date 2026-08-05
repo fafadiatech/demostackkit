@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import json
-from datetime import date, timedelta
+from datetime import timedelta
+
 from demostackkit.seeder.base import BaseTransactionSeeder
 from demostackkit.seeder.utils import parse_relative_date
 
@@ -35,8 +37,23 @@ class SalesOrderSeeder(BaseTransactionSeeder):
             delivery_date = order_date + timedelta(days=rng.randint(14, 45))
             customer = rng.choice(customers)
             chosen_items = rng.sample(fg_items, min(rng.randint(1, 5), len(fg_items)))
-            items = [{"item_code": ic, "qty": rng.randint(5, 100), "rate": round(rng.uniform(100, 5000), 2), "delivery_date": delivery_date.isoformat()} for ic in chosen_items]
-            orders.append({"customer": customer, "transaction_date": order_date.isoformat(), "delivery_date": delivery_date.isoformat(), "items": items})
+            items = [
+                {
+                    "item_code": ic,
+                    "qty": rng.randint(5, 100),
+                    "rate": round(rng.uniform(100, 5000), 2),
+                    "delivery_date": delivery_date.isoformat(),
+                }
+                for ic in chosen_items
+            ]
+            orders.append(
+                {
+                    "customer": customer,
+                    "transaction_date": order_date.isoformat(),
+                    "delivery_date": delivery_date.isoformat(),
+                    "items": items,
+                }
+            )
         orders_json = json.dumps(orders)
         script = f"""
 import json

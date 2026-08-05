@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import json
-from datetime import date, timedelta
+from datetime import timedelta
+
 from demostackkit.seeder.base import BaseTransactionSeeder
 from demostackkit.seeder.utils import parse_relative_date
 
@@ -78,5 +80,3 @@ frappe.db.commit()
 print(f'Sales Orders created: {{created}}')
 """
         self._exec(script, timeout=300)
-
-

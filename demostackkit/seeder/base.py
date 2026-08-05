@@ -38,7 +38,7 @@ class SeedContext:
     industry_slug: str
     """Industry identifier, e.g. 'garment'"""
 
-    industry_config: "IndustryConfig"
+    industry_config: IndustryConfig
     """Parsed and validated industry.yaml contents"""
 
     bench_path: str
@@ -155,10 +155,15 @@ class BaseSeeder(abc.ABC):
         python = f"{self.ctx.bench_path}/env/bin/python"
         result = subprocess.run(
             [
-                "docker", "exec", "-i",
-                "-e", "FRAPPE_STREAM_LOGGING=1",
+                "docker",
+                "exec",
+                "-i",
+                "-e",
+                "FRAPPE_STREAM_LOGGING=1",
                 self.ctx.backend_container,
-                python, "-c", full_script,
+                python,
+                "-c",
+                full_script,
             ],
             capture_output=True,
             text=True,
@@ -203,7 +208,9 @@ class BaseTransactionSeeder(BaseSeeder, abc.ABC):
     @property
     def volume(self) -> int:
         """Target number of documents to generate, from industry.yaml seed.volumes."""
-        return getattr(self.ctx.industry_config.seed.volumes, self._volume_attr, self.default_volume)
+        return getattr(
+            self.ctx.industry_config.seed.volumes, self._volume_attr, self.default_volume
+        )
 
     #: Attribute name on SeedVolumes to read for this seeder's volume
     _volume_attr: str = ""

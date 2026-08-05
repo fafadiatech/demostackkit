@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 _ITEM_GROUPS = [
@@ -11,6 +12,7 @@ _ITEM_GROUPS = [
     {"item_group_name": "Pipes & Fittings", "parent_item_group": "Civil Materials"},
     {"item_group_name": "Cables & Wiring", "parent_item_group": "Electrical Equipment"},
 ]
+
 
 class ItemGroupSeeder(BaseMasterSeeder):
     label = "Item Groups"

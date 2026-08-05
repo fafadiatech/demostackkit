@@ -14,9 +14,14 @@ def install_app(
     industry: Annotated[str, typer.Argument(help="Industry slug, e.g. garment")],
     app: Annotated[str, typer.Argument(help="App name, e.g. hrms")],
     source: Annotated[str, typer.Option("--source", help="frappe | github | local")] = "frappe",
-    url: Annotated[str | None, typer.Option("--url", help="GitHub URL (required when --source github)")] = None,
+    url: Annotated[
+        str | None, typer.Option("--url", help="GitHub URL (required when --source github)")
+    ] = None,
     branch: Annotated[str | None, typer.Option("--branch", help="Git branch (optional)")] = None,
-    path: Annotated[str | None, typer.Option("--path", help="Host directory path (required when --source local)")] = None,
+    path: Annotated[
+        str | None,
+        typer.Option("--path", help="Host directory path (required when --source local)"),
+    ] = None,
 ) -> None:
     """Fetch and install a Frappe app into a running industry stack.
 
@@ -52,7 +57,9 @@ def install_app(
     bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
 
     if bench.app_exists_in_bench(app):
-        console.print(f"[dim]App '{app}' already in bench — skipping get-app, running install-app only.[/dim]")
+        console.print(
+            f"[dim]App '{app}' already in bench — skipping get-app, running install-app only.[/dim]"
+        )
     else:
         console.print(f"[bold cyan]Fetching '{app}' (source={source})...[/bold cyan]")
         bench.get_app(entry)

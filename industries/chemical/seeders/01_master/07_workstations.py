@@ -11,14 +11,37 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 WORKSTATIONS = [
-    {"workstation_name": "Mixing Tank",          "description": "Agitated mixing vessel for blending raw materials", "hour_rate": 200.0},
-    {"workstation_name": "Reaction Vessel",      "description": "Jacketed reactor for chemical synthesis", "hour_rate": 350.0},
-    {"workstation_name": "Distillation Column",  "description": "Fractional distillation unit", "hour_rate": 400.0},
-    {"workstation_name": "Filtration Unit",      "description": "Pressure filtration and centrifuge station", "hour_rate": 250.0},
-    {"workstation_name": "Filling Station",      "description": "Automated filling and capping line", "hour_rate": 180.0},
-    {"workstation_name": "QC Lab",               "description": "Quality control and analytical testing laboratory", "hour_rate": 300.0},
+    {
+        "workstation_name": "Mixing Tank",
+        "description": "Agitated mixing vessel for blending raw materials",
+        "hour_rate": 200.0,
+    },
+    {
+        "workstation_name": "Reaction Vessel",
+        "description": "Jacketed reactor for chemical synthesis",
+        "hour_rate": 350.0,
+    },
+    {
+        "workstation_name": "Distillation Column",
+        "description": "Fractional distillation unit",
+        "hour_rate": 400.0,
+    },
+    {
+        "workstation_name": "Filtration Unit",
+        "description": "Pressure filtration and centrifuge station",
+        "hour_rate": 250.0,
+    },
+    {
+        "workstation_name": "Filling Station",
+        "description": "Automated filling and capping line",
+        "hour_rate": 180.0,
+    },
+    {
+        "workstation_name": "QC Lab",
+        "description": "Quality control and analytical testing laboratory",
+        "hour_rate": 300.0,
+    },
 ]
 
 

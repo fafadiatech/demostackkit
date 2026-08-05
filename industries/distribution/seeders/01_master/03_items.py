@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import csv
 import json
 from pathlib import Path
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 # Distribution is a pure buy-and-sell business; all stockable items are both
@@ -43,7 +45,9 @@ class ItemSeeder(BaseMasterSeeder):
         csv_path = self.ctx.industry_config.industry_dir / self.ctx.industry_config.data.items
         items = _read_csv(csv_path)
         items_json = json.dumps(items)
-        required_uoms = sorted({row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")})
+        required_uoms = sorted(
+            {row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")}
+        )
         uoms_json = json.dumps(required_uoms)
         script = f"""
 import json
@@ -77,8 +81,13 @@ print(f'Items: created={{created}}, skipped={{skipped}}')
         item_codes = [row["item_code"] for row in items]
         self.ctx.cache_set("item_codes", item_codes)
         # For a pure distribution business both FG and RM cover all stock items
-        all_stock_codes = [row["item_code"] for row in items if row.get("is_stock_item", "1") == "1"]
-        self.ctx.cache_set("fg_item_codes", [row["item_code"] for row in items if row.get("item_group") in FG_GROUPS])
+        all_stock_codes = [
+            row["item_code"] for row in items if row.get("is_stock_item", "1") == "1"
+        ]
+        self.ctx.cache_set(
+            "fg_item_codes",
+            [row["item_code"] for row in items if row.get("item_group") in FG_GROUPS],
+        )
         self.ctx.cache_set("rm_item_codes", all_stock_codes)
         self.ctx.cache_set(
             "rm_items",

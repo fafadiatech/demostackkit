@@ -8,12 +8,11 @@ The `_template` directory is excluded by convention.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from demostackkit.core.config import IndustryConfig, load_industry_config
 from demostackkit.core.exceptions import IndustryNotFoundError, InvalidIndustryConfigError
-
 
 # Directories that are not real industries
 _EXCLUDED_SLUGS = {"_template"}
@@ -53,7 +52,7 @@ class IndustryRegistry:
         self._errors: dict[str, str] = {}
 
     @classmethod
-    def from_root(cls, industries_root: Path, *, skip_invalid: bool = False) -> "IndustryRegistry":
+    def from_root(cls, industries_root: Path, *, skip_invalid: bool = False) -> IndustryRegistry:
         """
         Build a registry by scanning industries_root.
 

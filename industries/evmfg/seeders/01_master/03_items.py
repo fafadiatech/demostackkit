@@ -45,11 +45,12 @@ class ItemSeeder(BaseMasterSeeder):
         csv_path = self.ctx.industry_config.industry_dir / self.ctx.industry_config.data.items
         items = _read_csv(csv_path)
 
-        company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
         items_json = json.dumps(items)
 
         # Collect all UOMs used in the CSV so we can ensure they exist.
-        required_uoms = sorted({row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")})
+        required_uoms = sorted(
+            {row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")}
+        )
         uoms_json = json.dumps(required_uoms)
 
         script = f"""

@@ -26,8 +26,7 @@ class UserSeeder(BaseMasterSeeder):
 
         password = cfg.seed.demo_password
         users_data = [
-            {"email": u.email, "full_name": u.full_name, "roles": u.roles}
-            for u in cfg.users
+            {"email": u.email, "full_name": u.full_name, "roles": u.roles} for u in cfg.users
         ]
         users_json = json.dumps(users_data)
 

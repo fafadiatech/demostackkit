@@ -40,7 +40,8 @@ def create(
     bench.new_site(
         admin_password=admin_pw,
         db_root_password=db_root_pw,
-        install_apps=[a for a in config.required_apps if a != "frappe"] + [e.name for e in config.extra_apps],
+        install_apps=[a for a in config.required_apps if a != "frappe"]
+        + [e.name for e in config.extra_apps],
     )
 
     repo_root = industries_root.parent

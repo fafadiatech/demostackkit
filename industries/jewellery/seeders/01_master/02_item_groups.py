@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 _ITEM_GROUPS = [

@@ -11,16 +11,55 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 OPERATIONS = [
-    {"name": "Clay Preparation & Wedging", "workstation": "Throwing & Casting Station", "description": "Weigh, blend and wedge clay to remove air pockets", "operating_cost": 60.0},
-    {"name": "Throwing or Casting", "workstation": "Throwing & Casting Station", "description": "Throw on wheel or pour slip into moulds", "operating_cost": 90.0},
-    {"name": "Trimming & Drying", "workstation": "Trimming & Finishing Bench", "description": "Trim foot ring, smooth surface and air dry greenware", "operating_cost": 45.0},
-    {"name": "Bisque Firing", "workstation": "Bisque Kiln", "description": "First fire at 1000°C to harden greenware to bisqueware", "operating_cost": 120.0},
-    {"name": "Glazing", "workstation": "Glazing Station", "description": "Apply food-safe glaze by dipping or pouring", "operating_cost": 70.0},
-    {"name": "Glaze Firing", "workstation": "Glaze Kiln", "description": "Final fire at 1220°C to mature glaze and vitrify clay", "operating_cost": 150.0},
-    {"name": "QC Inspection", "workstation": "QC Inspection Table", "description": "Inspect glaze finish, dimensions and structural integrity", "operating_cost": 40.0},
-    {"name": "Packing & Labelling", "workstation": "Packaging Station", "description": "Wrap, box and label finished crockery pieces", "operating_cost": 30.0},
+    {
+        "name": "Clay Preparation & Wedging",
+        "workstation": "Throwing & Casting Station",
+        "description": "Weigh, blend and wedge clay to remove air pockets",
+        "operating_cost": 60.0,
+    },
+    {
+        "name": "Throwing or Casting",
+        "workstation": "Throwing & Casting Station",
+        "description": "Throw on wheel or pour slip into moulds",
+        "operating_cost": 90.0,
+    },
+    {
+        "name": "Trimming & Drying",
+        "workstation": "Trimming & Finishing Bench",
+        "description": "Trim foot ring, smooth surface and air dry greenware",
+        "operating_cost": 45.0,
+    },
+    {
+        "name": "Bisque Firing",
+        "workstation": "Bisque Kiln",
+        "description": "First fire at 1000°C to harden greenware to bisqueware",
+        "operating_cost": 120.0,
+    },
+    {
+        "name": "Glazing",
+        "workstation": "Glazing Station",
+        "description": "Apply food-safe glaze by dipping or pouring",
+        "operating_cost": 70.0,
+    },
+    {
+        "name": "Glaze Firing",
+        "workstation": "Glaze Kiln",
+        "description": "Final fire at 1220°C to mature glaze and vitrify clay",
+        "operating_cost": 150.0,
+    },
+    {
+        "name": "QC Inspection",
+        "workstation": "QC Inspection Table",
+        "description": "Inspect glaze finish, dimensions and structural integrity",
+        "operating_cost": 40.0,
+    },
+    {
+        "name": "Packing & Labelling",
+        "workstation": "Packaging Station",
+        "description": "Wrap, box and label finished crockery pieces",
+        "operating_cost": 30.0,
+    },
 ]
 
 

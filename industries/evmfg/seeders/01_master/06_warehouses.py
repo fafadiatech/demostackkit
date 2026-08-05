@@ -23,12 +23,21 @@ class WarehouseSeeder(BaseMasterSeeder):
         abbr = self.ctx.cache_get("company_abbr", self.ctx.industry_config.company.abbr)
 
         warehouses = [
-            {"warehouse_name": "Raw Material Store",   "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Work In Progress",     "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Finished Goods Store", "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Quality Hold",         "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Dispatch Area",        "parent_warehouse": f"Finished Goods Store - {abbr}"},
-            {"warehouse_name": "Rejection Store",      "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Raw Material Store",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
+            {"warehouse_name": "Work In Progress", "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Finished Goods Store",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
+            {"warehouse_name": "Quality Hold", "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Dispatch Area",
+                "parent_warehouse": f"Finished Goods Store - {abbr}",
+            },
+            {"warehouse_name": "Rejection Store", "parent_warehouse": f"All Warehouses - {abbr}"},
         ]
         wh_json = json.dumps(warehouses)
 

@@ -13,7 +13,6 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Solar System Assembly Route"
 
 # Each BOM: assembled solar system → component items
@@ -22,39 +21,99 @@ BOMS = [
         "item": "SLR-SYS-RTF-5KW",  # 5KW Rooftop Solar System
         "qty": 1,
         "items": [
-            {"item_code": "SLR-PNL-MON-001", "qty": 13,    "uom": "Nos",   "rate": 12500.0},  # 13× 400W = 5.2kW
-            {"item_code": "SLR-INV-HYB-003", "qty": 1,     "uom": "Nos",   "rate": 38000.0},  # Hybrid 5KW inverter
-            {"item_code": "SLR-MNT-RTF-001", "qty": 4,     "uom": "Nos",   "rate": 1200.0},   # Mounting rails
-            {"item_code": "SLR-BOS-CAB-001", "qty": 50,    "uom": "Meter", "rate": 38.0},     # DC cable
-            {"item_code": "SLR-BOS-CAB-002", "qty": 10,    "uom": "Meter", "rate": 52.0},     # AC cable
-            {"item_code": "SLR-BOS-MCB-003", "qty": 2,     "uom": "Nos",   "rate": 1850.0},   # DC MCB
-            {"item_code": "SLR-BOS-SPD-004", "qty": 1,     "uom": "Nos",   "rate": 3200.0},   # Surge protection
+            {
+                "item_code": "SLR-PNL-MON-001",
+                "qty": 13,
+                "uom": "Nos",
+                "rate": 12500.0,
+            },  # 13× 400W = 5.2kW
+            {
+                "item_code": "SLR-INV-HYB-003",
+                "qty": 1,
+                "uom": "Nos",
+                "rate": 38000.0,
+            },  # Hybrid 5KW inverter
+            {
+                "item_code": "SLR-MNT-RTF-001",
+                "qty": 4,
+                "uom": "Nos",
+                "rate": 1200.0,
+            },  # Mounting rails
+            {"item_code": "SLR-BOS-CAB-001", "qty": 50, "uom": "Meter", "rate": 38.0},  # DC cable
+            {"item_code": "SLR-BOS-CAB-002", "qty": 10, "uom": "Meter", "rate": 52.0},  # AC cable
+            {"item_code": "SLR-BOS-MCB-003", "qty": 2, "uom": "Nos", "rate": 1850.0},  # DC MCB
+            {
+                "item_code": "SLR-BOS-SPD-004",
+                "qty": 1,
+                "uom": "Nos",
+                "rate": 3200.0,
+            },  # Surge protection
         ],
     },
     {
         "item": "SLR-SYS-RTF-10KW",  # 10KW Rooftop Solar System
         "qty": 1,
         "items": [
-            {"item_code": "SLR-PNL-MON-001", "qty": 25,    "uom": "Nos",   "rate": 12500.0},  # 25× 400W = 10kW
-            {"item_code": "SLR-INV-STR-001", "qty": 1,     "uom": "Nos",   "rate": 48000.0},  # String 10KW inverter
-            {"item_code": "SLR-MNT-RTF-001", "qty": 8,     "uom": "Nos",   "rate": 1200.0},   # Mounting rails
-            {"item_code": "SLR-BOS-CAB-001", "qty": 100,   "uom": "Meter", "rate": 38.0},     # DC cable
-            {"item_code": "SLR-BOS-CAB-002", "qty": 20,    "uom": "Meter", "rate": 52.0},     # AC cable
-            {"item_code": "SLR-BOS-MCB-003", "qty": 4,     "uom": "Nos",   "rate": 1850.0},   # DC MCB
-            {"item_code": "SLR-BOS-SPD-004", "qty": 2,     "uom": "Nos",   "rate": 3200.0},   # Surge protection
+            {
+                "item_code": "SLR-PNL-MON-001",
+                "qty": 25,
+                "uom": "Nos",
+                "rate": 12500.0,
+            },  # 25× 400W = 10kW
+            {
+                "item_code": "SLR-INV-STR-001",
+                "qty": 1,
+                "uom": "Nos",
+                "rate": 48000.0,
+            },  # String 10KW inverter
+            {
+                "item_code": "SLR-MNT-RTF-001",
+                "qty": 8,
+                "uom": "Nos",
+                "rate": 1200.0,
+            },  # Mounting rails
+            {"item_code": "SLR-BOS-CAB-001", "qty": 100, "uom": "Meter", "rate": 38.0},  # DC cable
+            {"item_code": "SLR-BOS-CAB-002", "qty": 20, "uom": "Meter", "rate": 52.0},  # AC cable
+            {"item_code": "SLR-BOS-MCB-003", "qty": 4, "uom": "Nos", "rate": 1850.0},  # DC MCB
+            {
+                "item_code": "SLR-BOS-SPD-004",
+                "qty": 2,
+                "uom": "Nos",
+                "rate": 3200.0,
+            },  # Surge protection
         ],
     },
     {
         "item": "SLR-SYS-GRD-25KW",  # 25KW Ground Mount Solar System
         "qty": 1,
         "items": [
-            {"item_code": "SLR-PNL-BFX-004", "qty": 46,    "uom": "Nos",   "rate": 19500.0},  # 46× 550W bifacial = ~25kW
-            {"item_code": "SLR-INV-STR-002", "qty": 1,     "uom": "Nos",   "rate": 95000.0},  # String 25KW inverter
-            {"item_code": "SLR-MNT-GRD-002", "qty": 1,     "uom": "Nos",   "rate": 28000.0},  # Ground mount structure
-            {"item_code": "SLR-BOS-CAB-001", "qty": 250,   "uom": "Meter", "rate": 38.0},     # DC cable
-            {"item_code": "SLR-BOS-CAB-002", "qty": 50,    "uom": "Meter", "rate": 52.0},     # AC cable
-            {"item_code": "SLR-BOS-MCB-003", "qty": 8,     "uom": "Nos",   "rate": 1850.0},   # DC MCB
-            {"item_code": "SLR-BOS-SPD-004", "qty": 4,     "uom": "Nos",   "rate": 3200.0},   # Surge protection
+            {
+                "item_code": "SLR-PNL-BFX-004",
+                "qty": 46,
+                "uom": "Nos",
+                "rate": 19500.0,
+            },  # 46× 550W bifacial = ~25kW
+            {
+                "item_code": "SLR-INV-STR-002",
+                "qty": 1,
+                "uom": "Nos",
+                "rate": 95000.0,
+            },  # String 25KW inverter
+            {
+                "item_code": "SLR-MNT-GRD-002",
+                "qty": 1,
+                "uom": "Nos",
+                "rate": 28000.0,
+            },  # Ground mount structure
+            {"item_code": "SLR-BOS-CAB-001", "qty": 250, "uom": "Meter", "rate": 38.0},  # DC cable
+            {"item_code": "SLR-BOS-CAB-002", "qty": 50, "uom": "Meter", "rate": 52.0},  # AC cable
+            {"item_code": "SLR-BOS-MCB-003", "qty": 8, "uom": "Nos", "rate": 1850.0},  # DC MCB
+            {
+                "item_code": "SLR-BOS-SPD-004",
+                "qty": 4,
+                "uom": "Nos",
+                "rate": 3200.0,
+            },  # Surge protection
         ],
     },
 ]

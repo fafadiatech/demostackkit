@@ -44,7 +44,7 @@ class SeedRunner:
         )
         self._seeders = instantiate_seeders(self._seeder_classes, ctx)
 
-    def run(self, phase: str = "all") -> "SeedResult":
+    def run(self, phase: str = "all") -> SeedResult:
         """
         Run seeders for the given phase.
 
@@ -67,7 +67,9 @@ class SeedRunner:
             console.print(f"[yellow]No seeders found for phase '{phase}'[/yellow]")
             return SeedResult(total=0, succeeded=0, failed=0, skipped=0, errors={})
 
-        console.print(f"\n[bold]Running {len(seeders)} seeder(s) for '{self.ctx.industry_slug}'[/bold]")
+        console.print(
+            f"\n[bold]Running {len(seeders)} seeder(s) for '{self.ctx.industry_slug}'[/bold]"
+        )
 
         result = SeedResult(total=len(seeders), succeeded=0, failed=0, skipped=0, errors={})
 
@@ -117,7 +119,9 @@ class SeedRunner:
 
 
 class SeedResult:
-    def __init__(self, total: int, succeeded: int, failed: int, skipped: int, errors: dict[str, str]) -> None:
+    def __init__(
+        self, total: int, succeeded: int, failed: int, skipped: int, errors: dict[str, str]
+    ) -> None:
         self.total = total
         self.succeeded = succeeded
         self.failed = failed

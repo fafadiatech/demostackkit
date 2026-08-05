@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Annotated
 
 import typer
@@ -12,7 +11,9 @@ console = Console()
 
 
 def validate(
-    industry: Annotated[str | None, typer.Argument(help="Industry slug (omit to validate all)")] = None,
+    industry: Annotated[
+        str | None, typer.Argument(help="Industry slug (omit to validate all)")
+    ] = None,
 ) -> None:
     """Validate industry.yaml and fixture files for one or all industries."""
     from demostackkit.core.discovery import IndustryRegistry, get_industries_root
@@ -56,6 +57,7 @@ def validate(
 
         # Validate seeder modules can be imported
         from demostackkit.seeder.loader import discover_seeders
+
         try:
             seeder_classes = discover_seeders(industry_dir)
             console.print(f"  [green]✓ Seeders[/green] ({len(seeder_classes)} found)")
@@ -63,10 +65,10 @@ def validate(
             console.print(f"  [red]✗ Seeder import error: {exc}[/red]")
             errors_found = True
 
-        console.print(f"  [green]✓ Config schema[/green]")
+        console.print("  [green]✓ Config schema[/green]")
 
     if errors_found:
         console.print("\n[bold red]Validation failed.[/bold red]")
         raise typer.Exit(1)
     else:
-        console.print(f"\n[bold green]All validations passed.[/bold green]")
+        console.print("\n[bold green]All validations passed.[/bold green]")

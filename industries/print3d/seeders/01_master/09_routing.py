@@ -15,26 +15,33 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 FDM_ROUTING = "FDM Standard Route"
 SLA_ROUTING = "SLA Standard Route"
 
 FDM_OPERATIONS = [
-    {"operation": "FDM Printing",        "workstation": "FDM Printer Bank",      "time_in_mins": 120},
-    {"operation": "Support Removal",     "workstation": "Post-Processing Bench", "time_in_mins": 10},
-    {"operation": "Sanding & Finishing", "workstation": "Post-Processing Bench", "time_in_mins": 15},
-    {"operation": "Print QC Inspection", "workstation": "QC Inspection Desk",   "time_in_mins": 5},
-    {"operation": "Packing & Dispatch",  "workstation": "Packing Station",       "time_in_mins": 5},
+    {"operation": "FDM Printing", "workstation": "FDM Printer Bank", "time_in_mins": 120},
+    {"operation": "Support Removal", "workstation": "Post-Processing Bench", "time_in_mins": 10},
+    {
+        "operation": "Sanding & Finishing",
+        "workstation": "Post-Processing Bench",
+        "time_in_mins": 15,
+    },
+    {"operation": "Print QC Inspection", "workstation": "QC Inspection Desk", "time_in_mins": 5},
+    {"operation": "Packing & Dispatch", "workstation": "Packing Station", "time_in_mins": 5},
 ]
 
 SLA_OPERATIONS = [
-    {"operation": "SLA Printing",        "workstation": "SLA Printer Bank",      "time_in_mins": 90},
-    {"operation": "Support Removal",     "workstation": "Post-Processing Bench", "time_in_mins": 15},
-    {"operation": "IPA Washing",         "workstation": "Washing Station",       "time_in_mins": 10},
-    {"operation": "UV Curing",           "workstation": "UV Curing Chamber",     "time_in_mins": 15},
-    {"operation": "Sanding & Finishing", "workstation": "Post-Processing Bench", "time_in_mins": 10},
-    {"operation": "Print QC Inspection", "workstation": "QC Inspection Desk",   "time_in_mins": 5},
-    {"operation": "Packing & Dispatch",  "workstation": "Packing Station",       "time_in_mins": 5},
+    {"operation": "SLA Printing", "workstation": "SLA Printer Bank", "time_in_mins": 90},
+    {"operation": "Support Removal", "workstation": "Post-Processing Bench", "time_in_mins": 15},
+    {"operation": "IPA Washing", "workstation": "Washing Station", "time_in_mins": 10},
+    {"operation": "UV Curing", "workstation": "UV Curing Chamber", "time_in_mins": 15},
+    {
+        "operation": "Sanding & Finishing",
+        "workstation": "Post-Processing Bench",
+        "time_in_mins": 10,
+    },
+    {"operation": "Print QC Inspection", "workstation": "QC Inspection Desk", "time_in_mins": 5},
+    {"operation": "Packing & Dispatch", "workstation": "Packing Station", "time_in_mins": 5},
 ]
 
 

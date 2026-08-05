@@ -11,15 +11,42 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 WORKSTATIONS = [
-    {"workstation_name": "Throwing & Casting Station", "description": "Pottery wheel throwing and slip casting workstation", "hour_rate": 180.0},
-    {"workstation_name": "Trimming & Finishing Bench", "description": "Greenware trimming, smoothing and handle attachment bench", "hour_rate": 150.0},
-    {"workstation_name": "Bisque Kiln", "description": "Electric kiln for first bisque firing at 1000°C", "hour_rate": 200.0},
-    {"workstation_name": "Glazing Station", "description": "Glaze dipping, pouring and brushing station", "hour_rate": 160.0},
-    {"workstation_name": "Glaze Kiln", "description": "Electric kiln for final glaze firing at 1220°C", "hour_rate": 220.0},
-    {"workstation_name": "QC Inspection Table", "description": "Quality inspection and dimensional measurement table", "hour_rate": 120.0},
-    {"workstation_name": "Packaging Station", "description": "Crockery wrapping, boxing and labelling station", "hour_rate": 80.0},
+    {
+        "workstation_name": "Throwing & Casting Station",
+        "description": "Pottery wheel throwing and slip casting workstation",
+        "hour_rate": 180.0,
+    },
+    {
+        "workstation_name": "Trimming & Finishing Bench",
+        "description": "Greenware trimming, smoothing and handle attachment bench",
+        "hour_rate": 150.0,
+    },
+    {
+        "workstation_name": "Bisque Kiln",
+        "description": "Electric kiln for first bisque firing at 1000°C",
+        "hour_rate": 200.0,
+    },
+    {
+        "workstation_name": "Glazing Station",
+        "description": "Glaze dipping, pouring and brushing station",
+        "hour_rate": 160.0,
+    },
+    {
+        "workstation_name": "Glaze Kiln",
+        "description": "Electric kiln for final glaze firing at 1220°C",
+        "hour_rate": 220.0,
+    },
+    {
+        "workstation_name": "QC Inspection Table",
+        "description": "Quality inspection and dimensional measurement table",
+        "hour_rate": 120.0,
+    },
+    {
+        "workstation_name": "Packaging Station",
+        "description": "Crockery wrapping, boxing and labelling station",
+        "hour_rate": 80.0,
+    },
 ]
 
 

@@ -1,6 +1,9 @@
 from __future__ import annotations
+
 import json
+
 from demostackkit.seeder.base import BaseMasterSeeder
+
 
 class WarehouseSeeder(BaseMasterSeeder):
     label = "Warehouses"
@@ -10,11 +13,17 @@ class WarehouseSeeder(BaseMasterSeeder):
         company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
         abbr = self.ctx.cache_get("company_abbr", self.ctx.industry_config.company.abbr)
         warehouses = [
-            {"warehouse_name": "Raw Material Store", "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Raw Material Store",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
             {"warehouse_name": "Solvent Storage", "parent_warehouse": f"All Warehouses - {abbr}"},
             {"warehouse_name": "Hazmat Store", "parent_warehouse": f"All Warehouses - {abbr}"},
             {"warehouse_name": "Reaction Area", "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Finished Goods Store", "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Finished Goods Store",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
             {"warehouse_name": "QC Lab Hold", "parent_warehouse": f"All Warehouses - {abbr}"},
             {"warehouse_name": "Packaging Store", "parent_warehouse": f"All Warehouses - {abbr}"},
         ]

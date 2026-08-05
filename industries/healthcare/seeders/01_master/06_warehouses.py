@@ -19,11 +19,23 @@ class WarehouseSeeder(BaseMasterSeeder):
 
         warehouses = [
             {"warehouse_name": "Medicine Store", "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Medical Device Store", "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Medical Device Store",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
             {"warehouse_name": "Cold Storage", "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Pharmacy Dispensary", "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Surgical Supplies Store", "parent_warehouse": f"All Warehouses - {abbr}"},
-            {"warehouse_name": "Finished Goods - MCH", "parent_warehouse": f"All Warehouses - {abbr}"},
+            {
+                "warehouse_name": "Pharmacy Dispensary",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
+            {
+                "warehouse_name": "Surgical Supplies Store",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
+            {
+                "warehouse_name": "Finished Goods - MCH",
+                "parent_warehouse": f"All Warehouses - {abbr}",
+            },
         ]
         wh_json = json.dumps(warehouses)
 

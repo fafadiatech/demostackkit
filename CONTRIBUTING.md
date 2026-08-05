@@ -72,6 +72,7 @@ demostackkit validate furniture
 ```python
 from demostackkit.seeder.base import BaseMasterSeeder
 
+
 class ItemSeeder(BaseMasterSeeder):
     label = "Items"
     priority = 30  # Lower = runs first
@@ -92,6 +93,7 @@ class ItemSeeder(BaseMasterSeeder):
 
 ```python
 from demostackkit.seeder.base import BaseTransactionSeeder
+
 
 class SalesOrderSeeder(BaseTransactionSeeder):
     label = "Sales Orders"

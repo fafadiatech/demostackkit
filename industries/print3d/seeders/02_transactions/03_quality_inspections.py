@@ -12,18 +12,17 @@ Uses deterministic random (self.ctx.random) for reproducibility.
 from __future__ import annotations
 
 import json
-from datetime import date, timedelta
+from datetime import timedelta
 
 from demostackkit.seeder.base import BaseTransactionSeeder
 from demostackkit.seeder.utils import parse_relative_date
 
-
 # (specification, min_value, max_value)
 _QI_PARAMETERS = [
-    ("Dimensional Accuracy (mm)",  0.0,   0.5),
-    ("Surface Roughness Ra (um)",  0.0,  12.0),
-    ("Layer Adhesion (1-5)",       3.0,   5.0),
-    ("Print Completion (%)",      95.0, 100.0),
+    ("Dimensional Accuracy (mm)", 0.0, 0.5),
+    ("Surface Roughness Ra (um)", 0.0, 12.0),
+    ("Layer Adhesion (1-5)", 3.0, 5.0),
+    ("Print Completion (%)", 95.0, 100.0),
 ]
 
 _INSPECTION_TYPES = ["Incoming", "In Process", "Outgoing"]
@@ -72,23 +71,27 @@ class QualityInspectionSeeder(BaseTransactionSeeder):
                 else:
                     reading_val = round(rng.uniform(max_val * 1.05, max_val * 1.2), 2)
                     r_status = "Rejected"
-                readings.append({
-                    "specification": spec,
-                    "value_type": "Numeric",
-                    "min_value": min_val,
-                    "max_value": max_val,
-                    "reading_1": str(reading_val),
-                    "status": r_status,
-                })
+                readings.append(
+                    {
+                        "specification": spec,
+                        "value_type": "Numeric",
+                        "min_value": min_val,
+                        "max_value": max_val,
+                        "reading_1": str(reading_val),
+                        "status": r_status,
+                    }
+                )
 
-            inspections.append({
-                "item_code": item_code,
-                "inspection_type": inspection_type,
-                "report_date": report_date.isoformat(),
-                "sample_size": rng.randint(5, 50),
-                "status": overall_status,
-                "readings": readings,
-            })
+            inspections.append(
+                {
+                    "item_code": item_code,
+                    "inspection_type": inspection_type,
+                    "report_date": report_date.isoformat(),
+                    "sample_size": rng.randint(5, 50),
+                    "status": overall_status,
+                    "readings": readings,
+                }
+            )
 
         insp_json = json.dumps(inspections)
         script = f"""
@@ -128,5 +131,3 @@ frappe.db.commit()
 print(f'Quality Inspections created: {{created}}')
 """
         self._exec(script, timeout=300)
-
-

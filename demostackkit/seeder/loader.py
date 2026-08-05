@@ -27,7 +27,12 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from demostackkit.seeder.base import BaseSeeder, BaseMasterSeeder, BaseTransactionSeeder, SeedContext
+from demostackkit.seeder.base import (
+    BaseMasterSeeder,
+    BaseSeeder,
+    BaseTransactionSeeder,
+    SeedContext,
+)
 
 if TYPE_CHECKING:
     pass
@@ -88,7 +93,11 @@ def discover_seeders(
             continue
 
         # Namespace prefix prevents sys.modules key collisions between shared and industry seeders
-        ns = "shared" if seeders_root.parent.name == "demostackkit" else f"industry_{industry_dir.name}"
+        ns = (
+            "shared"
+            if seeders_root.parent.name == "demostackkit"
+            else f"industry_{industry_dir.name}"
+        )
 
         for phase_idx, phase_dir_name in enumerate(_PHASE_DIRS):
             phase_dir = seeders_root / phase_dir_name
@@ -113,6 +122,8 @@ def discover_seeders(
     return [cls for _, _, _, cls in collected]
 
 
-def instantiate_seeders(seeder_classes: list[type[BaseSeeder]], ctx: SeedContext) -> list[BaseSeeder]:
+def instantiate_seeders(
+    seeder_classes: list[type[BaseSeeder]], ctx: SeedContext
+) -> list[BaseSeeder]:
     """Instantiate each discovered seeder class with the given SeedContext."""
     return [cls(ctx) for cls in seeder_classes]

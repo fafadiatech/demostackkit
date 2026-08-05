@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import csv
 import json
 from pathlib import Path
+
 from demostackkit.seeder.base import BaseMasterSeeder
 
 FG_GROUPS = ("Vehicles", "Sedans", "SUVs", "Hatchbacks")
@@ -22,7 +24,9 @@ class ItemSeeder(BaseMasterSeeder):
         csv_path = self.ctx.industry_config.industry_dir / self.ctx.industry_config.data.items
         items = _read_csv(csv_path)
         items_json = json.dumps(items)
-        required_uoms = sorted({row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")})
+        required_uoms = sorted(
+            {row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")}
+        )
         uoms_json = json.dumps(required_uoms)
         script = f"""
 import json
@@ -55,8 +59,14 @@ print(f'Items: created={{created}}, skipped={{skipped}}')
         self._exec(script, timeout=180)
         item_codes = [row["item_code"] for row in items]
         self.ctx.cache_set("item_codes", item_codes)
-        self.ctx.cache_set("fg_item_codes", [row["item_code"] for row in items if row.get("item_group") in FG_GROUPS])
-        self.ctx.cache_set("rm_item_codes", [row["item_code"] for row in items if row.get("item_group") in RM_GROUPS])
+        self.ctx.cache_set(
+            "fg_item_codes",
+            [row["item_code"] for row in items if row.get("item_group") in FG_GROUPS],
+        )
+        self.ctx.cache_set(
+            "rm_item_codes",
+            [row["item_code"] for row in items if row.get("item_group") in RM_GROUPS],
+        )
         self.ctx.cache_set(
             "rm_items",
             [

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import random as _random_module
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from demostackkit.seeder.base import SeedContext
@@ -14,7 +13,7 @@ if TYPE_CHECKING:
 
 
 def build_seed_context(
-    config: "IndustryConfig",
+    config: IndustryConfig,
     *,
     bench_path: str = "/home/frappe/frappe-bench",
     backend_container: str = "demostackkit-backend-1",

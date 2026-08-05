@@ -11,18 +11,17 @@ from __future__ import annotations
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 _ITEM_GROUPS = [
-    {"item_group_name": "Raw Material",             "parent_item_group": "All Item Groups"},
-    {"item_group_name": "Finished Goods",           "parent_item_group": "All Item Groups"},
-    {"item_group_name": "Consumable",               "parent_item_group": "All Item Groups"},
-    {"item_group_name": "Packaging",                "parent_item_group": "All Item Groups"},
-    {"item_group_name": "FDM Filaments",            "parent_item_group": "Raw Material"},
-    {"item_group_name": "SLA Resins",               "parent_item_group": "Raw Material"},
+    {"item_group_name": "Raw Material", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Finished Goods", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Consumable", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Packaging", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "FDM Filaments", "parent_item_group": "Raw Material"},
+    {"item_group_name": "SLA Resins", "parent_item_group": "Raw Material"},
     {"item_group_name": "Post-Processing Supplies", "parent_item_group": "Consumable"},
-    {"item_group_name": "Prototypes",               "parent_item_group": "Finished Goods"},
-    {"item_group_name": "Functional Parts",         "parent_item_group": "Finished Goods"},
-    {"item_group_name": "Display Models",           "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Prototypes", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Functional Parts", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Display Models", "parent_item_group": "Finished Goods"},
 ]
 
 

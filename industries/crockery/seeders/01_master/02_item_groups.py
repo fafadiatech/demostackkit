@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 _ITEM_GROUPS = [
     {"item_group_name": "Raw Material", "parent_item_group": "All Item Groups"},
     {"item_group_name": "Finished Goods", "parent_item_group": "All Item Groups"},

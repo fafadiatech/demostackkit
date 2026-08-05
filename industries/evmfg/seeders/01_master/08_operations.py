@@ -14,17 +14,61 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 OPERATIONS = [
-    {"name": "Battery Cell Assembly",          "workstation": "Battery Assembly Station",   "description": "Sort, grade and spot-weld cells into modules",              "operating_cost": 800.0},
-    {"name": "Battery Pack Integration",       "workstation": "Pack Integration Bay",       "description": "Stack modules, wire BMS and seal battery pack",            "operating_cost": 650.0},
-    {"name": "Motor Assembly",                 "workstation": "Motor Assembly Bay",         "description": "Assemble stator, rotor and install bearings",              "operating_cost": 1000.0},
-    {"name": "Chassis & Frame Welding",        "workstation": "Chassis Welding Station",    "description": "Weld steel monocoque or aluminium bike frame to spec",     "operating_cost": 700.0},
-    {"name": "Body Panel Fitting",             "workstation": "Body Assembly Line",         "description": "Fit and hem exterior panels to body-in-white",             "operating_cost": 800.0},
-    {"name": "Electrical Systems Integration", "workstation": "Electrical Integration Bay", "description": "Route wiring harness and connect all HV/LV systems",       "operating_cost": 750.0},
-    {"name": "Final Assembly & Trim",          "workstation": "Final Assembly Bay",         "description": "Install trim, glass, seats and mechanical sub-assemblies", "operating_cost": 900.0},
-    {"name": "PDI & Road Test",                "workstation": "PDI & Testing Bay",          "description": "Flash software, run diagnostics and complete road test",    "operating_cost": 600.0},
-    {"name": "EV Packing & Dispatch",          "workstation": "EV Packing Station",         "description": "Wrap vehicle, crate and prepare dispatch documentation",    "operating_cost": 300.0},
+    {
+        "name": "Battery Cell Assembly",
+        "workstation": "Battery Assembly Station",
+        "description": "Sort, grade and spot-weld cells into modules",
+        "operating_cost": 800.0,
+    },
+    {
+        "name": "Battery Pack Integration",
+        "workstation": "Pack Integration Bay",
+        "description": "Stack modules, wire BMS and seal battery pack",
+        "operating_cost": 650.0,
+    },
+    {
+        "name": "Motor Assembly",
+        "workstation": "Motor Assembly Bay",
+        "description": "Assemble stator, rotor and install bearings",
+        "operating_cost": 1000.0,
+    },
+    {
+        "name": "Chassis & Frame Welding",
+        "workstation": "Chassis Welding Station",
+        "description": "Weld steel monocoque or aluminium bike frame to spec",
+        "operating_cost": 700.0,
+    },
+    {
+        "name": "Body Panel Fitting",
+        "workstation": "Body Assembly Line",
+        "description": "Fit and hem exterior panels to body-in-white",
+        "operating_cost": 800.0,
+    },
+    {
+        "name": "Electrical Systems Integration",
+        "workstation": "Electrical Integration Bay",
+        "description": "Route wiring harness and connect all HV/LV systems",
+        "operating_cost": 750.0,
+    },
+    {
+        "name": "Final Assembly & Trim",
+        "workstation": "Final Assembly Bay",
+        "description": "Install trim, glass, seats and mechanical sub-assemblies",
+        "operating_cost": 900.0,
+    },
+    {
+        "name": "PDI & Road Test",
+        "workstation": "PDI & Testing Bay",
+        "description": "Flash software, run diagnostics and complete road test",
+        "operating_cost": 600.0,
+    },
+    {
+        "name": "EV Packing & Dispatch",
+        "workstation": "EV Packing Station",
+        "description": "Wrap vehicle, crate and prepare dispatch documentation",
+        "operating_cost": 300.0,
+    },
 ]
 
 

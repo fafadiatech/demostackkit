@@ -10,7 +10,10 @@ from __future__ import annotations
 
 import json
 import subprocess
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from demostackkit.core.config import AppEntry
 
 from demostackkit.core.exceptions import BenchError
 
@@ -22,12 +25,16 @@ class BenchClient:
     All methods raise BenchError on non-zero exit codes.
     """
 
-    def __init__(self, container: str, site: str, bench_path: str = "/home/frappe/frappe-bench") -> None:
+    def __init__(
+        self, container: str, site: str, bench_path: str = "/home/frappe/frappe-bench"
+    ) -> None:
         self.container = container
         self.site = site
         self.bench_path = bench_path
 
-    def _docker_exec(self, cmd: list[str], *, input_data: str | None = None, timeout: int = 300) -> str:
+    def _docker_exec(
+        self, cmd: list[str], *, input_data: str | None = None, timeout: int = 300
+    ) -> str:
         """Run a command inside the container and return stdout."""
         full_cmd = ["docker", "exec", "-i", self.container] + cmd
         try:
@@ -39,7 +46,9 @@ class BenchClient:
                 timeout=timeout,
             )
         except subprocess.TimeoutExpired as exc:
-            raise BenchError(str(full_cmd), -1, f"Command timed out after {timeout} seconds") from exc
+            raise BenchError(
+                str(full_cmd), -1, f"Command timed out after {timeout} seconds"
+            ) from exc
 
         if result.returncode != 0:
             raise BenchError(str(full_cmd), result.returncode, result.stderr or result.stdout)
@@ -56,16 +65,12 @@ class BenchClient:
         Example:
             client.execute("frappe.db.count('Customer')")
         """
-        cmd = [
-            "bench",
-            "--site", self.site,
-            "execute",
-            f"--args={json.dumps([])}",
-            "--kwargs={}",
-            python_expr,
-        ]
         output = self._docker_exec(
-            ["bash", "-c", f"cd {self.bench_path} && bench --site {self.site} execute {python_expr!r}"]
+            [
+                "bash",
+                "-c",
+                f"cd {self.bench_path} && bench --site {self.site} execute {python_expr!r}",
+            ]
         )
         try:
             return json.loads(output)
@@ -85,9 +90,7 @@ class BenchClient:
             f"{script}; "
             "frappe.db.commit()"
         )
-        return self._docker_exec(
-            ["python", "-c", wrapped]
-        )
+        return self._docker_exec(["python", "-c", wrapped])
 
     def insert_doc(self, doctype: str, data: dict[str, Any]) -> str:
         """
@@ -99,7 +102,7 @@ class BenchClient:
 import frappe
 frappe.init(site='{self.site}', sites_path='{self.bench_path}/sites')
 frappe.connect()
-doc = frappe.get_doc({json.dumps({'doctype': doctype, **data})!r})
+doc = frappe.get_doc({json.dumps({"doctype": doctype, **data})!r})
 doc.insert(ignore_if_duplicate=True)
 frappe.db.commit()
 print(doc.name)
@@ -133,7 +136,7 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
         )
         self._docker_exec(["bash", "-c", cmd])
 
-        for app in (install_apps or []):
+        for app in install_apps or []:
             if app in ("frappe",):
                 continue  # Already installed on new-site
             self.install_app(app)
@@ -156,6 +159,7 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
         Returns the container-side path for use with bench get-app.
         """
         from pathlib import Path
+
         src = Path(host_path)
         if not src.exists():
             raise BenchError(f"docker cp {host_path}", -1, f"Path does not exist: {host_path}")
@@ -170,7 +174,7 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
             raise BenchError(f"docker cp {host_path}", result.returncode, result.stderr)
         return dest
 
-    def get_app(self, entry: "AppEntry") -> None:
+    def get_app(self, entry: AppEntry) -> None:
         """Fetch a Frappe app into the bench via bench get-app.
 
         Handles three source types:
@@ -178,7 +182,6 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
           github — bench get-app <url>   (fetches from GitHub)
           local  — docker cp host_path into container, then bench get-app /tmp/<name>
         """
-        from demostackkit.core.config import AppEntry  # local import avoids circular
 
         if entry.source == "local":
             fetch_target = self.copy_app_from_host(entry.host_path, entry.name)
@@ -206,7 +209,9 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
 
     def backup(self, backup_dir: str) -> str:
         """Run bench backup and return the path to the SQL file."""
-        cmd = f"cd {self.bench_path} && bench --site {self.site} backup --backup-path {backup_dir!r}"
+        cmd = (
+            f"cd {self.bench_path} && bench --site {self.site} backup --backup-path {backup_dir!r}"
+        )
         return self._docker_exec(["bash", "-c", cmd])
 
     def restore(self, sql_gz_path: str, db_root_password: str) -> None:

@@ -61,13 +61,15 @@ def reset(
     bench.new_site(
         admin_password=admin_pw,
         db_root_password=db_root_pw,
-        install_apps=[a for a in config.required_apps if a != "frappe"] + [e.name for e in config.extra_apps],
+        install_apps=[a for a in config.required_apps if a != "frappe"]
+        + [e.name for e in config.extra_apps],
     )
 
     # 4. Reseed
-    console.print(f"[bold cyan]Running seeders...[/bold cyan]")
+    console.print("[bold cyan]Running seeders...[/bold cyan]")
     from demostackkit.cli.commands.seed import _do_seed
+
     _do_seed(industry, phase="all", repo_root=industries_root.parent)
 
-    console.print(f"\n[bold green]Reset complete![/bold green]")
+    console.print("\n[bold green]Reset complete![/bold green]")
     console.print(f"  URL: http://{config.site.name}")

@@ -11,17 +11,16 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
-
 ROUTING_NAME = "Chemical Standard Route"
 
 ROUTING_OPERATIONS = [
-    {"operation": "Raw Material Dosing", "workstation": "Mixing Tank",         "time_in_mins": 30},
-    {"operation": "Mixing & Blending",   "workstation": "Mixing Tank",         "time_in_mins": 60},
-    {"operation": "Chemical Reaction",   "workstation": "Reaction Vessel",     "time_in_mins": 120},
-    {"operation": "Distillation",        "workstation": "Distillation Column", "time_in_mins": 90},
-    {"operation": "Filtration",          "workstation": "Filtration Unit",     "time_in_mins": 45},
-    {"operation": "Filling & Packaging", "workstation": "Filling Station",     "time_in_mins": 30},
-    {"operation": "Quality Testing",     "workstation": "QC Lab",              "time_in_mins": 60},
+    {"operation": "Raw Material Dosing", "workstation": "Mixing Tank", "time_in_mins": 30},
+    {"operation": "Mixing & Blending", "workstation": "Mixing Tank", "time_in_mins": 60},
+    {"operation": "Chemical Reaction", "workstation": "Reaction Vessel", "time_in_mins": 120},
+    {"operation": "Distillation", "workstation": "Distillation Column", "time_in_mins": 90},
+    {"operation": "Filtration", "workstation": "Filtration Unit", "time_in_mins": 45},
+    {"operation": "Filling & Packaging", "workstation": "Filling Station", "time_in_mins": 30},
+    {"operation": "Quality Testing", "workstation": "QC Lab", "time_in_mins": 60},
 ]
 
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 from datetime import date, timedelta
 from demostackkit.seeder.base import BaseTransactionSeeder
+from demostackkit.seeder.utils import parse_relative_date
 
 
 class SalesOrderSeeder(BaseTransactionSeeder):
@@ -25,8 +26,8 @@ class SalesOrderSeeder(BaseTransactionSeeder):
         if not customers or not fg_items:
             return
         cfg = self.ctx.industry_config.seed
-        start_date = _parse_relative_date(cfg.date_range.start)
-        end_date = _parse_relative_date(cfg.date_range.end)
+        start_date = parse_relative_date(cfg.date_range.start)
+        end_date = parse_relative_date(cfg.date_range.end)
         span = (end_date - start_date).days
         orders = []
         for _ in range(self.volume):
@@ -53,9 +54,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
             )
         orders_json = json.dumps(orders)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 company = '{company}'
 orders = json.loads('''{orders_json}''')
 created = 0
@@ -81,8 +80,3 @@ print(f'Sales Orders created: {{created}}')
         self._exec(script, timeout=300)
 
 
-def _parse_relative_date(value: str) -> date:
-    today = date.today()
-    if value.startswith("-") and value.endswith("d"):
-        return today - timedelta(days=int(value[1:-1]))
-    return date.fromisoformat(value)

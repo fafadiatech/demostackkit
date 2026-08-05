@@ -20,9 +20,7 @@ class CustomerSeeder(BaseMasterSeeder):
         required_groups = sorted({r.get("customer_group", "Commercial") for r in rows if r.get("customer_group")})
         groups_json = json.dumps(required_groups)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 for grp in json.loads('''{groups_json}'''):
     if not frappe.db.exists('Customer Group', grp):
         frappe.get_doc({{'doctype': 'Customer Group', 'customer_group_name': grp, 'parent_customer_group': 'All Customer Groups'}}).insert(ignore_permissions=True)

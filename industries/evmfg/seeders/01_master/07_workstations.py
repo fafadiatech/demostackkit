@@ -35,9 +35,7 @@ class WorkstationSeeder(BaseMasterSeeder):
     def run(self) -> None:
         ws_json = json.dumps(WORKSTATIONS)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 workstations = json.loads('''{ws_json}''')
 created = skipped = 0

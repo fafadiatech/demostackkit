@@ -46,9 +46,7 @@ class ItemSeeder(BaseMasterSeeder):
         required_uoms = sorted({row.get("stock_uom", "Nos") for row in items if row.get("stock_uom")})
         uoms_json = json.dumps(required_uoms)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 for uom_name in json.loads('''{uoms_json}'''):
     if not frappe.db.exists('UOM', uom_name):
         frappe.get_doc({{'doctype': 'UOM', 'uom_name': uom_name}}).insert(ignore_permissions=True)
@@ -82,6 +80,18 @@ print(f'Items: created={{created}}, skipped={{skipped}}')
         all_stock_codes = [row["item_code"] for row in items if row.get("is_stock_item", "1") == "1"]
         self.ctx.cache_set("fg_item_codes", [row["item_code"] for row in items if row.get("item_group") in FG_GROUPS])
         self.ctx.cache_set("rm_item_codes", all_stock_codes)
+        self.ctx.cache_set(
+            "rm_items",
+            [
+                {
+                    "item_code": row["item_code"],
+                    "stock_uom": row.get("stock_uom", "Nos"),
+                    "valuation_rate": float(row.get("valuation_rate", 0)),
+                }
+                for row in items
+                if row.get("is_stock_item", "1") == "1"
+            ],
+        )
 
 
 def _read_csv(path: Path) -> list[dict[str, str]]:

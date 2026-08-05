@@ -36,9 +36,7 @@ class CustomerSeeder(BaseMasterSeeder):
         groups_json = json.dumps(required_groups)
 
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 # Ensure required Customer Groups exist.
 for grp in json.loads('''{groups_json}'''):

@@ -10,9 +10,6 @@ class CompanySeeder(BaseMasterSeeder):
         cfg = self.ctx.industry_config
         company = cfg.company
         script = f"""
-import frappe
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
 if not frappe.db.exists('Company', '{company.name}'):
     doc = frappe.get_doc({{
         'doctype': 'Company',

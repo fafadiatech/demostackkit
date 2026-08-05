@@ -31,9 +31,7 @@ class RoutingSeeder(BaseMasterSeeder):
     def run(self) -> None:
         ops_json = json.dumps(ROUTING_OPERATIONS)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 routing_name = '{ROUTING_NAME}'
 if frappe.db.exists('Routing', routing_name):

@@ -47,9 +47,7 @@ class RoutingSeeder(BaseMasterSeeder):
         sla_ops_json = json.dumps(SLA_OPERATIONS)
 
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 fdm_routing_name = '{FDM_ROUTING}'
 sla_routing_name = '{SLA_ROUTING}'

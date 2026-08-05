@@ -33,9 +33,7 @@ class WarehouseSeeder(BaseMasterSeeder):
         wh_json = json.dumps(warehouses)
 
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 company = '{company}'
 abbr = '{abbr}'

@@ -33,9 +33,7 @@ class ItemGroupSeeder(BaseMasterSeeder):
     def run(self) -> None:
         groups_json = __import__("json").dumps(_ITEM_GROUPS)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 groups = json.loads('''{groups_json}''')
 for grp in groups:

@@ -106,9 +106,7 @@ class BOMSeeder(BaseMasterSeeder):
         company_name = self.ctx.industry_config.company.name
         boms_json = json.dumps(BOMS)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')

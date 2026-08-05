@@ -53,9 +53,7 @@ class ItemSeeder(BaseMasterSeeder):
         uoms_json = json.dumps(required_uoms)
 
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 # Ensure all required UOMs exist before inserting items.
 for uom_name in json.loads('''{uoms_json}'''):

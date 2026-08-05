@@ -34,9 +34,7 @@ class ItemSeeder(BaseMasterSeeder):
         uoms_json = json.dumps(required_uoms)
 
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 # Ensure all required UOMs exist before inserting items.
 for uom_name in json.loads('''{uoms_json}'''):
@@ -79,6 +77,18 @@ print(f'Items: created={{created}}, skipped={{skipped}}')
         self.ctx.cache_set(
             "rm_item_codes",
             [row["item_code"] for row in items if row.get("item_group") in ("Surgical Supplies", "Hospital Consumables")],
+        )
+        self.ctx.cache_set(
+            "rm_items",
+            [
+                {
+                    "item_code": row["item_code"],
+                    "stock_uom": row.get("stock_uom", "Nos"),
+                    "valuation_rate": float(row.get("valuation_rate", 0)),
+                }
+                for row in items
+                if row.get("item_group") in ("Surgical Supplies", "Hospital Consumables")
+            ],
         )
 
 

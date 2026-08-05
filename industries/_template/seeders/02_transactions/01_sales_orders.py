@@ -49,9 +49,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
 
         orders_json = json.dumps(orders)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 company = '{company}'
 orders = json.loads('''{orders_json}''')

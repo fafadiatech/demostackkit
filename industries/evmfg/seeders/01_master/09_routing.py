@@ -59,9 +59,7 @@ class RoutingSeeder(BaseMasterSeeder):
         bike_ops_json = json.dumps(BIKE_OPERATIONS)
 
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 car_routing_name  = '{CAR_ROUTING}'
 bike_routing_name = '{BIKE_ROUTING}'

@@ -30,9 +30,7 @@ class OperationSeeder(BaseMasterSeeder):
     def run(self) -> None:
         ops_json = json.dumps(OPERATIONS)
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 operations = json.loads('''{ops_json}''')
 created = skipped = 0

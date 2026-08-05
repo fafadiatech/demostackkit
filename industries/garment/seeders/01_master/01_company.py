@@ -20,9 +20,6 @@ class CompanySeeder(BaseMasterSeeder):
         company = cfg.company
 
         script = f"""
-import frappe
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
 
 # Ensure required Warehouse Types exist (not created by setup wizard bypass)
 for wh_type in ['Transit', 'Finished Goods', 'Work In Progress', 'Stores']:

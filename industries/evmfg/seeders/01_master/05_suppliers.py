@@ -33,9 +33,7 @@ class SupplierSeeder(BaseMasterSeeder):
         rows_json = json.dumps(rows)
 
         script = f"""
-import frappe, json
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
+import json
 
 rows = json.loads('''{rows_json}''')
 created = skipped = 0

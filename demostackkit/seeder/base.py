@@ -136,14 +136,29 @@ class BaseSeeder(abc.ABC):
         """
 
     def _exec(self, script: str, timeout: int = 120) -> str:
-        """Execute a Python script inside the backend container using the bench virtualenv."""
+        """Execute a Python script inside the backend container using the bench virtualenv.
+
+        A Frappe initialisation preamble is automatically prepended so individual
+        seeders do not need to repeat the boilerplate:
+
+            import frappe
+            frappe.init(site=<site>, sites_path=<bench>/sites)
+            frappe.connect()
+        """
+        preamble = (
+            "import frappe\n"
+            f"frappe.init(site='{self.ctx.site}', "
+            f"sites_path='{self.ctx.bench_path}/sites')\n"
+            "frappe.connect()\n"
+        )
+        full_script = preamble + script
         python = f"{self.ctx.bench_path}/env/bin/python"
         result = subprocess.run(
             [
                 "docker", "exec", "-i",
                 "-e", "FRAPPE_STREAM_LOGGING=1",
                 self.ctx.backend_container,
-                python, "-c", script,
+                python, "-c", full_script,
             ],
             capture_output=True,
             text=True,

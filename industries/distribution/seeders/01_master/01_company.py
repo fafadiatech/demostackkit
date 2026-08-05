@@ -10,9 +10,6 @@ class CompanySeeder(BaseMasterSeeder):
         cfg = self.ctx.industry_config
         company = cfg.company
         script = f"""
-import frappe
-frappe.init(site='{self.ctx.site}', sites_path='{self.ctx.bench_path}/sites')
-frappe.connect()
 for wh_type in ['Transit', 'Finished Goods', 'Work In Progress', 'Stores']:
     if not frappe.db.exists('Warehouse Type', wh_type):
         frappe.get_doc({{'doctype': 'Warehouse Type', 'name': wh_type, 'warehouse_type': wh_type}}).insert(ignore_permissions=True)

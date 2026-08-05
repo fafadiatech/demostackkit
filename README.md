@@ -28,10 +28,31 @@ demostackkit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | Jewellery Manufacturing | `jewellery` | http://jewellery.localhost | ✓ |
 | Drones Manufacturing | `drones` | http://drones.localhost | ✓ |
 | Crockery Manufacturing | `crockery` | http://crockery.localhost | ✓ |
+| 3D Printing Services | `print3d` | http://print3d.localhost | ✓ |
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
 | Distribution | `distribution` | http://distribution.localhost | — |
 | Healthcare | `healthcare` | http://healthcare.localhost | — |
+| Vanilla (clean slate) | `vanilla` | http://vanilla.localhost | — |
+
+### 3D Printing Services (`print3d`)
+
+A 3D print farm that takes customer orders for parts printed via FDM (fused deposition modeling) and SLA (stereolithography) technologies. Includes:
+
+- **Printers modelled as workstations** — FDM Printer Bank, SLA Printer Bank, UV Curing Chamber, Washing Station
+- **Two production routings** — FDM Standard Route (5 steps) and SLA Standard Route (7 steps, including IPA washing and UV curing)
+- **Material procurement** — filaments (PLA, ABS, PETG, TPU) and resins (standard, engineering, ABS-like) with correct UOM per material (Kg / Litre)
+- **9 finished-goods BOMs** — small/medium/large prototypes, functional parts, and display models, each linked to the correct routing
+- **Quality inspections** — dimensional accuracy, surface roughness Ra, layer adhesion, and print completion parameters
+
+### Vanilla (`vanilla`)
+
+A minimal environment with only a company and demo users created — no master data or transactions are seeded. Use this as a clean slate for custom demonstrations, onboarding sessions, or interactive workshops where the audience populates data live.
+
+```bash
+demostackkit up vanilla
+demostackkit up vanilla --currency EUR   # currency override works as usual
+```
 
 ## Quick Start
 

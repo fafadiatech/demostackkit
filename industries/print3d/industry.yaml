@@ -1,0 +1,88 @@
+# 3D Printing Services Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up print3d
+# URL: http://print3d.localhost  (admin / admin)
+
+name: "3D Printing Services"
+slug: "print3d"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for a 3D print farm offering FDM and SLA printing
+  services. Covers filament/resin procurement, print job management across
+  multiple printer technologies, post-processing workflows, and quality
+  inspection of finished parts.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+company:
+  name: "PrintForge 3D Services Inc"
+  abbr: "PF3"
+  currency: "USD"
+  country: "United States"
+  fiscal_year_start: "01-01"
+
+site:
+  name: "print3d.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "America/New_York"
+
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Manufacturing
+  - Quality Management
+
+seed:
+  random_seed: 20240315
+  volumes:
+    customers: 12
+    suppliers: 10
+    sales_orders: 40
+    purchase_orders: 25
+    quality_inspections: 20
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+users:
+  - email: "print.manager@print3d.demo"
+    full_name: "Jordan Rivera"
+    roles:
+      - Manufacturing Manager
+      - Stock Manager
+  - email: "sales@print3d.demo"
+    full_name: "Alex Chen"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "supply@print3d.demo"
+    full_name: "Morgan Patel"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@print3d.demo"
+    full_name: "Taylor Kim"
+    roles:
+      - Accounts Manager
+
+validate:
+  min_sales_orders: 30
+  min_items: 18
+  required_doctypes:
+    - BOM
+    - Routing
+    - Workstation
+    - Operation

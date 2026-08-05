@@ -1,0 +1,23 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+MAT-PLA-WHT,PLA Filament 1kg White,FDM Filaments,Kg,Premium PLA 1.75mm white filament for FDM printing,1,18.00
+MAT-PLA-BLK,PLA Filament 1kg Black,FDM Filaments,Kg,Premium PLA 1.75mm black filament for FDM printing,1,18.00
+MAT-ABS-GRY,ABS Filament 1kg Grey,FDM Filaments,Kg,Engineering-grade ABS 1.75mm grey for FDM printing,1,22.00
+MAT-PETG-CLR,PETG Filament 1kg Clear,FDM Filaments,Kg,Food-safe PETG 1.75mm clear filament,1,25.00
+MAT-TPU-BLK,TPU Filament 500g Black,FDM Filaments,Kg,Flexible TPU 95A 1.75mm black filament,1,35.00
+MAT-RES-STD,Standard Resin 1L White,SLA Resins,Litre,Standard photopolymer resin 405nm white,1,45.00
+MAT-RES-ENG,Engineering Resin 1L Grey,SLA Resins,Litre,High-strength engineering resin 405nm grey,1,75.00
+MAT-RES-ABS,ABS-Like Resin 1L Black,SLA Resins,Litre,ABS-like rigid resin 405nm black,1,55.00
+MAT-IPA-99,Isopropyl Alcohol 99% 1L,Post-Processing Supplies,Litre,IPA 99% purity for SLA part washing,1,8.00
+MAT-SAND-220,Sandpaper 220 Grit Pack,Post-Processing Supplies,Pack,25-sheet sandpaper pack for surface finishing,1,4.00
+MAT-PRIMER,Grey Primer Spray 400ml,Post-Processing Supplies,Nos,Automotive grey primer for surface prep,1,6.00
+MAT-PKG-BOX-S,Small Cardboard Box,Packaging,Nos,Corrugated cardboard box 200x200x150mm,1,1.20
+MAT-PKG-BUBBLE,Bubble Wrap Sheet,Packaging,Nos,500mm x 500mm bubble wrap protective sheet,1,0.50
+PRT-FDM-PROTO-S,FDM Prototype Small,Prototypes,Nos,FDM 3D printed prototype under 50cm3 volume,1,8.00
+PRT-FDM-PROTO-M,FDM Prototype Medium,Prototypes,Nos,FDM 3D printed prototype 50-300cm3 volume,1,20.00
+PRT-FDM-PROTO-L,FDM Prototype Large,Prototypes,Nos,FDM 3D printed prototype over 300cm3 volume,1,45.00
+PRT-FDM-FUNC-S,FDM Functional Part Small,Functional Parts,Nos,FDM engineering-grade functional part under 50cm3,1,15.00
+PRT-FDM-FUNC-M,FDM Functional Part Medium,Functional Parts,Nos,FDM engineering-grade functional part 50-300cm3,1,35.00
+PRT-SLA-PROTO-S,SLA Prototype Small,Prototypes,Nos,SLA high-detail prototype under 30cm3 volume,1,18.00
+PRT-SLA-PROTO-M,SLA Prototype Medium,Prototypes,Nos,SLA high-detail prototype 30-150cm3 volume,1,40.00
+PRT-SLA-FUNC-S,SLA Functional Part Small,Functional Parts,Nos,SLA engineering resin functional part under 30cm3,1,25.00
+PRT-SLA-DISP-M,SLA Display Model Medium,Display Models,Nos,SLA high-detail display or art model 30-150cm3,1,50.00

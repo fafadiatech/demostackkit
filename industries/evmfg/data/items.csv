@@ -1,0 +1,38 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+MAT-LICELL-21700,Li-Ion Cell 21700 3.6V,Battery Components,Nos,High-energy cylindrical lithium-ion cell 21700 for EV battery packs,1,265.00
+MAT-LICELL-18650,Li-Ion Cell 18650 3.6V,Battery Components,Nos,Cylindrical lithium-ion cell 18650 for two-wheeler battery packs,1,210.00
+MAT-BMS-HV,High-Voltage BMS 200A 16S,Battery Components,Nos,Battery management system for 48-60V high-voltage car packs,1,15000.00
+MAT-BMS-LV,Low-Voltage BMS 60A 7S,Battery Components,Nos,Battery management system for 24-48V two-wheeler packs,1,3750.00
+MAT-BUSBAR,Copper Busbar Strip,Battery Components,Meter,99.9% pure copper flat busbar for cell interconnects,1,660.00
+MAT-THERMAL,Thermal Interface Pad 100mm,Battery Components,Nos,Phase-change thermal pad for cell-to-pack heat management,1,250.00
+MAT-DCDC,DC-DC Converter 12V 20A,Electrical & Electronics,Nos,Bidirectional DC-DC converter for 12V auxiliary systems,1,2900.00
+MAT-CTRL-HV,High-Power Motor Controller 80kW,Electrical & Electronics,Nos,FOC motor controller for 80kW PMSM traction motors,1,26500.00
+MAT-CTRL-LV,BLDC Motor Controller 5kW,Electrical & Electronics,Nos,Sinusoidal BLDC controller for hub motors up to 5kW,1,7900.00
+MAT-CHARGEPORT,CCS2 Charging Port Assembly,Electrical & Electronics,Nos,Combined charging system 2 port with locking actuator,1,5400.00
+MAT-HARNESS-CAR,Automotive Wiring Harness Car,Electrical & Electronics,Set,Full vehicle wiring harness for four-wheeler EV platform,1,18500.00
+MAT-HARNESS-BIKE,Wiring Harness Two-Wheeler,Electrical & Electronics,Set,Wiring harness set for electric two-wheeler platform,1,3750.00
+MAT-CLUSTER,Instrument Cluster Display 7 inch,Electrical & Electronics,Nos,7-inch TFT instrument cluster with BT and GPS,1,7900.00
+MAT-CONTACTOR,High-Voltage Contactor 200A,Electrical & Electronics,Nos,Main and pre-charge HV contactors for battery disconnect,1,1850.00
+MAT-FUSE-HV,High-Voltage Fuse 250A,Electrical & Electronics,Nos,Ceramic HV fuse for main battery circuit protection,1,1000.00
+MAT-FRAME-CAR,Steel Monocoque Frame Car,Structural & Body,Set,High-strength steel monocoque body-in-white for car platform,1,100000.00
+MAT-FRAME-BIKE,Aluminium Alloy Bike Frame,Structural & Body,Nos,6061-T6 aluminium alloy frame for electric two-wheeler,1,15000.00
+MAT-BODY-CAR,Body Panel Set Car,Structural & Body,Set,Complete set of stamped steel exterior body panels,1,70000.00
+MAT-MOTOR-CAR,PMSM Traction Motor 60kW,Structural & Body,Nos,Permanent magnet synchronous traction motor 60kW peak,1,150000.00
+MAT-MOTOR-BIKE,BLDC Hub Motor 3kW,Structural & Body,Nos,Brushless DC rear hub motor 3kW for electric two-wheeler,1,18500.00
+MAT-BRAKE-DISC,Disc Brake Assembly,Structural & Body,Nos,Hydraulic disc brake caliper and rotor assembly,1,7100.00
+MAT-SUSP-CAR,Front Suspension Kit Car,Structural & Body,Set,MacPherson strut front suspension kit with coil springs,1,35000.00
+MAT-AXLE-REAR,Rear Axle Assembly,Structural & Body,Nos,Solid rear axle with differential for car platform,1,31500.00
+MAT-TYRE-CAR,Car Tyre Set,Structural & Body,Set,Set of 4 tubeless radial tyres 205/55R16,1,20000.00
+MAT-TYRE-BIKE,Bike Tyre Set,Structural & Body,Set,Front and rear tubeless tyres for electric two-wheeler,1,5000.00
+MAT-HANDLE-BIKE,Handlebar and Stem Assembly,Structural & Body,Nos,Adjustable aluminium handlebar with integrated switch cluster,1,2900.00
+MAT-WELD-WIRE,MIG Welding Wire 15kg Spool,Manufacturing Supplies,Nos,ER70S-6 MIG wire for steel chassis welding,1,3750.00
+MAT-SEALANT,Automotive Sealant 310ml,Manufacturing Supplies,Nos,Polyurethane seam sealer for body and battery tray joints,1,665.00
+MAT-PKG-CRATE-L,Heavy Duty Wooden Crate Large,Packaging,Nos,ISPM-15 compliant wooden crate for car dispatch,1,7100.00
+MAT-PKG-CRATE-M,Wooden Crate Medium,Packaging,Nos,Wooden crate for electric two-wheeler dispatch,1,2900.00
+MAT-PKG-WRAP,Stretch Wrap Film Roll,Packaging,Nos,500mm stretch wrap roll for part protection,1,1250.00
+EV-CAR-SEDAN,Voltara Sedan EV,Electric Cars,Nos,5-seat electric sedan 72kWh dual-motor 500km range,1,1500000.00
+EV-CAR-SUV,Voltara SUV EV,Electric Cars,Nos,7-seat electric SUV 90kWh dual-motor 520km range,1,1850000.00
+EV-CAR-HATCH,Voltara Hatchback EV,Electric Cars,Nos,5-seat electric hatchback 54kWh single-motor 400km range,1,1150000.00
+EV-BIKE-SPORT,Voltara Sport E-Bike,Electric Bikes,Nos,Sport electric motorcycle 1.5kWh 120kmph top speed,1,150000.00
+EV-BIKE-CITY,Voltara City Commuter E-Bike,Electric Bikes,Nos,Urban electric scooter 1kWh 80kmph top speed,1,100000.00
+EV-BIKE-CARGO,Voltara Cargo E-Bike,Electric Bikes,Nos,Electric cargo bike 2kWh 250kg payload capacity,1,125000.00

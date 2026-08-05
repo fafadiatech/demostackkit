@@ -29,11 +29,22 @@ demostackkit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | Drones Manufacturing | `drones` | http://drones.localhost | ✓ |
 | Crockery Manufacturing | `crockery` | http://crockery.localhost | ✓ |
 | 3D Printing Services | `print3d` | http://print3d.localhost | ✓ |
+| EV Manufacturing | `evmfg` | http://evmfg.localhost | ✓ |
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
 | Distribution | `distribution` | http://distribution.localhost | — |
 | Healthcare | `healthcare` | http://healthcare.localhost | — |
 | Vanilla (clean slate) | `vanilla` | http://vanilla.localhost | — |
+
+### EV Manufacturing (`evmfg`)
+
+An Indian electric vehicle manufacturer (Voltara EV) producing both electric cars and electric bikes. The central demo story is **shared component procurement** — items like the DC-DC converter, CCS2 charging port, instrument cluster, HV contactor, HV fuse, disc brake assemblies, copper busbars, and thermal pads all appear in BOMs for both vehicle families, naturally driving consolidated purchasing scenarios. Includes:
+
+- **3 electric cars** — Sedan (72 kWh dual-motor), SUV (90 kWh dual-motor), Hatchback (54 kWh single-motor)
+- **3 electric bikes** — Sport, City Commuter, Cargo; each using 18650-cell packs and hub motors
+- **Two manufacturing routings** — EV Car Route (9 steps, ~40 hrs) and EV Bike Route (8 steps, ~6.5 hrs)
+- **6 BOMs with 19-21 components each** — car BOMs use 21700 cells + 60 kW PMSM motors; bike BOMs use 18650 cells + 3 kW hub motors
+- **Split sales order generation** — 40% car orders (qty 1–3, ₹12–22 lakh) and 60% bike orders (qty 1–15, ₹80k–1.8 lakh) with different lead times
 
 ### 3D Printing Services (`print3d`)
 
@@ -78,11 +89,13 @@ pip install -e .
 demostackkit init
 demostackkit doctor
 
-# Spin up the garment demo
-demostackkit up garment
+# Spin up any industry — examples:
+demostackkit up garment    # Garment Manufacturing → http://garment.localhost
+demostackkit up evmfg      # EV Manufacturing      → http://evmfg.localhost
+demostackkit up print3d    # 3D Printing Services  → http://print3d.localhost
+demostackkit up vanilla    # Clean slate            → http://vanilla.localhost
 
-# Access at http://garment.localhost
-# Login: Administrator / admin
+# Login: Administrator / admin (or any seeded user at Demo@1234)
 ```
 
 ### CLI Reference
@@ -137,12 +150,15 @@ The active version is stored in `infra/.env` as `ERPNEXT_VERSION`. Docker Compos
 Each industry's default currency is set in its `industry.yaml` under `company.currency`. You can override it at runtime with `--currency` (ISO 4217 code) without touching any config files:
 
 ```bash
-# Spin up Jewellery with USD, Garment with INR
+# Spin up EV Manufacturing with USD instead of default INR
+demostackkit up evmfg --currency USD
+
+# Spin up Jewellery with USD, 3D Printing with GBP
 demostackkit up jewellery --currency USD
-demostackkit up garment --currency INR
+demostackkit up print3d --currency GBP
 
 # Override currency when re-running seeders on an existing site
-demostackkit seed jewellery --currency USD
+demostackkit seed evmfg --currency USD
 ```
 
 The override applies to both the ERPNext setup wizard (company default currency) and all seeders.
@@ -167,21 +183,30 @@ Recommended workflow when switching versions:
 ```bash
 demostackkit use v16
 demostackkit purge --yes    # clear old site data
-demostackkit up garment     # fresh v16 site
+demostackkit up evmfg       # fresh v16 site — works for any industry
 ```
 
 ### Installing Extra Apps
 
 Each industry can declare additional Frappe apps in `industry.yaml` under `extra_apps`. These are fetched via `bench get-app` and installed automatically on every `up`, `create`, and `reset`.
 
+All industries ship with **HRMS** and **Helpdesk** pre-configured:
+
 ```yaml
-# industries/garment/industry.yaml
+# industries/evmfg/industry.yaml (all industries follow the same pattern)
 extra_apps:
-  - name: hrms          # from frappe.io
+  - name: hrms          # Frappe HRMS — payroll, leaves, appraisals
     source: frappe
     branch: version-15
+  - name: helpdesk      # Frappe Helpdesk — customer support tickets
+    source: frappe
+```
 
-  - name: hrms          # from GitHub
+You can also add apps from GitHub or a local directory:
+
+```yaml
+extra_apps:
+  - name: hrms
     source: github
     url: https://github.com/frappe/hrms
     branch: version-15

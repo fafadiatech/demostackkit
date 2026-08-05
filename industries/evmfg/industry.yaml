@@ -1,0 +1,101 @@
+# EV Manufacturing Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up evmfg
+# URL: http://evmfg.localhost  (admin / admin)
+
+name: "EV Manufacturing"
+slug: "evmfg"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for an electric vehicle manufacturer producing
+  both electric cars (sedan, SUV, hatchback) and electric bikes (sport, city,
+  cargo). Demonstrates shared component procurement (battery cells, BMS,
+  charging ports, controllers, disc brakes) across both vehicle families,
+  multi-routing manufacturing workflows, and EV-specific quality inspections.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# Extra apps fetched at runtime via bench get-app
+extra_apps:
+  - name: hrms
+    source: frappe
+    branch: version-15
+  - name: helpdesk
+    source: frappe
+
+company:
+  name: "Voltara EV Manufacturing Pvt Ltd"
+  abbr: "VEM"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+site:
+  name: "evmfg.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Manufacturing
+  - Quality Management
+
+seed:
+  random_seed: 20240601
+  volumes:
+    customers: 15
+    suppliers: 10
+    sales_orders: 35
+    purchase_orders: 30
+    quality_inspections: 25
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+users:
+  - email: "production.manager@evmfg.demo"
+    full_name: "Rajan Menon"
+    roles:
+      - Manufacturing Manager
+      - Stock Manager
+  - email: "engineering@evmfg.demo"
+    full_name: "Priya Subramaniam"
+    roles:
+      - Manufacturing Manager
+  - email: "sales@evmfg.demo"
+    full_name: "Arjun Kapoor"
+    roles:
+      - Sales Manager
+      - CRM Manager
+  - email: "purchase@evmfg.demo"
+    full_name: "Neha Joshi"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@evmfg.demo"
+    full_name: "Kiran Bhat"
+    roles:
+      - Accounts Manager
+
+validate:
+  min_sales_orders: 25
+  min_items: 30
+  required_doctypes:
+    - BOM
+    - Routing
+    - Workstation
+    - Operation

@@ -3,6 +3,7 @@ from __future__ import annotations
 from demostackkit.seeder.base import BaseMasterSeeder
 
 _ITEM_GROUPS = [
+    {"item_group_name": "Finished Goods", "parent_item_group": "All Item Groups"},
     {"item_group_name": "Solar Panels", "parent_item_group": "All Item Groups"},
     {"item_group_name": "Inverters", "parent_item_group": "All Item Groups"},
     {"item_group_name": "Mounting Structures", "parent_item_group": "All Item Groups"},

@@ -1,8 +1,13 @@
-# demostackkit
+# DemoStackKit
+
+<div align="center">
+  <img src="logo.png" alt="DemoStackKit" width="400"/>
+</div>
 
 > Create, manage and distribute ERPNext demo environments for different industries — with a single command.
 
-[![CI](https://github.com/demostackkit/demostackkit/actions/workflows/ci.yml/badge.svg)](https://github.com/demostackkit/demostackkit/actions)
+DemoStackKit is an open-source toolkit for quickly spinning up industry-specific ERPNext demo environments with realistic sample data. It includes ready-to-use demos for Garment Manufacturing, Chemical Manufacturing, Engineering Procurement & Construction (EPC), Solar Manufacturing, Auto Dealerships, and Jewellery Manufacturing.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 

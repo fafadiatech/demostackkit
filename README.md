@@ -1,7 +1,7 @@
 # DemoStackKit
 
 <div align="center">
-  <img src="logo.png" alt="DemoStackKit" width="400"/>
+  <img src="logo.png" alt="DemoStackKit" />
 </div>
 
 > Create, manage and distribute ERPNext demo environments for different industries — with a single command.

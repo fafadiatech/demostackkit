@@ -13,7 +13,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
 
 ## Index
 
-- [What is demostackkit?](#what-is-demostackkit)
+- [What is DemoStackKit?](#what-is-demostackkit)
 - [Supported Industries](#supported-industries)
 - [Quick Start](#quick-start)
   - [Prerequisites](#prerequisites)
@@ -45,9 +45,9 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
 - [Contributing](#contributing)
 - [License](#license)
 
-## What is demostackkit?
+## What is DemoStackKit?
 
-demostackkit makes it trivial to spin up a **fully seeded** ERPNext demo environment for any industry vertical. After one command, you get:
+DemoStackKit makes it trivial to spin up a **fully seeded** ERPNext demo environment for any industry vertical. After one command, you get:
 
 - ERPNext v15 or v16 installed and running
 - A demo company configured

@@ -37,6 +37,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
   - [Crockery Manufacturing](#crockery-manufacturing-crockery)
   - [3D Printing Services](#3d-printing-services-print3d)
   - [EV Manufacturing](#ev-manufacturing-evmfg)
+  - [Electrical Equipment Manufacturing](#electrical-equipment-manufacturing-electrical)
   - [Engineering Procurement & Construction](#engineering-procurement--construction-epc)
   - [Automobile Dealership](#automobile-dealership-automobile)
   - [FMCG Distribution](#fmcg-distribution-distribution)
@@ -69,6 +70,7 @@ DemoStackKit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | Crockery Manufacturing | `crockery` | http://crockery.localhost | ✓ |
 | 3D Printing Services | `print3d` | http://print3d.localhost | ✓ |
 | EV Manufacturing | `evmfg` | http://evmfg.localhost | ✓ |
+| Electrical Equipment Manufacturing | `electrical` | http://electrical.localhost | ✓ |
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
 | Distribution | `distribution` | http://distribution.localhost | — |
@@ -376,6 +378,16 @@ Voltara EV Manufacturing Pvt Ltd — Indian EV manufacturer producing both elect
 - **Two manufacturing routings** — EV Car Route (9 steps, ~40 hrs) and EV Bike Route (8 steps, ~6.5 hrs)
 - **6 BOMs with 19–21 components each** — car BOMs use 21700 cells + 60 kW PMSM motors; bike BOMs use 18650 cells + 3 kW hub motors
 - **Split sales order generation** — 40% car orders (qty 1–3, ₹12–22 lakh, 30–90 day lead) and 60% bike orders (qty 1–15, ₹80k–1.8 lakh, 7–30 day lead)
+
+### Electrical Equipment Manufacturing (`electrical`)
+
+PowerTech Electrical Pvt Ltd — switchgear and transformer manufacturer producing distribution transformers (100kVA–500kVA), power transformers (1MVA), HT switchgear panels (11kV), LT distribution panels (415V), and motor control centres. Covers a project-driven B2B sales cycle where state electricity boards and EPC contractors place high-value made-to-order contracts. Includes:
+
+- **Two manufacturing routings** — Transformer Route (7 steps: coil winding → core lamination → assembly → tank fabrication → oil filling → HV testing → packing) and Switchgear Route (3 steps: panel assembly → HV testing → packing)
+- **7 BOMs** — 4 transformer BOMs (100kVA, 250kVA, 500kVA, 1MVA) and 3 switchgear panel BOMs (HT 11kV, LT 415V, MCC 415V); each with domain-accurate copper, CRGO steel, and insulating oil quantities
+- **Split sales order generation** — 60% transformer orders (qty 1–5, 60–120 day lead) and 40% switchgear orders (qty 1–3, 30–60 day lead)
+- **Electrical quality parameters** — turns ratio error (%), insulation resistance (MOhm), oil breakdown voltage (kV), and load loss (W)
+- **12 customers** — state electricity boards (MSEDCL, KSEB, TSSPDCL), EPC contractors (L&T, Tata Projects), industrial consumers, and export partners
 
 ### Engineering Procurement & Construction (`epc`)
 

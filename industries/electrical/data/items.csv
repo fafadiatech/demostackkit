@@ -1,0 +1,36 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+ERM-CU-WIRE-15,Copper Winding Wire 1.5mm,Electrical Raw Materials,Kg,High conductivity 99.9% copper enameled winding wire 1.5mm diameter for LV coils,1,750.00
+ERM-CU-WIRE-30,Copper Winding Wire 3.0mm,Electrical Raw Materials,Kg,High conductivity 99.9% copper enameled winding wire 3.0mm diameter for HV coils,1,740.00
+ERM-CRGO-STEEL,CRGO Silicon Steel Lamination,Electrical Raw Materials,Kg,Cold rolled grain oriented silicon steel M4 grade 0.27mm for transformer cores,1,120.00
+ERM-TRANS-OIL,Transformer Oil IS 335,Electrical Raw Materials,Litre,Mineral based transformer insulating oil compliant with IS 335 and IEC 60296,1,95.00
+ERM-INS-PAPER,Insulation Paper 0.125mm,Electrical Raw Materials,Kg,Kraft insulation paper 0.125mm for transformer coil winding and interlayer insulation,1,180.00
+ERM-EPOXY,Epoxy Resin System,Electrical Raw Materials,Kg,Bisphenol-A epoxy resin for cast resin transformer insulation and surface protection,1,280.00
+ERM-MS-SHEET,MS Steel Sheet 3mm,Electrical Raw Materials,Kg,Mild steel sheet IS 2062 grade for transformer tank and switchgear enclosure fabrication,1,65.00
+ECOMP-BUSH-HV,HV Porcelain Bushing 11kV,Electrical Components,Nos,11kV outdoor porcelain bushing 400A continuous current rating for transformer HV side,1,3500.00
+ECOMP-BUSH-LV,LV Porcelain Bushing 415V,Electrical Components,Nos,415V LV bushing 1600A for distribution transformer LV side,1,850.00
+ECOMP-BUCHHOLZ,Buchholz Relay,Electrical Components,Nos,Oil and gas actuated protective relay for oil-immersed transformers with alarm and trip contacts,1,4500.00
+ECOMP-TEMP-IND,Winding Temperature Indicator,Electrical Components,Nos,Dial type winding temperature indicator 0-150 C with alarm and trip contacts,1,2800.00
+ECOMP-PRD,Pressure Relief Device,Electrical Components,Nos,Spring loaded pressure relief device 80mm for transformer conservator tank protection,1,2200.00
+ECOMP-BUSBAR-AL,Aluminium Busbar 50x6mm,Electrical Components,Meter,6101 alloy aluminium busbar 50x6mm for LT distribution panels and MCC,1,210.00
+ECOMP-BUSBAR-CU,Copper Busbar 50x6mm,Electrical Components,Meter,Electrolytic copper busbar 50x6mm for HT switchgear current carrying conductors,1,620.00
+ECOMP-MCB-63A,MCB 63A 4-Pole,Electrical Components,Nos,Miniature circuit breaker 63A 4-pole 10kA breaking capacity for LT distribution,1,1850.00
+ECOMP-MCCB-400A,MCCB 400A 3-Pole,Electrical Components,Nos,Moulded case circuit breaker 400A 3-pole 50kA breaking capacity with motor operator,1,12500.00
+ECOMP-CT-11KV,Current Transformer 11kV,Electrical Components,Nos,Metering class current transformer 11kV 100/5A class 0.5 for energy metering,1,8500.00
+ECOMP-VCB,Vacuum Circuit Breaker 11kV,Electrical Components,Nos,11kV 630A vacuum circuit breaker with spring charged operating mechanism,1,85000.00
+ECOMP-RELAY-PROT,Numerical Protection Relay,Electrical Components,Nos,Microprocessor-based overcurrent and earth fault numerical protection relay with communication,1,18500.00
+ECOMP-GASKET,Gasket Set Natural Rubber,Electrical Components,Set,Complete gasket set for transformer tank cover conservator and radiator flanges,1,1200.00
+ECOMP-CABLE-LUG,Cable Lug 95mm Copper,Electrical Components,Nos,Mechanical type copper cable lug 95mm2 for transformer HV and LV terminations,1,95.00
+ESA-COIL-HV,HV Wound Coil Assembly,Switchgear Assemblies,Nos,High voltage coil wound on mandrel with inter-layer insulation paper taping,1,25000.00
+ESA-COIL-LV,LV Wound Coil Assembly,Switchgear Assemblies,Nos,Low voltage disc coil wound on mandrel with conductor transposition,1,18000.00
+ESA-CORE,Transformer Core Assembly,Switchgear Assemblies,Nos,Laminated CRGO core assembly mitred joint construction with clamping structure,1,35000.00
+ESA-SWGR-BUS,Switchgear Busbar Assembly,Switchgear Assemblies,Nos,11kV busbar assembly with porcelain insulator supports and end sealing caps,1,22000.00
+EFG-TRANS-100,Distribution Transformer 100 kVA 11kV/415V,Transformers,Nos,ONAN cooled distribution transformer 100kVA 11kV/415V Dyn11 3-phase 50Hz IS 2026,1,180000.00
+EFG-TRANS-250,Distribution Transformer 250 kVA 11kV/415V,Transformers,Nos,ONAN cooled distribution transformer 250kVA 11kV/415V Dyn11 3-phase 50Hz IS 2026,1,350000.00
+EFG-TRANS-500,Distribution Transformer 500 kVA 11kV/415V,Transformers,Nos,ONAN cooled distribution transformer 500kVA 11kV/415V Dyn11 3-phase 50Hz IS 2026,1,620000.00
+EFG-TRANS-1MVA,Power Transformer 1 MVA 33kV/11kV,Transformers,Nos,ONAN cooled power transformer 1MVA 33kV/11kV YNd11 3-phase 50Hz IS 2026,1,1800000.00
+EFG-SWGR-HT,HT Switchgear Panel 11kV,Switchgear,Nos,Metal-clad indoor HT switchgear panel 11kV VCB with numerical protection relay,1,450000.00
+EFG-SWGR-LT,LT Distribution Panel 415V,Switchgear,Nos,MCCB based LT distribution panel 415V with metering busbars and incomer breaker,1,125000.00
+EFG-MCC,Motor Control Center 415V,Switchgear,Nos,Fully draw-out motor control centre 415V with DOL and star-delta starters,1,280000.00
+EPKG-CRATE-LG,Heavy Duty Wooden Crate Large,Packaging Materials,Nos,ISPM-15 compliant fumigated wooden crate for transformer dispatch,1,8500.00
+EPKG-CRATE-MD,Wooden Crate Medium,Packaging Materials,Nos,Wooden crate for LT panel and switchgear dispatch,1,3500.00
+EPKG-WRAP,Stretch Wrap Film Roll,Packaging Materials,Nos,500mm stretch wrap roll for equipment surface protection during transit,1,950.00

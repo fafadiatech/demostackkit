@@ -1,0 +1,95 @@
+# Electrical Equipment Manufacturing Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up electrical
+# URL: http://electrical.localhost  (admin / admin)
+
+name: "Electrical Equipment Manufacturing"
+slug: "electrical"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for a switchgear and transformer manufacturer
+  producing distribution transformers (100kVA–500kVA), power transformers
+  (1MVA), HT switchgear panels (11kV), LT distribution panels (415V), and
+  motor control centres. Demonstrates multi-operation transformer manufacturing
+  workflows (coil winding, core lamination, assembly, oil filling, HV testing),
+  switchgear panel assembly, and electrical-industry quality inspections.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+extra_apps: []
+
+company:
+  name: "PowerTech Electrical Pvt Ltd"
+  abbr: "PEL"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+site:
+  name: "electrical.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Manufacturing
+  - Quality Management
+
+seed:
+  random_seed: 20240820
+  volumes:
+    customers: 12
+    suppliers: 10
+    sales_orders: 45
+    purchase_orders: 35
+    quality_inspections: 20
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+users:
+  - email: "production.manager@electrical.demo"
+    full_name: "Ramesh Kulkarni"
+    roles:
+      - Manufacturing Manager
+      - Stock Manager
+  - email: "engineering@electrical.demo"
+    full_name: "Priya Nair"
+    roles:
+      - Manufacturing Manager
+  - email: "sales@electrical.demo"
+    full_name: "Suresh Mehta"
+    roles:
+      - Sales Manager
+  - email: "purchase@electrical.demo"
+    full_name: "Anita Sharma"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@electrical.demo"
+    full_name: "Vikram Desai"
+    roles:
+      - Accounts Manager
+
+validate:
+  min_sales_orders: 35
+  min_items: 25
+  required_doctypes:
+    - BOM
+    - Routing
+    - Workstation
+    - Operation

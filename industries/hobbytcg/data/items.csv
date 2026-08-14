@@ -1,0 +1,30 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,has_batch_no,has_serial_no,valuation_rate
+PKM-BOX-SV05,Pokémon SV05 Temporal Forces Booster Box,Sealed Product,Box,36-pack booster box for Pokémon Scarlet & Violet — Temporal Forces expansion,1,1,0,72.00
+PKM-BOX-SV06,Pokémon SV06 Twilight Masquerade Booster Box,Sealed Product,Box,36-pack booster box for Pokémon Scarlet & Violet — Twilight Masquerade expansion,1,1,0,72.00
+PKM-BOX-SV07,Pokémon SV07 Stellar Crown Booster Box,Sealed Product,Box,36-pack booster box for Pokémon Scarlet & Violet — Stellar Crown expansion,1,1,0,72.00
+MTG-BOX-BLB,Magic: The Gathering Bloomburrow Play Booster Box,Sealed Product,Box,36-pack Play Booster box for Magic: The Gathering Bloomburrow set,1,1,0,90.00
+MTG-BOX-DSK,Magic: The Gathering Duskmourn Draft Booster Box,Sealed Product,Box,36-pack Draft Booster box for Magic: The Gathering Duskmourn: House of Horror,1,1,0,90.00
+YGO-BOX-PHNI,Yu-Gi-Oh! Phantom Nightmare Booster Box,Sealed Product,Box,24-pack booster box for Yu-Gi-Oh! Phantom Nightmare expansion,1,1,0,55.00
+YGO-BOX-AGOV,Yu-Gi-Oh! Age of Overlord Booster Box,Sealed Product,Box,24-pack booster box for Yu-Gi-Oh! Age of Overlord expansion,1,1,0,55.00
+PKM-CASE-SV05,Pokémon SV05 Temporal Forces Booster Case (6 boxes),Sealed Product,Case,Factory-sealed case of 6 Pokémon Temporal Forces booster boxes,1,1,0,420.00
+MTG-CASE-BLB,Magic: The Gathering Bloomburrow Play Booster Case (6 boxes),Sealed Product,Case,Factory-sealed case of 6 Magic: The Gathering Bloomburrow Play Booster boxes,1,1,0,528.00
+GRADE-PKM-PSA10-CHARIZARD,Pokémon Base Set Charizard Holo (PSA 10),Graded Cards,Nos,PSA Gem Mint 10 graded Pokémon Base Set unlimited Charizard holographic rare,1,0,1,8500.00
+GRADE-PKM-BGS95-PIKACHU,Pokémon 1st Ed. Pikachu Base Set (BGS 9.5),Graded Cards,Nos,BGS 9.5 Gem Mint graded Pokémon 1st Edition Base Set Pikachu card,1,0,1,1200.00
+GRADE-MTG-PSA9-BLACKLOTUS,Magic: The Gathering Alpha Black Lotus (PSA 9),Graded Cards,Nos,PSA Mint 9 graded Magic: The Gathering Alpha Edition Black Lotus,1,0,1,45000.00
+GRADE-YGO-PSA10-BEWD,Yu-Gi-Oh! Blue-Eyes White Dragon 1st Ed. (PSA 10),Graded Cards,Nos,PSA Gem Mint 10 graded Yu-Gi-Oh! 1st Edition Blue-Eyes White Dragon LOB-001,1,0,1,3800.00
+SINGLE-PKM-CHARIZARD-EX-NM,Pokémon Charizard ex SV05 (NM),Singles,Nos,Near Mint Pokémon Charizard ex from Scarlet & Violet — Temporal Forces,1,0,0,18.00
+SINGLE-PKM-MEWTWO-EX-NM,Pokémon Mewtwo ex SV06 (NM),Singles,Nos,Near Mint Pokémon Mewtwo ex from Scarlet & Violet — Twilight Masquerade,1,0,0,12.00
+SINGLE-MTG-ONERING-FOIL,Magic: The Gathering The One Ring (Foil NM),Singles,Nos,Near Mint foil The One Ring from Magic: The Gathering The Lord of the Rings expansion,1,0,0,22.00
+SINGLE-MTG-MOXEMERALD-LP,Magic: The Gathering Mox Emerald (LP),Singles,Nos,Lightly Played Mox Emerald from Magic: The Gathering Alpha/Beta Power Nine,1,0,0,6500.00
+SINGLE-YGO-EXODIA-1ED-NM,Yu-Gi-Oh! Exodia The Forbidden One 1st Ed. (NM),Singles,Nos,Near Mint 1st Edition Exodia The Forbidden One from Legend of Blue Eyes White Dragon,1,0,0,280.00
+SINGLE-YGO-DARKMAGICIAN-25TH,Yu-Gi-Oh! Dark Magician 25th Anniversary (NM),Singles,Nos,Near Mint Dark Magician 25th Anniversary reprint from Yu-Gi-Oh! premium collection,1,0,0,8.00
+ACC-DS-CLASSIC-100,Dragon Shield Classic Sleeves 100ct,Accessories,Pack,100-count Dragon Shield Classic card sleeves in assorted colors for standard-size cards,1,0,0,8.50
+ACC-DS-MATTE-100,Dragon Shield Matte Sleeves 100ct,Accessories,Pack,100-count Dragon Shield Matte card sleeves for reduced glare and premium shuffle feel,1,0,0,9.00
+ACC-UP-PRO-DECKBOX,Ultra PRO Pro-Deck Box (100+),Accessories,Nos,Ultra PRO hinged Pro-Deck Box holding 100+ double-sleeved standard cards,1,0,0,4.50
+ACC-UP-PLAYMAT-STD,Ultra PRO Standard Gaming Playmat,Accessories,Nos,Ultra PRO rubber-backed standard 24x14 in. gaming playmat with stitched edges,1,0,0,12.00
+ACC-BCW-TOPLOADER-25,BCW Rigid Toploaders 3x4 25ct,Accessories,Pack,25-count BCW semi-rigid 3x4 in. toploaders for standard single-card storage and shipping,1,0,0,5.00
+ACC-UG-ZIPFOLIO-360,Ultimate Guard ZipFolio 360 Binder,Accessories,Nos,Ultimate Guard ZipFolio 360-card XenoSkin binder with zip closure for collection display,1,0,0,28.00
+SVC-TOURN-FNM,Friday Night Tournament Entry Fee,Services,Nos,Entry fee for weekly Friday Night Magic / Pokémon / Yu-Gi-Oh! in-store tournament,0,0,0,0.00
+SVC-TOURN-REGIONAL,Regional Championship Entry Fee,Services,Nos,Entry fee for regional-level sanctioned TCG championship event hosted at the store,0,0,0,0.00
+SVC-TABLE-RENTAL-HR,Game Table Rental (Per Hour),Services,Nos,Hourly game table rental for open play including seating and game accessories,0,0,0,0.00
+SVC-GRADING-SUBMISSION,Card Grading Submission Fee,Services,Nos,Service fee for submitting customer cards to PSA or BGS for professional grading,0,0,0,0.00

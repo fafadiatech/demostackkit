@@ -1,0 +1,84 @@
+# Hobby Shop & TCG Retailer Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up hobbytcg
+# URL: http://hobbytcg.localhost  (admin / admin)
+
+name: "Hobby Shop & TCG Retailer"
+slug: "hobbytcg"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for a hybrid Hobby Shop & Trading Card Game retailer
+  operating B2C brick-and-mortar, e-commerce, and B2B wholesale channels. Covers
+  batch-tracked sealed product (booster boxes/cases), serial-tracked graded cards
+  (PSA/BGS), standard-stock raw singles and accessories, and non-stock service items
+  (tournament fees, table rental, grading submissions). Demonstrates distributor
+  purchasing, trade-in intake, POS retail sales, and high-value B2B card transactions.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+extra_apps: []
+
+company:
+  name: "Nexus TCG & Hobbies"
+  abbr: "NTH"
+  currency: "USD"
+  country: "United States"
+  fiscal_year_start: "01-01"
+
+site:
+  name: "hobbytcg.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "America/New_York"
+
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+
+seed:
+  random_seed: 20240901
+  volumes:
+    customers: 20
+    suppliers: 8
+    sales_orders: 50
+    purchase_orders: 30
+  date_range:
+    start: "-30d"
+    end: "-1d"
+
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+users:
+  - email: "store.manager@hobbytcg.demo"
+    full_name: "Alex Rivera"
+    roles:
+      - Sales Manager
+      - Stock Manager
+  - email: "purchasing@hobbytcg.demo"
+    full_name: "Jordan Kim"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@hobbytcg.demo"
+    full_name: "Morgan Chen"
+    roles:
+      - Accounts Manager
+
+validate:
+  min_sales_orders: 35
+  min_items: 20
+  required_doctypes:
+    - Item
+    - Customer
+    - Supplier
+    - Warehouse

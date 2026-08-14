@@ -6,7 +6,7 @@
 
 > Create, manage and distribute ERPNext demo environments for different industries — with a single command.
 
-DemoStackKit is an open-source toolkit for quickly spinning up industry-specific ERPNext demo environments with realistic sample data. It includes ready-to-use demos for Garment Manufacturing, Chemical Manufacturing, Engineering Procurement & Construction (EPC), Solar Manufacturing, Auto Dealerships, and Jewellery Manufacturing.
+DemoStackKit is an open-source toolkit for quickly spinning up industry-specific ERPNext demo environments with realistic sample data. It includes ready-to-use demos for Garment Manufacturing, Chemical Manufacturing, Engineering Procurement & Construction (EPC), Solar Manufacturing, Auto Dealerships, Jewellery Manufacturing, and Hobby Shop & TCG Retail.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
@@ -38,6 +38,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
   - [3D Printing Services](#3d-printing-services-print3d)
   - [EV Manufacturing](#ev-manufacturing-evmfg)
   - [Electrical Equipment Manufacturing](#electrical-equipment-manufacturing-electrical)
+  - [Hobby Shop & TCG Retailer](#hobby-shop--tcg-retailer-hobbytcg)
   - [Engineering Procurement & Construction](#engineering-procurement--construction-epc)
   - [Automobile Dealership](#automobile-dealership-automobile)
   - [FMCG Distribution](#fmcg-distribution-distribution)
@@ -71,6 +72,7 @@ DemoStackKit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | 3D Printing Services | `print3d` | http://print3d.localhost | ✓ |
 | EV Manufacturing | `evmfg` | http://evmfg.localhost | ✓ |
 | Electrical Equipment Manufacturing | `electrical` | http://electrical.localhost | ✓ |
+| Hobby Shop & TCG Retailer | `hobbytcg` | http://hobbytcg.localhost | — |
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
 | Distribution | `distribution` | http://distribution.localhost | — |
@@ -388,6 +390,20 @@ PowerTech Electrical Pvt Ltd — switchgear and transformer manufacturer produci
 - **Split sales order generation** — 60% transformer orders (qty 1–5, 60–120 day lead) and 40% switchgear orders (qty 1–3, 30–60 day lead)
 - **Electrical quality parameters** — turns ratio error (%), insulation resistance (MOhm), oil breakdown voltage (kV), and load loss (W)
 - **12 customers** — state electricity boards (MSEDCL, KSEB, TSSPDCL), EPC contractors (L&T, Tata Projects), industrial consumers, and export partners
+
+### Hobby Shop & TCG Retailer (`hobbytcg`)
+
+Nexus TCG & Hobbies — a US-based hybrid hobby shop and trading card game retailer operating B2C brick-and-mortar, e-commerce, and B2B wholesale channels. Covers the full TCG retail lifecycle from distributor purchasing to high-value card sales. Includes:
+
+- **Batch-tracked sealed product** — booster boxes and cases for Pokémon, Magic: The Gathering, and Yu-Gi-Oh! (release wave and pre-order allocation tracking)
+- **Serial-tracked graded cards** — PSA/BGS/CGC certified cards (Charizard PSA 10, Black Lotus PSA 9, Blue-Eyes White Dragon PSA 10) each assigned a unique cert number for high-value traceability
+- **Standard stock singles and accessories** — raw NM/LP singles across all three TCGs plus Dragon Shield sleeves, Ultra PRO playmats, deck boxes, toploaders, and binders
+- **Non-stock service items** — tournament entry fees (FNM, Regionals), game table rental, and card grading submission fees
+- **Three-warehouse layout** — Front-of-House Retail Store (POS), Backroom Sealed Inventory (bulk/case storage), The Vault (rare and graded cards)
+- **18 customers** — walk-in retail players, online buyers, and B2B wholesale LGS accounts (Cards & Comics Corner, Dragon's Lair Austin, Mythic Realm Games)
+- **8 suppliers** — TCG distributors (ACD, Alliance, GTS, Southern Hobby), accessory vendors (Ultra PRO, Dragon Shield/Arcane Tinmen, BCW), and grading services (PSA)
+- **30 purchase orders** — distributor restocks of sealed product and singles with realistic ±10% price variance
+- **50 sales orders** — split ~50% sealed product, ~30% singles, ~20% accessories with TCG-appropriate retail markups
 
 ### Engineering Procurement & Construction (`epc`)
 

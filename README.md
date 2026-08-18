@@ -30,6 +30,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
 - [Deterministic Resets](#deterministic-resets)
 - [Standard Warehouses](#standard-warehouses)
 - [Opening Stock Balances](#opening-stock-balances)
+- [Payroll](#payroll)
 - [Industrywise Breakdown](#industrywise-breakdown)
   - [Garment Manufacturing](#garment-manufacturing-garment)
   - [Chemical Manufacturing](#chemical-manufacturing-chemical)
@@ -336,6 +337,38 @@ seed:
 
 The seeder is idempotent: items that already carry a Stock Ledger Entry are skipped, so re-running tops up a partially seeded site instead of double-counting.
 
+## Payroll
+
+Industries that seed employees can also seed payroll, so HRMS opens with a payable workforce rather than an empty Payroll Entry. The seeder creates, in order: a **Holiday List** (set as the company default — no Salary Slip can be raised without one), the **Salary Components** the structure needs, a submitted **Salary Structure**, and a submitted **Salary Structure Assignment** for every active employee. It is idempotent; anything that already exists is left alone.
+
+The industry seeder carries only one table — annual cost to company per designation:
+
+```python
+ANNUAL_CTC = {
+    "Production Manager": 1_140_000,
+    "Plant Operator": 384_000,
+    ...
+}
+```
+
+Everything else comes from `demostackkit/seeder/payroll.py`, which picks a convention from the company's **country**:
+
+| | Monthly (default) | Hourly (United States) |
+| --- | --- | --- |
+| Payroll frequency | Monthly | Weekly |
+| Salary Structure | one, for the whole workforce | one per designation — HRMS holds `hour_rate` on the structure, so a shared one would pay every role the same |
+| Timesheets | not used | `salary_slip_based_on_timesheet`, hours paid against **Basic** at `annual ÷ 2080` |
+| Assignment `base` | one month's CTC | one week at the hourly rate |
+| Earnings | Basic, House Rent Allowance, Conveyance Allowance, Special Allowance | Basic, Overtime |
+| Deductions | Provident Fund, Professional Tax, Income Tax | Federal Income Tax, Social Security, Medicare, Retirement Savings |
+| Weekly off | Sunday | Saturday and Sunday |
+
+**Every US demo runs payroll hourly off timesheets** — that rule lives in `HOURLY_PAYROLL_COUNTRIES` and applies wherever the seeder is rolled out, without the industry having to know about it.
+
+Structure rows are formulas over `base` and earnings always sum to it, so an assignment's `base` reads as gross pay for the period. Formulas never reference another component's abbreviation: HRMS rejects a formula that reads a payment-days-dependent component while itself depending on payment days, since the amount would be prorated twice.
+
+Seeded so far: `chemical`. Rolling it out to another industry is a copy of `industries/chemical/seeders/01_master/12_payroll.py` with its own `ANNUAL_CTC` table.
+
 ## Industrywise Breakdown
 
 ### Garment Manufacturing (`garment`)
@@ -356,6 +389,7 @@ Alpha Chemicals Pvt Ltd — batch-process chemical manufacturer covering raw mat
 - **Quality management** — chemical composition, viscosity, pH, and purity inspection parameters
 - **50 sales orders, 30 purchase orders** — industrial buyers and chemical raw material vendors seeded over 180 days
 - **25 quality inspections** across incoming, in-process, and outgoing stages
+- **Payroll** — 11 plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
 
 ### Solar Energy (`solar`)
 

@@ -55,6 +55,8 @@ modules:
   - Stock
   - Manufacturing
   - Quality Management
+  - HR
+  - Payroll
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:

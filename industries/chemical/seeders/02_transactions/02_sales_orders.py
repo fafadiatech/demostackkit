@@ -4,7 +4,7 @@ import json
 from datetime import timedelta
 
 from demostackkit.seeder.base import BaseTransactionSeeder
-from demostackkit.seeder.utils import parse_relative_date
+from demostackkit.seeder.utils import ITEM_ROW_HELPERS, parse_relative_date
 
 
 class SalesOrderSeeder(BaseTransactionSeeder):
@@ -55,7 +55,9 @@ class SalesOrderSeeder(BaseTransactionSeeder):
                 }
             )
         orders_json = json.dumps(orders)
-        script = f"""
+        script = (
+            ITEM_ROW_HELPERS
+            + f"""
 import json
 company = '{company}'
 orders = json.loads('''{orders_json}''')
@@ -69,7 +71,7 @@ for o in orders:
             'transaction_date': o['transaction_date'],
             'delivery_date': o['delivery_date'],
             'order_type': 'Sales',
-            'items': [{{'item_code': it['item_code'], 'qty': it['qty'], 'rate': it['rate'], 'delivery_date': it['delivery_date'], 'uom': 'Nos', 'stock_uom': 'Nos', 'conversion_factor': 1}} for it in o['items']],
+            'items': [dsk_item_row(it['item_code'], it['qty'], rate=it['rate'], delivery_date=it['delivery_date']) for it in o['items']],
         }})
         so.insert(ignore_permissions=True)
         so.submit()
@@ -79,4 +81,5 @@ for o in orders:
 frappe.db.commit()
 print(f'Sales Orders created: {{created}}')
 """
+        )
         self._exec(script, timeout=300)

@@ -59,7 +59,13 @@ for ws in workstations:
         'doctype': 'Workstation',
         'workstation_name': ws['workstation_name'],
         'description': ws.get('description', ''),
-        'hour_rate': ws.get('hour_rate', 0),
+        # Workstation.before_save() recomputes hour_rate as the sum of the four
+        # cost components, so hour_rate cannot be set directly -- seed the
+        # components and let the declared rate fall out as their total.
+        'hour_rate_labour': ws.get('hour_rate', 0) * 0.30,
+        'hour_rate_electricity': ws.get('hour_rate', 0) * 0.40,
+        'hour_rate_consumable': ws.get('hour_rate', 0) * 0.15,
+        'hour_rate_rent': ws.get('hour_rate', 0) * 0.15,
     }}).insert(ignore_permissions=True)
     created += 1
 

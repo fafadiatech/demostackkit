@@ -144,6 +144,7 @@ for b in boms:
             'company': company_name,
             'item': b['item'],
             'quantity': b.get('qty', 1),
+            'with_operations': 1,
             'routing': routing_name,
             'is_active': 1,
             'is_default': 1,

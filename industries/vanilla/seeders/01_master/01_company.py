@@ -4,7 +4,7 @@ from demostackkit.seeder.base import BaseMasterSeeder
 
 
 class CompanySeeder(BaseMasterSeeder):
-    label = "Company & Fiscal Year"
+    label = "Company"
     priority = 10
 
     def run(self) -> None:

@@ -246,11 +246,17 @@ def _create_site_if_needed(config: object, repo_root: Path) -> bool:
 
     console.print(f"[bold cyan]Running ERPNext setup wizard for {site}...[/bold cyan]")
     company = config.company
+    # ERPNext's install_company() feeds fy_start_date/fy_end_date straight into a
+    # Fiscal Year record. Omit them and getdate(None) resolves both to today, so
+    # FiscalYear.validate_dates() throws InvalidDates and the site ends up with no
+    # Fiscal Year at all. The shared Fiscal Years seeder fills in the remaining years.
+    _, fy_start, fy_end = _current_fiscal_year(company.fiscal_year_start)
     # setup_complete(args) takes a single positional dict — use --args, not --kwargs.
     wizard_args = (
         f"[{{'language': 'English', 'country': '{company.country}', "
-        f"'currency': '{company.currency}', 'timezone': 'Asia/Kolkata', "
+        f"'currency': '{company.currency}', 'timezone': '{config.site.timezone}', "
         f"'chart_of_accounts': 'Standard', "
+        f"'fy_start_date': '{fy_start}', 'fy_end_date': '{fy_end}', "
         f"'company_name': '{company.name}', "
         f"'company_abbr': '{company.abbr}'}}]"
     )
@@ -263,6 +269,17 @@ def _create_site_if_needed(config: object, repo_root: Path) -> bool:
     if result.returncode != 0:
         raise RuntimeError(f"ERPNext setup wizard failed for {site}")
     return True
+
+
+def _current_fiscal_year(fiscal_year_start: str) -> tuple[str, str, str]:
+    """(year_label, start, end) ISO strings for the fiscal year containing today."""
+    from datetime import date
+
+    from demostackkit.seeder.utils import fiscal_year_windows
+
+    today = date.today()
+    label, start, end = fiscal_year_windows(fiscal_year_start, today, today)[0]
+    return label, start.isoformat(), end.isoformat()
 
 
 def _load_env_file(env_file: Path) -> dict:

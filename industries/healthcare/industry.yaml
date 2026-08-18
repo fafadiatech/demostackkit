@@ -36,6 +36,7 @@ company:
   abbr: "MCH"
   currency: "INR"
   country: "India"
+  fiscal_year_start: "04-01"
 
 # ── Site ─────────────────────────────────────────────────────────────────────
 site:

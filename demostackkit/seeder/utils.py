@@ -23,6 +23,59 @@ def parse_relative_date(value: str) -> date:
     return date.fromisoformat(value)
 
 
+def fiscal_year_windows(
+    fy_start_mmdd: str, first: date, last: date
+) -> list[tuple[str, date, date]]:
+    """Every ERPNext Fiscal Year window needed to cover [first, last], inclusive.
+
+    Returns (year_label, start_date, end_date) tuples, oldest first. `year_label`
+    follows ERPNext's own get_fy_details() convention: "2026" when the window sits
+    inside one calendar year, "2026-2027" when it straddles two.
+
+    end is always start + 1 year - 1 day, which is exactly what
+    FiscalYear.validate_dates() demands — anything else raises InvalidDates.
+
+    Examples:
+        fiscal_year_windows("04-01", date(2026, 2, 19), date(2026, 8, 18))
+        # [("2025-2026", 2025-04-01, 2026-03-31), ("2026-2027", 2026-04-01, 2027-03-31)]
+    """
+    month, day = _parse_mmdd(fy_start_mmdd)
+    if first > last:
+        first, last = last, first
+
+    windows: list[tuple[str, date, date]] = []
+    year = _fy_start_year(month, day, first)
+    while True:
+        start = date(year, month, day)
+        if start > last:
+            break
+        end = date(year + 1, month, day) - timedelta(days=1)
+        label = str(year) if end.year == year else f"{year}-{year + 1}"
+        windows.append((label, start, end))
+        year += 1
+    return windows
+
+
+def _parse_mmdd(value: str) -> tuple[int, int]:
+    """Validate a MM-DD fiscal year start and return (month, day)."""
+    try:
+        month_str, day_str = value.split("-")
+        month, day = int(month_str), int(day_str)
+        # 2001 is a non-leap year: a fiscal year start must exist in EVERY year,
+        # so 02-29 is rejected here rather than silently shifting some windows.
+        date(2001, month, day)
+    except ValueError as exc:
+        raise ValueError(
+            f"Invalid fiscal_year_start {value!r}: expected MM-DD that exists in every year"
+        ) from exc
+    return month, day
+
+
+def _fy_start_year(month: int, day: int, when: date) -> int:
+    """Calendar year of the fiscal year start for the FY containing `when`."""
+    return when.year if (when.month, when.day) >= (month, day) else when.year - 1
+
+
 ITEM_ROW_HELPERS = '''
 from fractions import Fraction as _DskFraction
 from math import gcd as _dsk_gcd

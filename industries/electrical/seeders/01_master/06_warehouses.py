@@ -3,7 +3,8 @@ Seeder: Warehouses for PowerTech Electrical Manufacturing.
 
 Creates the warehouse hierarchy for raw material storage (copper wire, CRGO
 steel, oil), work-in-progress areas (coil winding, assembly), finished goods
-holding for transformers and switchgear, quality hold, dispatch, and rejection.
+holding for transformers and switchgear, quality hold and dispatch. The Scrap /
+Rejected / Rework warehouses come from the shared Standard Warehouses seeder.
 Idempotent — skips existing warehouses.
 """
 
@@ -46,10 +47,6 @@ class WarehouseSeeder(BaseMasterSeeder):
             {
                 "warehouse_name": "Dispatch Area",
                 "parent_warehouse": f"Finished Goods Store - {abbr}",
-            },
-            {
-                "warehouse_name": "Rejection Store",
-                "parent_warehouse": f"All Warehouses - {abbr}",
             },
         ]
         wh_json = json.dumps(warehouses)

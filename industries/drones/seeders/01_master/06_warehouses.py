@@ -32,7 +32,6 @@ class WarehouseSeeder(BaseMasterSeeder):
                 "warehouse_name": "Dispatch Area",
                 "parent_warehouse": f"Finished Goods Store - {abbr}",
             },
-            {"warehouse_name": "Rejection Store", "parent_warehouse": f"All Warehouses - {abbr}"},
         ]
         wh_json = json.dumps(warehouses)
 

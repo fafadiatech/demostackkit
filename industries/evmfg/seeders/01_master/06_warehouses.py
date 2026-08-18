@@ -2,8 +2,9 @@
 Seeder: Warehouses for Voltara EV Manufacturing.
 
 Creates the warehouse hierarchy for raw material storage, work-in-progress
-battery and vehicle assembly, finished goods holding, quality hold,
-dispatch area, and rejection zones.
+battery and vehicle assembly, finished goods holding, quality hold and
+dispatch area. The Scrap / Rejected / Rework warehouses come from the shared
+Standard Warehouses seeder.
 Idempotent — skips existing warehouses.
 """
 
@@ -37,7 +38,6 @@ class WarehouseSeeder(BaseMasterSeeder):
                 "warehouse_name": "Dispatch Area",
                 "parent_warehouse": f"Finished Goods Store - {abbr}",
             },
-            {"warehouse_name": "Rejection Store", "parent_warehouse": f"All Warehouses - {abbr}"},
         ]
         wh_json = json.dumps(warehouses)
 

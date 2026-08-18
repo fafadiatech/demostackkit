@@ -2,7 +2,8 @@
 Seeder: Warehouses for 3D Printing Services.
 
 Creates the warehouse hierarchy for raw material storage, print-in-progress
-work, finished goods, quality hold, dispatch, and rejection zones.
+work, finished goods, quality hold and dispatch. The Scrap / Rejected / Rework
+warehouses come from the shared Standard Warehouses seeder.
 Idempotent — skips existing warehouses.
 """
 
@@ -36,7 +37,6 @@ class WarehouseSeeder(BaseMasterSeeder):
                 "warehouse_name": "Dispatch Area",
                 "parent_warehouse": f"Finished Goods Store - {abbr}",
             },
-            {"warehouse_name": "Rejection Store", "parent_warehouse": f"All Warehouses - {abbr}"},
         ]
         wh_json = json.dumps(warehouses)
 

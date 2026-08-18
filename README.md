@@ -28,6 +28,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
 - [Repository Structure](#repository-structure)
 - [Adding a New Industry](#adding-a-new-industry)
 - [Deterministic Resets](#deterministic-resets)
+- [Standard Warehouses](#standard-warehouses)
 - [Opening Stock Balances](#opening-stock-balances)
 - [Industrywise Breakdown](#industrywise-breakdown)
   - [Garment Manufacturing](#garment-manufacturing-garment)
@@ -305,6 +306,18 @@ See [docs/creating-an-industry.md](docs/creating-an-industry.md) for the full gu
 ## Deterministic Resets
 
 `demostackkit reset garment` always produces **byte-for-byte identical data**. All transactional seeders use a seeded `random.Random` instance (never `random.random()`), with the seed taken from `industry.yaml`. This makes demo environments reproducible and reliable.
+
+## Standard Warehouses
+
+On top of each industry's own themed warehouse tree, a shared seeder creates the exception warehouses ERPNext's stock flows expect:
+
+| Warehouse | Seeded for | Used by |
+| --- | --- | --- |
+| `Scrap` | every industry | Work Order `scrap_warehouse`, write-offs and damaged stock |
+| `Rejected` | every industry | Purchase Receipt / Subcontracting Receipt `rejected_warehouse` (flagged `is_rejected_warehouse`, so the field defaults to it) |
+| `Rework` | industries running the **Manufacturing** module | stock sent back for repair after a failed inspection, rather than scrapped |
+
+All three hang off `All Warehouses - <ABBR>` and are idempotent — an existing warehouse of the same name is left untouched. Nothing to configure; the seeder runs right after the industry's own Warehouse seeder.
 
 ## Opening Stock Balances
 

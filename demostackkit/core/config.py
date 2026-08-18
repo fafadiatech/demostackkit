@@ -58,6 +58,34 @@ class SeedVolumes(BaseModel):
     quality_inspections: int = Field(default=30, ge=1)
 
 
+class OpeningStockConfig(BaseModel):
+    """Where the shared Opening Stock seeder parks each item's starting balance.
+
+    Warehouse names are given without the company abbreviation suffix; the seeder
+    appends it (``Stores`` → ``Stores - ACH``). The defaults are the warehouses
+    ERPNext creates with every company, so an industry that defines its own
+    themed warehouses can point at them here instead.
+    """
+
+    enabled: bool = Field(default=True, description="Set false to skip opening balances")
+    warehouse: str = Field(
+        default="Stores", description="Warehouse for purchased/raw items, without ' - ABBR'"
+    )
+    fg_warehouse: str = Field(
+        default="Finished Goods",
+        description="Warehouse for items with a default BOM, without ' - ABBR'",
+    )
+    qty_scale: float = Field(
+        default=1.0,
+        gt=0,
+        description=(
+            "Multiplier on the value-banded opening quantities. The bands assume an "
+            "industrial operation holding INR-scale inventory; a small retail or "
+            "hobby business should dial this down (e.g. 0.03)."
+        ),
+    )
+
+
 class SeedDateRange(BaseModel):
     start: str = Field(
         default="-180d", description="Relative date like -180d or absolute YYYY-MM-DD"
@@ -76,6 +104,7 @@ class SeedConfig(BaseModel):
     )
     volumes: SeedVolumes = Field(default_factory=SeedVolumes)
     date_range: SeedDateRange = Field(default_factory=SeedDateRange)
+    opening_stock: OpeningStockConfig = Field(default_factory=OpeningStockConfig)
 
 
 class FixturesConfig(BaseModel):

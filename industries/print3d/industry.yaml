@@ -62,6 +62,10 @@ seed:
   date_range:
     start: "-180d"
     end: "-1d"
+  # A print bureau stocks filament in tens of kilograms, not the hundreds the
+  # default bands would open with for an item priced at USD 18/kg.
+  opening_stock:
+    qty_scale: 0.04
 
 data:
   items: "data/items.csv"

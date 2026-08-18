@@ -21,7 +21,11 @@ import json
 from datetime import date, timedelta
 
 from demostackkit.seeder.base import BaseMasterSeeder
-from demostackkit.seeder.utils import fiscal_year_windows, parse_relative_date
+from demostackkit.seeder.utils import (
+    fiscal_year_windows,
+    opening_stock_date,
+    parse_relative_date,
+)
 
 
 class FiscalYearSeeder(BaseMasterSeeder):
@@ -31,7 +35,9 @@ class FiscalYearSeeder(BaseMasterSeeder):
     def run(self) -> None:
         cfg = self.ctx.industry_config
         today = date.today()
-        first = min(parse_relative_date(cfg.seed.date_range.start), today)
+        # Opening stock posts one day ahead of the range, which can fall in the
+        # previous fiscal year when the range starts on the fiscal year boundary.
+        first = min(opening_stock_date(parse_relative_date(cfg.seed.date_range.start)), today)
         # A year of headroom past the range so post-dated demo documents (delivery
         # dates, required-by dates) still land inside a Fiscal Year.
         last = max(parse_relative_date(cfg.seed.date_range.end), today) + timedelta(days=365)

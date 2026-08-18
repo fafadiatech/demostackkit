@@ -6,6 +6,7 @@ Import from here instead of defining locally in each seeder file.
 
 from __future__ import annotations
 
+import random as _random_module
 from datetime import date, timedelta
 
 
@@ -74,6 +75,82 @@ def _parse_mmdd(value: str) -> tuple[int, int]:
 def _fy_start_year(month: int, day: int, when: date) -> int:
     """Calendar year of the fiscal year start for the FY containing `when`."""
     return when.year if (when.month, when.day) >= (month, day) else when.year - 1
+
+
+def opening_stock_date(range_start: date) -> date:
+    """Posting date for opening balances: the day before the first seeded transaction.
+
+    Opening stock must predate every seeded document, otherwise a Stock Entry or
+    Delivery Note dated earlier would consume stock that does not exist yet. The
+    Fiscal Year seeder widens its coverage with this same function, so the opening
+    entry always lands inside a Fiscal Year.
+    """
+    return range_start - timedelta(days=1)
+
+
+#: (unit value below which the band applies, min qty, max qty), ascending.
+#: Opening quantities are banded by unit value rather than fixed, because item
+#: rates across industries span six orders of magnitude — from a 0.50 filament
+#: gram to a 2,200,000 machine. A flat range would stock either absurd amounts of
+#: capital equipment or a token amount of bulk chemicals.
+OPENING_STOCK_QTY_BANDS: tuple[tuple[float, int, int], ...] = (
+    (10, 2000, 8000),
+    (100, 500, 2500),
+    (1_000, 100, 600),
+    (10_000, 40, 150),
+    (100_000, 8, 30),
+    (float("inf"), 2, 6),
+)
+
+#: Finished goods sit in stock in smaller numbers than the raw materials they
+#: consume — a demo that opens with more finished units than components reads wrong.
+FINISHED_GOODS_QTY_SCALE = 0.3
+
+
+def opening_stock_qty(
+    unit_value: float,
+    rng: _random_module.Random,
+    *,
+    is_finished_good: bool = False,
+    scale: float = 1.0,
+) -> int:
+    """Deterministic opening quantity for one item, banded by its unit value.
+
+    The bands key off the magnitude of the valuation rate rather than a fixed
+    quantity, so a bulk solvent and a machine tool both open at a plausible
+    depth. They assume an industrial operation, though — a hobby retailer holds
+    far less of a similarly priced SKU, which is what `scale` is for.
+
+    Args:
+        unit_value: Item valuation rate. Non-positive values fall into the
+            cheapest band, which is the safe direction to guess.
+        rng: Seeded Random from SeedContext — never the global random module.
+        is_finished_good: True for items with a default BOM.
+        scale: Industry multiplier from `seed.opening_stock.qty_scale`.
+
+    Returns at least 1: an item that opens at zero is indistinguishable from one
+    that was never opened at all.
+    """
+    value = max(float(unit_value or 0), 0.0)
+    low, high = next((lo, hi) for ceiling, lo, hi in OPENING_STOCK_QTY_BANDS if value < ceiling)
+    qty = float(rng.randint(low, high)) * scale
+    if is_finished_good:
+        qty *= FINISHED_GOODS_QTY_SCALE
+    return _round_to_nice(qty)
+
+
+def _round_to_nice(qty: float) -> int:
+    """Round to a step that matches the magnitude, so quantities read as stock
+    counts (1,200) rather than as random draws (1,237). Never returns below 1."""
+    if qty >= 1000:
+        step = 100
+    elif qty >= 100:
+        step = 10
+    elif qty >= 20:
+        step = 5
+    else:
+        step = 1
+    return max(1, int(round(qty / step)) * step)
 
 
 ITEM_ROW_HELPERS = '''

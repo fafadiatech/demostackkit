@@ -28,6 +28,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
 - [Repository Structure](#repository-structure)
 - [Adding a New Industry](#adding-a-new-industry)
 - [Deterministic Resets](#deterministic-resets)
+- [Opening Stock Balances](#opening-stock-balances)
 - [Industrywise Breakdown](#industrywise-breakdown)
   - [Garment Manufacturing](#garment-manufacturing-garment)
   - [Chemical Manufacturing](#chemical-manufacturing-chemical)
@@ -270,6 +271,7 @@ demostackkit/
 │   ├── cli/               # Typer commands
 │   ├── core/              # Config, discovery, exceptions
 │   ├── seeder/            # BaseSeeder, runner, loader
+│   ├── seeders/           # Shared seeders run for every industry
 │   ├── erpnext/           # bench CLI wrapper
 │   └── docker/            # compose runner, builder
 ├── industries/
@@ -303,6 +305,23 @@ See [docs/creating-an-industry.md](docs/creating-an-industry.md) for the full gu
 ## Deterministic Resets
 
 `demostackkit reset garment` always produces **byte-for-byte identical data**. All transactional seeders use a seeded `random.Random` instance (never `random.random()`), with the seed taken from `industry.yaml`. This makes demo environments reproducible and reliable.
+
+## Opening Stock Balances
+
+Every industry opens with stock on the shelf. A shared seeder posts an ERPNext **Opening Stock** Stock Reconciliation — one per warehouse, dated the day before the first seeded transaction — covering every stockable item, including batch- and serial-tracked ones. Stock Balance, Stock Ledger and Stock Ageing therefore have data from the moment the site comes up, and a hand-keyed Work Order has components to draw from.
+
+Quantities are banded by unit value rather than fixed, so a bulk solvent and a machine tool both open at a plausible depth, and items with a default BOM are treated as finished goods (smaller quantities, finished-goods warehouse). Tune per industry in `industry.yaml`:
+
+```yaml
+seed:
+  opening_stock:
+    enabled: true            # false to skip opening balances entirely
+    warehouse: "Stores"      # purchased/raw items — ' - ABBR' is appended
+    fg_warehouse: "Finished Goods"   # items with a default BOM
+    qty_scale: 1.0           # dial down for small retail (hobbytcg uses 0.03)
+```
+
+The seeder is idempotent: items that already carry a Stock Ledger Entry are skipped, so re-running tops up a partially seeded site instead of double-counting.
 
 ## Industrywise Breakdown
 

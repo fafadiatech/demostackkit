@@ -52,6 +52,11 @@ seed:
   date_range:
     start: "-30d"
     end: "-1d"
+  # A single-store card shop holds a fraction of what the default opening-stock
+  # bands assume (they are tuned for industrial operations): tens of booster
+  # boxes and one or two graded cards, not pallets of either.
+  opening_stock:
+    qty_scale: 0.03
 
 data:
   items: "data/items.csv"

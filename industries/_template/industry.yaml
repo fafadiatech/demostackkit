@@ -87,6 +87,14 @@ seed:
   date_range:
     start: "-180d"
     end: "-1d"
+  # Opening balances are posted for every stockable item by a shared seeder.
+  # These defaults are the warehouses ERPNext creates with every company; point
+  # them at your own if you seed themed warehouses.
+  opening_stock:
+    enabled: true
+    warehouse: "Stores"              # purchased/raw items (' - ABBR' appended)
+    fg_warehouse: "Finished Goods"   # items with a default BOM
+    qty_scale: 1.0                   # < 1 for small retail, > 1 for high-volume
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 fixtures:

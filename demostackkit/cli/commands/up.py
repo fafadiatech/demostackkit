@@ -72,14 +72,13 @@ def up(
     if detach and seed:
         console.print("\n[dim]Waiting for ERPNext to be ready before seeding...[/dim]")
         _wait_for_backend(runner, timeout_seconds=180)
-        apps_fetched = False
-        if config.extra_apps:
-            from demostackkit.erpnext.bench import BenchClient
+        from demostackkit.erpnext.bench import BenchClient
 
-            bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
-            apps_fetched = _fetch_extra_apps(config, bench)
+        bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
+        apps_pruned = _reconcile_apps_txt(config, bench)
+        apps_fetched = _fetch_extra_apps(config, bench)
         site_created = _create_site_if_needed(config, repo_root)
-        if apps_fetched or site_created:
+        if apps_pruned or apps_fetched or site_created:
             _reload_frappe_services(runner)
         console.print("[bold cyan]Running seeders...[/bold cyan]")
         _run_seed(industry, repo_root, currency=currency)
@@ -95,6 +94,48 @@ def up(
 # Frontend is restarted separately after backend is healthy so nginx re-resolves the
 # backend upstream IP (otherwise jewellery.localhost can 502 after compose restart).
 _FRAPPE_PROCESS_SERVICES = ("backend", "websocket", "queue-short", "queue-long", "scheduler")
+
+
+def _reconcile_apps_txt(config: object, bench: object) -> bool:
+    """Drop apps.txt entries whose app directory is no longer in the bench.
+
+    sites/apps.txt lives in the persistent `sites` volume, but apps/ lives in the
+    backend container's writable layer. Recreating that container (image bump,
+    ERPNEXT_VERSION toggle, compose down/up) resets apps/ to the image's baked-in
+    frappe + erpnext while apps.txt keeps every app a previous `bench get-app`
+    added. Frappe imports each app named in apps.txt on any `bench --site` call, so
+    a stale name raises ModuleNotFoundError long before seeding starts.
+
+    Entries this industry declares in extra_apps are left in place — _fetch_extra_apps
+    re-fetches them immediately after. Anything else is pruned; a later `up` for the
+    industry that owns it re-adds it via bench get-app.
+
+    Returns True if apps.txt was rewritten.
+    """
+    from demostackkit.core.config import IndustryConfig
+    from demostackkit.erpnext.bench import BenchClient
+
+    assert isinstance(config, IndustryConfig)
+    assert isinstance(bench, BenchClient)
+
+    listed = bench.apps_txt_entries()
+    if not listed:
+        return False
+
+    will_refetch = {entry.name for entry in config.extra_apps}
+    stale = [
+        name for name in listed if name not in will_refetch and not bench.app_exists_in_bench(name)
+    ]
+    if not stale:
+        return False
+
+    console.print(f"[yellow]Pruning app(s) missing from the bench: {', '.join(stale)}[/yellow]")
+    console.print(
+        "[dim]Their apps/ directories are gone. Re-run `up` for an industry that "
+        "declares them to restore them.[/dim]"
+    )
+    bench.write_apps_txt([name for name in listed if name not in stale])
+    return True
 
 
 def _fetch_extra_apps(config: object, bench: object) -> bool:

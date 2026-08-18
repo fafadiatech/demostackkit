@@ -153,6 +153,24 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
         )
         return result.strip() == "yes"
 
+    def apps_txt_entries(self) -> list[str]:
+        """Return the app names listed in sites/apps.txt (the bench-wide registry).
+
+        Frappe imports every app named here on any `bench --site` call, so an entry
+        without a matching apps/<name> directory breaks all site commands.
+        """
+        output = self._docker_exec(
+            ["bash", "-c", f"cat {self.bench_path}/sites/apps.txt 2>/dev/null || true"]
+        )
+        return [line.strip() for line in output.splitlines() if line.strip()]
+
+    def write_apps_txt(self, app_names: list[str]) -> None:
+        """Overwrite sites/apps.txt with the given app names, one per line."""
+        self._docker_exec(
+            ["bash", "-c", f"cat > {self.bench_path}/sites/apps.txt"],
+            input_data="\n".join(app_names) + "\n",
+        )
+
     def copy_app_from_host(self, host_path: str, app_name: str) -> str:
         """Copy a local app directory from the host into /tmp/<app_name> in the container.
 

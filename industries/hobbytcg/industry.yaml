@@ -21,7 +21,16 @@ required_apps:
   - frappe
   - erpnext
 
-extra_apps: []
+# Extra apps fetched at runtime via bench get-app
+extra_apps:
+  - name: hrms
+    source: frappe
+    branch: version-15
+  - name: telephony
+    source: frappe
+  - name: helpdesk
+    source: frappe
+    branch: v1.28.0
 
 company:
   name: "Nexus TCG & Hobbies"

@@ -367,7 +367,12 @@ Everything else comes from `demostackkit/seeder/payroll.py`, which picks a conve
 
 Structure rows are formulas over `base` and earnings always sum to it, so an assignment's `base` reads as gross pay for the period. Formulas never reference another component's abbreviation: HRMS rejects a formula that reads a payment-days-dependent component while itself depending on payment days, since the amount would be prorated twice.
 
-Seeded so far: `chemical`. Rolling it out to another industry is a copy of `industries/chemical/seeders/01_master/12_payroll.py` with its own `ANNUAL_CTC` table.
+Seeded for all industries. Each industry carries a thin `12_payroll.py` with its own `ANNUAL_CTC` table; shared run logic lives in `demostackkit/seeder/payroll_seeder.py`. US demos (`print3d`, `hobbytcg`, `vanilla`) use hourly/timesheet payroll automatically from their company's country.
+
+| Industry | Payroll convention |
+| --- | --- |
+| `automobile`, `chemical`, `crockery`, `distribution`, `drones`, `electrical`, `epc`, `evmfg`, `garment`, `healthcare`, `jewellery`, `solar` | Monthly (India) |
+| `hobbytcg`, `print3d`, `vanilla` | Hourly / timesheet (United States) |
 
 ## Industrywise Breakdown
 
@@ -379,6 +384,7 @@ Alpha Garments Pvt Ltd — apparel manufacturer producing T-shirts, shirts, jean
 - **Single CMT routing** — 7 sequential operations totalling ~2.5 hrs per garment
 - **11 finished-goods BOMs** — fabric + thread + trims + packaging per garment type
 - **Quality inspections** — thread count, tensile strength, colour fastness, shrinkage (30 QIs, 85% pass rate)
+- **Payroll** — plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
 - **HR & Payroll enabled** — 20 customers, 15 suppliers, 50 sales orders, 30 purchase orders
 
 ### Chemical Manufacturing (`chemical`)

@@ -12,6 +12,7 @@ Convention:
             ...
 
 Each Python module in these directories is imported. Any class that:
+  - Is defined in that module (imported seeder bases are ignored)
   - Is a subclass of BaseSeeder
   - Is not BaseSeeder, BaseMasterSeeder, or BaseTransactionSeeder itself
   - Is not abstract
@@ -25,6 +26,7 @@ import importlib.util
 import inspect
 import sys
 from pathlib import Path
+from types import ModuleType
 from typing import TYPE_CHECKING
 
 from demostackkit.seeder.base import (
@@ -51,7 +53,7 @@ def _is_concrete_seeder(obj: object) -> bool:
     )
 
 
-def _load_module_from_path(path: Path, module_name: str) -> object:
+def _load_module_from_path(path: Path, module_name: str) -> ModuleType:
     spec = importlib.util.spec_from_file_location(module_name, path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot load module from {path}")
@@ -115,6 +117,9 @@ def discover_seeders(
                     raise ImportError(f"Failed to load seeder module {py_file}: {exc}") from exc
 
                 for _name, obj in inspect.getmembers(module, _is_concrete_seeder):
+                    # Imported shared bases (e.g. PayrollSeeder) must not run as seeders.
+                    if obj.__module__ != module.__name__:
+                        continue
                     collected.append((phase_idx, obj.priority, py_file.name, obj))
 
     # Sort: phase → priority → filename

@@ -4,12 +4,15 @@ Unit tests for the seeder discovery / loader.
 
 from __future__ import annotations
 
+import sys
 import textwrap
 from pathlib import Path
 
 import pytest
 
 from demostackkit.seeder.loader import discover_seeders
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def _write_seeder(
@@ -82,3 +85,46 @@ class TestDiscoverSeeders:
 
         for cls in classes:
             assert cls not in (BaseMasterSeeder, BaseSeeder)
+
+    def test_skips_imported_concrete_seeder(self, tmp_path: Path) -> None:
+        """A subclass of an imported concrete seeder must be the only class collected."""
+        shared = tmp_path / "shared_payroll_base.py"
+        shared.write_text(
+            textwrap.dedent("""
+                from demostackkit.seeder.base import BaseMasterSeeder
+                class PayrollSeeder(BaseMasterSeeder):
+                    label = "Imported Base"
+                    priority = 82
+                    def run(self): pass
+            """),
+            encoding="utf-8",
+        )
+        sys.path.insert(0, str(tmp_path))
+        try:
+            industry_dir = tmp_path / "ind"
+            path = industry_dir / "seeders" / "01_master" / "12_payroll.py"
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                textwrap.dedent("""
+                    from shared_payroll_base import PayrollSeeder as _PayrollSeederBase
+                    class PayrollSeeder(_PayrollSeederBase):
+                        label = "Industry Payroll"
+                        ANNUAL_CTC = {"Operator": 300_000}
+                """),
+                encoding="utf-8",
+            )
+            classes = discover_seeders(industry_dir)
+        finally:
+            sys.path.remove(str(tmp_path))
+            sys.modules.pop("shared_payroll_base", None)
+
+        assert [c.__name__ for c in classes] == ["PayrollSeeder"]
+        assert classes[0].label == "Industry Payroll"
+        assert classes[0].__module__.startswith("_dsk_industry_ind_")
+
+    def test_electrical_discovers_one_payroll_seeder(self) -> None:
+        industry_dir = REPO_ROOT / "industries" / "electrical"
+        payroll = [cls for cls in discover_seeders(industry_dir) if cls.__name__ == "PayrollSeeder"]
+        assert len(payroll) == 1
+        assert hasattr(payroll[0], "ANNUAL_CTC")
+        assert payroll[0].ANNUAL_CTC

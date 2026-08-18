@@ -192,6 +192,69 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
             raise BenchError(f"docker cp {host_path}", result.returncode, result.stderr)
         return dest
 
+    def build_app_assets(self, app_names: list[str]) -> None:
+        """Run bench build for each app (creates JS/CSS bundles and asset symlinks)."""
+        for app_name in app_names:
+            self._docker_exec(
+                ["bash", "-c", f"cd {self.bench_path} && bench build --app {app_name}"],
+                timeout=900,
+            )
+
+    def materialize_app_assets(self, app_names: list[str]) -> bool:
+        """Copy sites/assets/<app> into the sites volume as real files.
+
+        bench get-app / bench build create symlinks under sites/assets/ that point
+        into apps/. The frontend nginx container only mounts sites/, so those
+        symlinks 404 and /apps icons break for HRMS, Helpdesk, etc.
+        """
+        if not app_names:
+            return False
+
+        apps_shell = " ".join(app_names)
+        script = f"""
+set -e
+cd {self.bench_path}
+ASSETS_ROOT=sites/assets
+changed=0
+materialize_one() {{
+  local name="$1"
+  local dest="$ASSETS_ROOT/$name"
+  if [ -L "$dest" ]; then
+    local target
+    target=$(readlink -f "$dest" 2>/dev/null || true)
+    if [ -n "$target" ] && [ -d "$target" ]; then
+      rm -f "$dest"
+      cp -aL "$target" "$dest"
+      changed=1
+      echo "materialized:$name"
+    fi
+  elif [ ! -e "$dest" ]; then
+    local pub=""
+    if [ -d "apps/$name/$name/public" ]; then
+      pub="apps/$name/$name/public"
+    else
+      pub=$(find "apps/$name" -mindepth 2 -maxdepth 2 -type d -name public 2>/dev/null | head -1 || true)
+    fi
+    if [ -n "$pub" ] && [ -d "$pub" ]; then
+      mkdir -p "$ASSETS_ROOT"
+      cp -aL "$pub" "$dest"
+      changed=1
+      echo "materialized:$name"
+    fi
+  fi
+}}
+for app in {apps_shell}; do
+  materialize_one "$app"
+done
+if [ "$changed" -eq 1 ]; then
+  echo done:changed
+else
+  echo done:unchanged
+fi
+"""
+        output = self._docker_exec(["bash", "-c", script], timeout=300)
+        return "done:changed" in output
+
     def get_app(self, entry: AppEntry) -> None:
         """Fetch a Frappe app into the bench via bench get-app.
 

@@ -68,6 +68,10 @@ def install_app(
     console.print(f"[bold cyan]Installing '{app}' on {config.site.name}...[/bold cyan]")
     bench.install_app(app)
 
+    console.print("[dim]Building and materializing app assets for frontend nginx...[/dim]")
+    bench.build_app_assets([app])
+    bench.materialize_app_assets([app])
+
     repo_root = industries_root.parent
     runner = ComposeRunner(
         compose_file=repo_root / "infra" / "docker-compose.yml",

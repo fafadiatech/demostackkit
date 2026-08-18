@@ -78,6 +78,7 @@ def up(
         apps_pruned = _reconcile_apps_txt(config, bench)
         apps_fetched = _fetch_extra_apps(config, bench)
         site_created = _create_site_if_needed(config, repo_root)
+        _sync_extra_app_assets(config, bench, build=apps_fetched or site_created)
         if apps_pruned or apps_fetched or site_created:
             _reload_frappe_services(runner)
         console.print("[bold cyan]Running seeders...[/bold cyan]")
@@ -136,6 +137,34 @@ def _reconcile_apps_txt(config: object, bench: object) -> bool:
     )
     bench.write_apps_txt([name for name in listed if name not in stale])
     return True
+
+
+def _sync_extra_app_assets(config: object, bench: object, *, build: bool) -> bool:
+    """Build and materialize static assets for extra_apps so nginx can serve them.
+
+    Returns True if assets were materialized into sites/assets/.
+    """
+    from demostackkit.core.config import IndustryConfig
+    from demostackkit.erpnext.bench import BenchClient
+
+    assert isinstance(config, IndustryConfig)
+    assert isinstance(bench, BenchClient)
+
+    app_names = [entry.name for entry in config.extra_apps]
+    if not app_names:
+        return False
+
+    if build:
+        console.print("[dim]Building assets for extra apps...[/dim]")
+        bench.build_app_assets(app_names)
+
+    console.print("[dim]Materializing extra app assets for frontend nginx...[/dim]")
+    if bench.materialize_app_assets(app_names):
+        console.print("[green]Extra app assets copied into sites/assets/.[/green]")
+        return True
+
+    console.print("[dim]Extra app assets already materialized.[/dim]")
+    return False
 
 
 def _fetch_extra_apps(config: object, bench: object) -> bool:

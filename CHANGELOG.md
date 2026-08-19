@@ -8,6 +8,8 @@ All notable changes to DemoStackKit, grouped by week. Most recent week first.
 
 ### Added
 
+- **Project management seeding** — every industry now ships a four-project portfolio with phase (group) tasks, `depends_on` chains for the Gantt chart, per-employee assignment and a full status spread for the Kanban board. New `demostackkit/seeder/projects.py` (pure planning logic) and `project_seeders.py` (shared run logic), per-industry `01_master/13_projects.py` and `02_transactions/04_projects.py`, plus shared seeders for employee logins (84), timesheets (250), the status/assignment pass (260) and the Task Kanban board (270). Adds `Projects` to every industry's modules and `seed.volumes.projects` / `seed.volumes.timesheets`.
+- **Logins for seeded employees** — `01_master/84_employee_users.py` creates one User per Employee, links `Employee.user_id` and grants `Projects User`, so tasks can be assigned to the real workforce instead of the four generic demo logins.
 - **Payroll seeding** — new `demostackkit/seeder/payroll.py` module plus a chemical-industry payroll seeder (`01_master/12_payroll.py`) and unit tests, so demos ship with realistic payroll data. (`d6bc117`, ref #14)
 - **Standard scrap / rejected / rework warehouses** — a shared `01_master/61_standard_warehouses.py` seeder now creates these three warehouses for every industry; the per-industry warehouse seeders (crockery, drones, electrical, evmfg, garment, print3d) were trimmed accordingly. (`6a596ff`, ref #11)
 - **Opening stock balances** — new `01_master/90_opening_stock.py` seeder with configuration hooks in `core/config.py`, `industry.yaml` templates, and helpers in `seeder/utils.py`, so demo sites start with non-zero inventory. (`fdcce6f`, ref #13)

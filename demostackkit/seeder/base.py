@@ -172,8 +172,26 @@ class BaseSeeder(abc.ABC):
         if self.ctx.verbose:
             print(result.stdout)
         if result.returncode != 0:
-            raise RuntimeError(result.stderr or result.stdout)
+            raise RuntimeError(self._failure_detail(result.stdout, result.stderr))
         return result.stdout
+
+    #: Lines of script output kept when a script fails. Seeders report per-record
+    #: problems on stdout and then exit with a bare count, so the count alone —
+    #: which is all stderr carries — says nothing about what actually went wrong.
+    _FAILURE_OUTPUT_LINES = 40
+
+    @classmethod
+    def _failure_detail(cls, stdout: str, stderr: str) -> str:
+        """Build an error message that keeps the per-record diagnostics.
+
+        A seeder script prints `ERROR <thing>: <exception>` per failure and then
+        raises SystemExit with a summary count. SystemExit's message goes to
+        stderr, so reporting stderr alone reduces a real ERPNext validation
+        error to something like '1 project(s) failed'.
+        """
+        tail = stdout.strip().splitlines()[-cls._FAILURE_OUTPUT_LINES :]
+        parts = [part for part in (stderr.strip(), "\n".join(tail)) if part]
+        return "\n".join(parts) or "script exited non-zero with no output"
 
 
 class BaseMasterSeeder(BaseSeeder, abc.ABC):

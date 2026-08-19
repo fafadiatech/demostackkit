@@ -56,6 +56,18 @@ class SeedVolumes(BaseModel):
     customers: int = Field(default=20, ge=1)
     suppliers: int = Field(default=15, ge=1)
     quality_inspections: int = Field(default=30, ge=1)
+    projects: int = Field(
+        default=4,
+        ge=0,
+        description=(
+            "How many of the industry's authored project blueprints to seed. "
+            "Blueprints are hand-written, so this trims the portfolio rather "
+            "than generating more of it."
+        ),
+    )
+    timesheets: int = Field(
+        default=40, ge=0, description="Upper bound on time logs booked against project tasks"
+    )
 
 
 class OpeningStockConfig(BaseModel):

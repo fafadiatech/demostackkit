@@ -49,6 +49,7 @@ modules:
   - Buying
   - Selling
   - Stock
+  - Projects
   - Manufacturing
   - Quality Management
 

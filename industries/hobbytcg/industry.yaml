@@ -50,6 +50,7 @@ modules:
   - Buying
   - Selling
   - Stock
+  - Projects
 
 seed:
   random_seed: 20240901

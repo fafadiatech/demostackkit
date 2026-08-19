@@ -56,6 +56,7 @@ modules:
   - Buying
   - Selling
   - Stock
+  - Projects
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:

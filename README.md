@@ -31,6 +31,10 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
 - [Standard Warehouses](#standard-warehouses)
 - [Opening Stock Balances](#opening-stock-balances)
 - [Payroll](#payroll)
+- [Project Management](#project-management)
+  - [Logins for employees](#logins-for-employees)
+  - [Dates drive statuses](#dates-drive-statuses)
+  - [Seeding order](#seeding-order)
 - [Industrywise Breakdown](#industrywise-breakdown)
   - [Garment Manufacturing](#garment-manufacturing-garment)
   - [Chemical Manufacturing](#chemical-manufacturing-chemical)
@@ -374,6 +378,59 @@ Seeded for all industries. Each industry carries a thin `12_payroll.py` with its
 | `automobile`, `chemical`, `crockery`, `distribution`, `drones`, `electrical`, `epc`, `evmfg`, `garment`, `healthcare`, `jewellery`, `solar` | Monthly (India) |
 | `hobbytcg`, `print3d`, `vanilla` | Hourly / timesheet (United States) |
 
+## Project Management
+
+Every industry seeds a live project portfolio, so the Projects workspace, the Gantt chart and the Kanban board open with something worth showing rather than an empty list.
+
+Each industry gets **four projects at deliberately different stages** — one nearly handed over, one mid-execution, one just kicked off, and one that ERPNext generates itself from a **Project Template**, which is what proves the template → project flow actually works. Around them sit industry-specific **Project Types** and **Task Types**, a shared **Kanban Board**, and **Timesheets** booked against tasks so project costing is not zero.
+
+What every hand-authored project carries:
+
+| | |
+| --- | --- |
+| **Group tasks** | one per phase (`is_group`), spanning its whole subtree |
+| **Dependencies** | `depends_on` chains across phases, so the Gantt draws real arrows |
+| **Assignment** | every unfinished task assigned to a seeded employee's login via ToDo |
+| **Status spread** | Open, Working, Pending Review, Overdue, Completed and Cancelled all populated |
+| **Priorities** | Low through Urgent, mixed across the tree |
+
+### Logins for employees
+
+Tasks are assigned to Users, but seeded Employees arrive with no `user_id`. A shared seeder (`demostackkit/seeders/01_master/84_employee_users.py`) creates one login per employee (`first.last@<slug>.demo`, password from `seed.demo_password`), links `Employee.user_id`, and grants **`Projects User`** — `task.json` grants read/write to that role and nothing else, so without it every assignment silently becomes a document share instead.
+
+It deliberately sets `create_user_permission = 0`. ERPNext's default of `1` restricts each login to its own Employee record, which cascades into Timesheet, Leave and Attendance and makes a demo site look broken to anyone who signs in to look around.
+
+### Dates drive statuses
+
+An industry blueprint declares each task as an offset and a duration from the project start; `demostackkit/seeder/projects.py` turns that into dates and derives the status from where the window falls. A blueprint may hint at a status, but only one that is *stable* for that window — an Open task whose end date has already passed gets flipped to Overdue by ERPNext's daily `set_tasks_as_overdue` job within a day of the demo being stood up, quietly draining the Kanban column.
+
+| Task window | Default status | Hints allowed |
+| --- | --- | --- |
+| Ends before today | `Completed` | `Overdue`, `Cancelled` |
+| Spans today | `Working` | `Open`, `Pending Review` |
+| Starts after today | `Open` | — |
+
+`tests/unit/test_industry_data_integrity.py` expands every blueprint in every industry and checks the result would survive ERPNext's own validation. A task completed before its dependencies, a phase ending before its children, an undeclared task type or a designation nobody holds all fail in CI rather than halfway through a live seed run.
+
+### Seeding order
+
+The order here is forced by ERPNext, not chosen: `Task.validate_status` rejects a Completed task whose dependencies are unfinished — on a fresh insert too, since `get_db_value` returns `None` for a new document — and submitting a Timesheet promotes an Open task to Working. So tasks go in `Open` in dependency order, timesheets land, and only then does the status pass run.
+
+| Priority | Seeder | |
+| --- | --- | --- |
+| 84 | `01_master/84_employee_users.py` | logins and `Employee.user_id` |
+| 88 | `01_master/13_projects.py` | Project Types, Task Types, Project Templates |
+| 240 | `02_transactions/04_projects.py` | Projects, phase/task trees, dependencies |
+| 250 | `02_transactions/250_timesheets.py` | Activity Type rates, submitted Timesheets |
+| 260 | `02_transactions/260_task_finalize.py` | final statuses, then assignments |
+| 270 | `02_transactions/270_kanban_boards.py` | the **Project Tasks** Kanban board |
+
+The four shared seeders run for every industry and no-op when no projects were seeded. Each industry carries only data — `01_master/13_projects.py` for types and templates, `02_transactions/04_projects.py` for the blueprints — with the run logic in `demostackkit/seeder/project_seeders.py`, the same split payroll uses.
+
+Volumes are tunable per industry: `seed.volumes.projects` trims the portfolio and `seed.volumes.timesheets` caps the time logs.
+
+Open the board at `/app/task/view/kanban/Project Tasks`, or a project's Gantt from `/app/project`.
+
 ## Industrywise Breakdown
 
 ### Garment Manufacturing (`garment`)
@@ -386,6 +443,7 @@ Alpha Garments Pvt Ltd — apparel manufacturer producing T-shirts, shirts, jean
 - **Quality inspections** — thread count, tensile strength, colour fastness, shrinkage (30 QIs, 85% pass rate)
 - **Payroll** — plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
 - **HR & Payroll enabled** — 20 customers, 15 suppliers, 50 sales orders, 30 purchase orders
+- **Projects** — AW26 Collection Development; Export Buyer Order Ramp - Nordwear; SEDEX Compliance Audit; plus SS27 Capsule Line generated from the "Seasonal Collection Development" Project Template
 
 ### Chemical Manufacturing (`chemical`)
 
@@ -396,6 +454,7 @@ Alpha Chemicals Pvt Ltd — batch-process chemical manufacturer covering raw mat
 - **50 sales orders, 30 purchase orders** — industrial buyers and chemical raw material vendors seeded over 180 days
 - **25 quality inspections** across incoming, in-process, and outgoing stages
 - **Payroll** — 11 plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
+- **Projects** — Specialty Resin Scale-up - RX-400; Reactor-3 Turnaround; REACH Registration - Export Grades; plus Pilot Batch Qualification - Additive AD-9 generated from the "Process Scale-up Protocol" Project Template
 
 ### Solar Energy (`solar`)
 
@@ -405,6 +464,7 @@ SunPower Solar Pvt Ltd — solar equipment distributor and EPC contractor. Cover
 - **BOMs with routing** — panel assembly workstations and operations for system integration
 - **Items across technologies** — monocrystalline panels, string/micro inverters, MPPT charge controllers, lithium battery banks, mounting structures
 - **12 customers, 10 suppliers** — EPC contractors, housing societies, commercial buyers, equipment vendors
+- **Projects** — 2 MW Ground-Mount Farm - Jodhpur; 500 kW Factory Rooftop - Chakan; Annual O&M Contract - Western Cluster; plus Residential Rooftop Cluster - Kothrud generated from the "Rooftop Solar Installation" Project Template
 
 ### Jewellery Manufacturing (`jewellery`)
 
@@ -414,6 +474,7 @@ GoldStar Jewellers Pvt Ltd — jewellery manufacturer and wholesaler producing g
 - **Gemstone inventory** — diamonds, rubies, emeralds, sapphires tracked by carat and quality grade
 - **Manufacturing BOMs** — rings, necklaces, bangles, earrings with metal + stone + setting components
 - **50 sales orders** — retail boutiques and wholesale buyers across 180 days
+- **Projects** — Bridal Collection Launch - Vivaha; Bespoke Commission - Mehta Necklace Set; India Jewellery Show - Mumbai; plus Festive Collection - Deepavali generated from the "Collection Development" Project Template
 
 ### Drones Manufacturing (`drones`)
 
@@ -423,6 +484,7 @@ SkyForge Drones Pvt Ltd — drone manufacturer covering component procurement, P
 - **Quality inspections** — flight performance, sensor accuracy, communication range, hover stability (25 QIs)
 - **HR & Payroll enabled** — 15 customers, 10 suppliers, 40 sales orders, 25 purchase orders
 - **Featured reports** — Drone Assembly Report, Component Consumption Report
+- **Projects** — Agri-Spray Drone NPD - AgriHawk 8L; DGCA Type Certification - SurveyWing; Survey Fleet Deployment - NHAI Corridor; plus Payload Variant NPD - Thermal Pod generated from the "Drone NPD Programme" Project Template
 
 ### Crockery Manufacturing (`crockery`)
 
@@ -432,6 +494,7 @@ PotteryPro Ceramics Pvt Ltd — ceramics and crockery manufacturer covering clay
 - **Quality inspections** — glaze coverage, dimensional tolerance, chip resistance, colour consistency (20 QIs)
 - **HR & Payroll enabled** — 12 customers, 8 suppliers, 40 sales orders, 20 purchase orders
 - **Featured reports** — Kiln Firing Report, Glaze Consumption Report
+- **Projects** — Stoneware Dinnerware Launch - Terra Series; Kiln-2 Refractory Rebuild; Flagship Store Rollout - Bandra; plus Glazed Serveware Launch - Monsoon generated from the "Collection Development" Project Template
 
 ### 3D Printing Services (`print3d`)
 
@@ -442,6 +505,7 @@ A 3D print farm (PrintForge 3D Services) taking customer orders for parts printe
 - **Material procurement** — filaments (PLA, ABS, PETG, TPU) and resins (standard, engineering, ABS-like) with correct UOM per material (Kg / Litre)
 - **9 finished-goods BOMs** — small/medium/large prototypes, functional parts, display models, each linked to its routing
 - **Quality inspections** — dimensional accuracy (mm), surface roughness Ra (μm), layer adhesion, print completion (%)
+- **Projects** — Aerospace Bracket Prototype Programme; Dental Aligner Batch Run - Q3; SLS Cell Installation; plus Automotive Jig Prototype Run generated from the "Prototype Delivery Programme" Project Template
 
 ### EV Manufacturing (`evmfg`)
 
@@ -452,6 +516,7 @@ Voltara EV Manufacturing Pvt Ltd — Indian EV manufacturer producing both elect
 - **Two manufacturing routings** — EV Car Route (9 steps, ~40 hrs) and EV Bike Route (8 steps, ~6.5 hrs)
 - **6 BOMs with 19–21 components each** — car BOMs use 21700 cells + 60 kW PMSM motors; bike BOMs use 18650 cells + 3 kW hub motors
 - **Split sales order generation** — 40% car orders (qty 1–3, ₹12–22 lakh, 30–90 day lead) and 60% bike orders (qty 1–15, ₹80k–1.8 lakh, 7–30 day lead)
+- **Projects** — 2W Powertrain NPD - Volt 3.5kW; Battery Pack Line Commissioning; ARAI Homologation - Voltara City; plus Fleet Variant NPD - Cargo 2W generated from the "EV Product Development" Project Template
 
 ### Electrical Equipment Manufacturing (`electrical`)
 
@@ -462,6 +527,7 @@ PowerTech Electrical Pvt Ltd — switchgear and transformer manufacturer produci
 - **Split sales order generation** — 60% transformer orders (qty 1–5, 60–120 day lead) and 40% switchgear orders (qty 1–3, 30–60 day lead)
 - **Electrical quality parameters** — turns ratio error (%), insulation resistance (MOhm), oil breakdown voltage (kV), and load loss (W)
 - **12 customers** — state electricity boards (MSEDCL, KSEB, TSSPDCL), EPC contractors (L&T, Tata Projects), industrial consumers, and export partners
+- **Projects** — LV Switchgear NPD - PowerLine 630A; 11kV Panel Build - Textile Park; IEC 62271 Type Test Campaign; plus Distribution Transformer NPD - 250 kVA generated from the "Electrical NPD Programme" Project Template
 
 ### Hobby Shop & TCG Retailer (`hobbytcg`)
 
@@ -476,6 +542,7 @@ Nexus TCG & Hobbies — a US-based hybrid hobby shop and trading card game retai
 - **8 suppliers** — TCG distributors (ACD, Alliance, GTS, Southern Hobby), accessory vendors (Ultra PRO, Dragon Shield/Arcane Tinmen, BCW), and grading services (PSA)
 - **30 purchase orders** — distributor restocks of sealed product and singles with realistic ±10% price variance
 - **50 sales orders** — split ~50% sealed product, ~30% singles, ~20% accessories with TCG-appropriate retail markups
+- **Projects** — Second Store Launch - Riverside; Regional Tournament Series - Spring Circuit; Holiday Season Programme; plus Pop-up Booth - Comic Expo generated from the "Store Launch Playbook" Project Template
 
 ### Engineering Procurement & Construction (`epc`)
 
@@ -485,6 +552,7 @@ BuildRight EPC Pvt Ltd — EPC company running project-based operations covering
 - **Pure procurement + billing** — no BOMs or production orders; workflow is PO → stock → project billing
 - **50 sales orders, 30 purchase orders** — project milestones and material POs over 180 days
 - **Featured reports** — Project Costing Report, Material Procurement Summary
+- **Projects** — 220kV Substation Package - Nashik; Industrial Warehouse Shell - Bhiwandi; Water Treatment Plant Upgrade - Pune; plus Metro Depot MEP Fit-out - Wadala generated from the "MEP Retrofit Package" Project Template
 
 ### Automobile Dealership (`automobile`)
 
@@ -494,6 +562,7 @@ AutoDrive Motors Pvt Ltd — automobile dealership and service centre. Vehicle s
 - **Spare parts inventory** — multi-category parts catalogue across vehicle makes and models
 - **20 customers, 15 suppliers** — fleet operators, individual buyers, OEM and aftermarket parts vendors
 - **50 sales orders** — vehicle and parts sales with Featured reports: Vehicle Sales Report, Spare Parts Consumption
+- **Projects** — Service Bay Expansion - Andheri Workshop; Recall Campaign - Model X Brake Actuator; Dealer DMS Rollout; plus Annual Service Camp - Pune generated from the "Service Campaign Playbook" Project Template
 
 ### FMCG Distribution (`distribution`)
 
@@ -503,6 +572,7 @@ QuickMove Distributors Pvt Ltd — FMCG distributor procuring from brands and fu
 - **Multi-warehouse stock management** — regional warehouses with dispatch area and stock ageing tracking
 - **Order fulfilment focus** — procurement, stock receipts, and delivery notes as the primary workflow
 - **Featured reports** — Stock Ageing, Delivery Note Trends, Purchase Analytics
+- **Projects** — Regional DC Commissioning - Nagpur; Tier-2 Route Expansion - Vidarbha; Festive Trade Programme - Diwali; plus Satellite Depot Setup - Aurangabad generated from the "Depot Commissioning" Project Template
 
 ### Healthcare & Pharma (`healthcare`)
 
@@ -512,10 +582,13 @@ MedCare Healthcare Pvt Ltd — healthcare and pharmaceutical distributor coverin
 - **Pharma inventory** — medicines tracked by batch and expiry, controlled substance handling
 - **Medical devices** — surgical instruments, diagnostic equipment, PPE alongside medicines
 - **12 customers** — hospitals, clinics, pharmacies, and institutional buyers
+- **Projects** — New OPD Wing Commissioning; NABH Accreditation Programme; Diabetes Care Programme Launch; plus Day-Care Dialysis Unit Setup generated from the "Clinical Facility Commissioning" Project Template
 
 ### Vanilla (`vanilla`)
 
-A minimal environment with only a company (Acme Corp) and demo users created — no master data or transactions are seeded. Use this as a clean slate for custom demonstrations, onboarding sessions, or interactive workshops where the audience populates data live.
+A minimal environment with only a company (Acme Corp) and demo users created — no industry master data or transactions are seeded. Use this as a clean slate for custom demonstrations, onboarding sessions, or interactive workshops where the audience populates data live.
+
+The cross-industry seeders still run, so the site is not entirely bare: it carries a small workforce with logins, payroll, and a generic project portfolio — ERP Rollout - Phase 1; Website Revamp; Office Relocation; plus Customer Portal Pilot generated from the "Standard Delivery Programme" Project Template. Projects use ERPNext's own `Internal` and `External` project types rather than declaring new ones.
 
 ```bash
 demostackkit up vanilla

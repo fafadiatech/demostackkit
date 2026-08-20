@@ -1,6 +1,8 @@
 item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
 FAB-COT-WH-001,White Cotton Fabric 30/30,Raw Material,Meter,100% combed cotton white fabric 30x30 thread count,1,180.00
 FAB-COT-BL-002,Blue Denim Fabric 12oz,Raw Material,Meter,Heavy duty 12oz blue denim fabric,1,250.00
+FAB-GRY-DNM-000,Grey Denim Fabric Unfinished 12oz,Raw Material,Meter,Undyed greige denim fabric prior to dyeing and finishing,1,150.00
+DYE-IND-BL-001,Indigo Dye Powder,Consumable,Kg,Synthetic indigo dye powder for denim fabric,1,450.00
 FAB-POL-BK-003,Black Polyester Fabric,Raw Material,Meter,Anti-wrinkle black polyester blend,1,120.00
 FAB-SIL-RD-004,Red Silk Fabric,Raw Material,Meter,Pure silk fabric in red colour,1,850.00
 FAB-LIN-NA-005,Navy Linen Fabric,Raw Material,Meter,Breathable navy blue linen fabric,1,320.00

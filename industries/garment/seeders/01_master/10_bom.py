@@ -2,7 +2,15 @@
 Seeder: Bill of Materials for Garment Manufacturing.
 
 Creates BOMs for all finished goods items, linking them to raw materials
-and the Garment Standard Route. BOMs are submitted (active) after creation.
+and the Garment Standard Route.
+
+Key design point — multi-level BOM:
+FAB-COT-BL-002 (Blue Denim Fabric, consumed by GRM-DNM-32, GRM-DNM-34,
+GRM-TSH-BL-M and GRM-JKT-BK-M) carries its own BOM of unfinished greige
+fabric and indigo dye, so each of those finished goods explodes two levels
+deep on the fabric line.
+
+BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
 
@@ -16,6 +24,15 @@ ROUTING_NAME = "Garment Standard Route"
 
 # Each BOM: finished good item → list of {item_code, qty, uom, rate}
 BOMS = [
+    # ── Sub-assembly (consumed by the denim-based finished goods below) ─────────
+    {
+        "item": "FAB-COT-BL-002",  # Blue Denim Fabric 12oz (per Meter)
+        "qty": 1,
+        "items": [
+            {"item_code": "FAB-GRY-DNM-000", "qty": 1.05, "uom": "Meter", "rate": 150.0},
+            {"item_code": "DYE-IND-BL-001", "qty": 0.05, "uom": "Kg", "rate": 450.0},
+        ],
+    },
     {
         "item": "GRM-TSH-WH-S",
         "qty": 1,

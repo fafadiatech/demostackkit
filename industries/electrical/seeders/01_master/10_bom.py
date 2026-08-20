@@ -1,9 +1,19 @@
 """
 Seeder: Bill of Materials for PowerTech Electrical Manufacturing.
 
-Creates 7 BOMs — 4 transformers (100kVA, 250kVA, 500kVA, 1MVA) and 3
-switchgear panels (HT 11kV, LT 415V, MCC 415V). Each BOM references the
-appropriate routing.
+Creates 7 finished-good BOMs — 4 transformers (100kVA, 250kVA, 500kVA, 1MVA)
+and 3 switchgear panels (HT 11kV, LT 415V, MCC 415V) — plus 4 sub-assembly
+BOMs (wound HV/LV coils, core, switchgear busbar assembly). Each BOM
+references the appropriate routing.
+
+Key design point — multi-level BOM:
+EFG-TRANS-100 is built from ESA-COIL-HV, ESA-COIL-LV and ESA-CORE rather
+than raw copper wire/CRGO steel/insulation paper directly, and EFG-SWGR-HT
+is built from ESA-SWGR-BUS. Those four sub-assembly items each carry their
+own submitted BOM (created first, below), so a BOM report for EFG-TRANS-100
+or EFG-SWGR-HT explodes two levels deep — matching how a transformer winding
+shop actually winds coils and stacks cores as intermediate assemblies before
+final tanking, rather than treating raw wire as a single-step input.
 
 Key design point — shared raw materials across product families:
 The following items appear in BOTH transformer and switchgear BOMs,
@@ -11,9 +21,9 @@ demonstrating the shared procurement story central to this demo:
   - ERM-MS-SHEET    (MS Steel Sheet — used for both tanks and panel enclosures)
   - EPKG-WRAP       (Stretch Wrap Film — common packaging across all products)
 
-Transformer BOMs use copper winding wire, CRGO silicon steel, transformer
-oil, insulation paper, HV/LV bushings, Buchholz relay, and temperature
-indicator; switchgear BOMs use VCBs/MCCBs, busbars, CTs, and protection relays.
+Transformer BOMs use wound coil/core sub-assemblies, transformer oil,
+MS steel, HV/LV bushings, Buchholz relay, and temperature indicator;
+switchgear BOMs use VCBs/MCCBs, busbar assemblies, CTs, and protection relays.
 BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
@@ -25,20 +35,55 @@ import json
 from demostackkit.seeder.base import BaseMasterSeeder
 
 BOMS = [
+    # ── Sub-assemblies (consumed by the finished goods below) ──────────────────
+    {
+        "item": "ESA-COIL-LV",
+        "qty": 1,
+        "routing": "Transformer Manufacturing Route",
+        "items": [
+            {"item_code": "ERM-CU-WIRE-15", "qty": 180.0, "uom": "Kg", "rate": 750.0},
+            {"item_code": "ERM-INS-PAPER", "qty": 15.0, "uom": "Kg", "rate": 180.0},
+        ],
+    },
+    {
+        "item": "ESA-COIL-HV",
+        "qty": 1,
+        "routing": "Transformer Manufacturing Route",
+        "items": [
+            {"item_code": "ERM-CU-WIRE-30", "qty": 45.0, "uom": "Kg", "rate": 740.0},
+            {"item_code": "ERM-INS-PAPER", "qty": 10.0, "uom": "Kg", "rate": 180.0},
+        ],
+    },
+    {
+        "item": "ESA-CORE",
+        "qty": 1,
+        "routing": "Transformer Manufacturing Route",
+        "items": [
+            {"item_code": "ERM-CRGO-STEEL", "qty": 280.0, "uom": "Kg", "rate": 120.0},
+        ],
+    },
+    {
+        "item": "ESA-SWGR-BUS",
+        "qty": 1,
+        "routing": "Switchgear Manufacturing Route",
+        "items": [
+            {"item_code": "ECOMP-BUSBAR-CU", "qty": 6.0, "uom": "Meter", "rate": 620.0},
+            {"item_code": "ERM-MS-SHEET", "qty": 5.0, "uom": "Kg", "rate": 65.0},
+        ],
+    },
     # ── Distribution Transformers ─────────────────────────────────────────────
     {
         "item": "EFG-TRANS-100",
         "qty": 1,
         "routing": "Transformer Manufacturing Route",
         "items": [
-            # Conductors
-            {"item_code": "ERM-CU-WIRE-15", "qty": 180.0, "uom": "Kg", "rate": 750.0},
-            {"item_code": "ERM-CU-WIRE-30", "qty": 45.0, "uom": "Kg", "rate": 740.0},
-            # Core
-            {"item_code": "ERM-CRGO-STEEL", "qty": 280.0, "uom": "Kg", "rate": 120.0},
+            # Wound coil and core sub-assemblies (each carries its own BOM —
+            # see above — making this a two-level BOM)
+            {"item_code": "ESA-COIL-LV", "qty": 1, "uom": "Nos", "rate": 18000.0},
+            {"item_code": "ESA-COIL-HV", "qty": 1, "uom": "Nos", "rate": 25000.0},
+            {"item_code": "ESA-CORE", "qty": 1, "uom": "Nos", "rate": 35000.0},
             # Insulation
             {"item_code": "ERM-TRANS-OIL", "qty": 150.0, "uom": "Litre", "rate": 95.0},
-            {"item_code": "ERM-INS-PAPER", "qty": 25.0, "uom": "Kg", "rate": 180.0},
             # Tank
             {"item_code": "ERM-MS-SHEET", "qty": 80.0, "uom": "Kg", "rate": 65.0},
             # Accessories
@@ -134,6 +179,7 @@ BOMS = [
             {"item_code": "ECOMP-BUSBAR-CU", "qty": 6.0, "uom": "Meter", "rate": 620.0},
             {"item_code": "ECOMP-CT-11KV", "qty": 3, "uom": "Nos", "rate": 8500.0},
             {"item_code": "ECOMP-RELAY-PROT", "qty": 1, "uom": "Nos", "rate": 18500.0},
+            # Busbar sub-assembly (carries its own BOM — see above)
             {"item_code": "ESA-SWGR-BUS", "qty": 1, "uom": "Nos", "rate": 22000.0},
             # Packaging
             {"item_code": "EPKG-CRATE-MD", "qty": 1, "uom": "Nos", "rate": 3500.0},

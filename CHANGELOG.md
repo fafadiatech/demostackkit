@@ -8,15 +8,21 @@ All notable changes to DemoStackKit, grouped by week. Most recent week first.
 
 ### Added
 
-- **Project management seeding** — every industry now ships a four-project portfolio with phase (group) tasks, `depends_on` chains for the Gantt chart, per-employee assignment and a full status spread for the Kanban board. New `demostackkit/seeder/projects.py` (pure planning logic) and `project_seeders.py` (shared run logic), per-industry `01_master/13_projects.py` and `02_transactions/04_projects.py`, plus shared seeders for employee logins (84), timesheets (250), the status/assignment pass (260) and the Task Kanban board (270). Adds `Projects` to every industry's modules and `seed.volumes.projects` / `seed.volumes.timesheets`.
-- **Logins for seeded employees** — `01_master/84_employee_users.py` creates one User per Employee, links `Employee.user_id` and grants `Projects User`, so tasks can be assigned to the real workforce instead of the four generic demo logins.
-- **Payroll seeding** — new `demostackkit/seeder/payroll.py` module plus a chemical-industry payroll seeder (`01_master/12_payroll.py`) and unit tests, so demos ship with realistic payroll data. (`d6bc117`, ref #14)
+- **Project management seeding** — every industry now ships a four-project portfolio with phase (group) tasks, `depends_on` chains for the Gantt chart, per-employee assignment and a full status spread for the Kanban board. New `demostackkit/seeder/projects.py` (pure planning logic) and `project_seeders.py` (shared run logic), per-industry `01_master/13_projects.py` and `02_transactions/04_projects.py`, plus shared seeders for employee logins (84), timesheets (250), the status/assignment pass (260) and the Task Kanban board (270). Adds `Projects` to every industry's modules and `seed.volumes.projects` / `seed.volumes.timesheets`. (`024adb9`, ref #15)
+- **Logins for seeded employees** — `01_master/84_employee_users.py` creates one User per Employee, links `Employee.user_id` and grants `Projects User`, so tasks can be assigned to the real workforce instead of the four generic demo logins. (`024adb9`, ref #15)
+- **Payroll seeding** — new `demostackkit/seeder/payroll.py` module with shared run logic in `payroll_seeder.py`; every industry now carries a thin `01_master/12_payroll.py` with its own `ANNUAL_CTC` table. India industries get monthly structures; US industries (`print3d`, `hobbytcg`, `vanilla`) get hourly/timesheet payroll automatically from the company's country. (`d6bc117`, `ed31806`, ref #14)
 - **Standard scrap / rejected / rework warehouses** — a shared `01_master/61_standard_warehouses.py` seeder now creates these three warehouses for every industry; the per-industry warehouse seeders (crockery, drones, electrical, evmfg, garment, print3d) were trimmed accordingly. (`6a596ff`, ref #11)
 - **Opening stock balances** — new `01_master/90_opening_stock.py` seeder with configuration hooks in `core/config.py`, `industry.yaml` templates, and helpers in `seeder/utils.py`, so demo sites start with non-zero inventory. (`fdcce6f`, ref #13)
-- **Employee master data** for chemical, crockery, drones, electrical, evmfg, garment, jewellery, print3d and solar industries (`11_employees.py` per industry). (`f475cf2`, ref #9)
+- **Employee master data** for automobile, chemical, crockery, distribution, drones, electrical, epc, evmfg, garment, healthcare, hobbytcg, jewellery, print3d, solar and vanilla industries (`11_employees.py` per industry). (`f475cf2`, `ed31806`, ref #9)
+
+### Changed
+
+- **`electrical` and `hobbytcg`** — `industry.yaml` now declares HRMS, telephony and Helpdesk in `extra_apps`, matching the other industries that ship HR & Payroll by default. (`7d0a770`)
 
 ### Fixed
 
+- **Stale `apps.txt` after container recreation** — `demostackkit up` now prunes `sites/apps.txt` entries whose app directory is missing from the bench (while preserving apps the current industry will re-fetch), so a backend image bump or compose down/up no longer raises `ModuleNotFoundError` before seeding starts. (`7d0a770`)
+- **Extra app assets 404 in the frontend** — `demostackkit up` and `install-app` now build and materialize static assets for `extra_apps` into `sites/assets/` as real files instead of symlinks, so nginx can serve HRMS, Helpdesk and other app icons. (`5024503`)
 - **Missing Fiscal Year** — added a `01_master/00_fiscal_years.py` seeder and fiscal-year window helpers, wired into `demostackkit up`; every industry's company seeder now relies on it instead of assuming a year exists. (`396aee4`, ref #10)
 - **Missing seed data** across industries — corrected workstations, BOM linkage, sales-order generation and print3d item data. (`f475cf2`, ref #9)
 

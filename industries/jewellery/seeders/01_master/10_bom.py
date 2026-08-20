@@ -3,10 +3,19 @@ Seeder: Bill of Materials for Jewellery Manufacturing.
 
 Creates BOMs for finished jewellery items, linking them to raw materials
 (precious metals and gemstones) and the Jewellery Standard Route.
+
+Key design point — multi-level BOM:
+JWL-GLD-NCK-001 is built partly from JWL-GLD-CHN-007 (the 22K Gold Chain,
+itself a finished good with its own submitted BOM below) plus extra loose
+gold for the pendant and clasp work, so JWL-GLD-NCK-001 explodes two levels
+deep on the chain line — a chain assembled first, then finished into a
+necklace, rather than melting raw gold straight into the final piece.
+
 BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 
-Note: Qty values represent grams of metal per finished piece.
+Note: Qty values represent grams of metal (or of the sub-assembly) per
+finished piece.
 """
 
 from __future__ import annotations
@@ -23,7 +32,10 @@ BOMS = [
         "item": "JWL-GLD-NCK-001",  # 22K Gold Necklace Classic (~15g)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 15.0, "uom": "Gram", "rate": 6000.0},
+            # Chain sub-assembly (carries its own BOM — see JWL-GLD-CHN-007
+            # below), plus loose gold for the pendant and clasp work.
+            {"item_code": "JWL-GLD-CHN-007", "qty": 10.0, "uom": "Gram", "rate": 6050.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 6000.0},
         ],
     },
     {

@@ -2,7 +2,15 @@
 Seeder: Bill of Materials for Drones Manufacturing.
 
 Creates BOMs for all finished drone models, linking them to components
-and the Drone Standard Route. BOMs are submitted (active) after creation.
+and the Drone Standard Route.
+
+Key design point — multi-level BOM:
+FCS-PIX-001 (the Pixhawk flight controller, consumed by DRN-AGR-5L,
+DRN-SRV-4K and DRN-DLV-P5) carries its own BOM of a bare PCB, an IMU sensor
+and a GPS module, so each of those finished drones explodes two levels deep
+on the flight-controller line.
+
+BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
 
@@ -16,6 +24,16 @@ ROUTING_NAME = "Drone Standard Route"
 
 # Each BOM: finished good item → list of {item_code, qty, uom, rate}
 BOMS = [
+    # ── Sub-assembly (consumed by the finished drones below) ────────────────────
+    {
+        "item": "FCS-PIX-001",  # Flight Controller Pixhawk 6C
+        "qty": 1,
+        "items": [
+            {"item_code": "PCB-FC-BARE-001", "qty": 1, "uom": "Nos", "rate": 2500.0},
+            {"item_code": "SNS-IMU-001", "qty": 1, "uom": "Nos", "rate": 3200.0},
+            {"item_code": "GPS-M8N-001", "qty": 1, "uom": "Nos", "rate": 1800.0},
+        ],
+    },
     {
         "item": "DRN-AGR-5L",
         "qty": 1,

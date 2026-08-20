@@ -5,6 +5,13 @@ Creates BOMs for all 9 finished goods items (FDM prototypes, FDM functional
 parts, SLA prototypes, SLA functional parts, and SLA display models).
 Each BOM references either the FDM Standard Route or SLA Standard Route
 and lists the appropriate filament/resin and consumable inputs.
+
+Key design point — multi-level BOM:
+PRT-FDM-FUNC-M is built from MAT-BLANK-FDM-M (an unfinished print straight
+off the bed, itself carrying its own BOM of raw ABS filament) rather than
+filament directly, so PRT-FDM-FUNC-M explodes two levels deep — printing and
+post-processing modelled as separate steps instead of one flat material list.
+
 BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
@@ -16,6 +23,15 @@ import json
 from demostackkit.seeder.base import BaseMasterSeeder
 
 BOMS = [
+    # ── Sub-assembly (consumed by PRT-FDM-FUNC-M below) ─────────────────────────
+    {
+        "item": "MAT-BLANK-FDM-M",
+        "qty": 1,
+        "routing": "FDM Standard Route",
+        "items": [
+            {"item_code": "MAT-ABS-GRY", "qty": 0.20, "uom": "Kg", "rate": 22.0},
+        ],
+    },
     {
         "item": "PRT-FDM-PROTO-S",
         "qty": 1,
@@ -62,7 +78,8 @@ BOMS = [
         "qty": 1,
         "routing": "FDM Standard Route",
         "items": [
-            {"item_code": "MAT-ABS-GRY", "qty": 0.20, "uom": "Kg", "rate": 22.0},
+            # Printed blank sub-assembly (carries its own BOM — see above)
+            {"item_code": "MAT-BLANK-FDM-M", "qty": 1, "uom": "Nos", "rate": 5.0},
             {"item_code": "MAT-SAND-220", "qty": 0.10, "uom": "Pack", "rate": 4.0},
             {"item_code": "MAT-PKG-BOX-S", "qty": 1, "uom": "Nos", "rate": 1.20},
             {"item_code": "MAT-PKG-BUBBLE", "qty": 1, "uom": "Nos", "rate": 0.50},

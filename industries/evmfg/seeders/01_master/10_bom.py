@@ -18,6 +18,11 @@ shared component procurement story central to this demo:
 
 Car BOMs use the 21700-format Li-Ion cells and high-voltage BMS/controllers;
 bike BOMs use the smaller 18650-format cells and low-voltage variants.
+
+Key design point — multi-level BOM:
+MAT-BRAKE-DISC (used in every car and bike BOM above) carries its own BOM
+of rotor and pad, so any car or bike explodes two levels deep on that line.
+
 BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
@@ -29,6 +34,16 @@ import json
 from demostackkit.seeder.base import BaseMasterSeeder
 
 BOMS = [
+    # ── Sub-assemblies (consumed by the car/bike BOMs below) ────────────────────
+    {
+        "item": "MAT-BRAKE-DISC",
+        "qty": 1,
+        "routing": "EV Car Manufacturing Route",
+        "items": [
+            {"item_code": "MAT-DISC-ROTOR", "qty": 2, "uom": "Nos", "rate": 3200.0},
+            {"item_code": "MAT-BRAKE-PAD", "qty": 1, "uom": "Set", "rate": 900.0},
+        ],
+    },
     # ── Electric Cars ─────────────────────────────────────────────────────────
     {
         "item": "EV-CAR-SEDAN",

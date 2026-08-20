@@ -3,6 +3,12 @@ Seeder: Bill of Materials for Solar System Assembly.
 
 Creates BOMs for assembled solar system products, linking them to component
 items (panels, inverters, mounting, cabling) and the Solar System Assembly Route.
+
+Key design point — multi-level BOM:
+SLR-INV-HYB-003 (the hybrid inverter used in SLR-SYS-RTF-5KW) carries its own
+BOM of PCB assembly, heatsinks and a DC MCB, so the 5KW rooftop system's BOM
+explodes two levels deep on that line.
+
 BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
@@ -17,6 +23,16 @@ ROUTING_NAME = "Solar System Assembly Route"
 
 # Each BOM: assembled solar system → component items
 BOMS = [
+    # ── Sub-assembly (consumed by SLR-SYS-RTF-5KW below) ────────────────────────
+    {
+        "item": "SLR-INV-HYB-003",  # Hybrid Inverter 5KW
+        "qty": 1,
+        "items": [
+            {"item_code": "SLR-COMP-PCB-001", "qty": 1, "uom": "Nos", "rate": 22000.0},
+            {"item_code": "SLR-COMP-HTSK-002", "qty": 2, "uom": "Nos", "rate": 3500.0},
+            {"item_code": "SLR-BOS-MCB-003", "qty": 1, "uom": "Nos", "rate": 1850.0},
+        ],
+    },
     {
         "item": "SLR-SYS-RTF-5KW",  # 5KW Rooftop Solar System
         "qty": 1,

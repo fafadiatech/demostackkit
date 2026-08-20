@@ -2,7 +2,15 @@
 Seeder: Bill of Materials for Chemical Manufacturing.
 
 Creates BOMs for finished chemical products, linking them to raw materials
-and the Chemical Standard Route. BOMs are submitted (active) after creation.
+and the Chemical Standard Route.
+
+Key design point — multi-level BOM:
+CHM-INT-ACT-007 and CHM-INT-DMS-008 (both Intermediates, consumed by
+CHM-FIN-TRT-003 and CHM-FIN-CLN-002 respectively) each carry their own BOM
+synthesised from raw chemicals, so those finished products explode two
+levels deep on the intermediate line.
+
+BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
 
@@ -16,6 +24,23 @@ ROUTING_NAME = "Chemical Standard Route"
 
 # Each BOM: finished product → list of {item_code, qty, uom, rate}
 BOMS = [
+    # ── Intermediates (consumed by the finished products below) ─────────────────
+    {
+        "item": "CHM-INT-ACT-007",  # Acetic Anhydride (per 10 Kg batch)
+        "qty": 10,
+        "items": [
+            {"item_code": "CHM-RAW-TOL-004", "qty": 3.0, "uom": "Litre", "rate": 95.0},
+            {"item_code": "CHM-RAW-SUL-001", "qty": 1.0, "uom": "Kg", "rate": 45.0},
+        ],
+    },
+    {
+        "item": "CHM-INT-DMS-008",  # Dimethyl Sulphoxide (per 10 Kg batch)
+        "qty": 10,
+        "items": [
+            {"item_code": "CHM-RAW-IPA-006", "qty": 12.0, "uom": "Litre", "rate": 125.0},
+            {"item_code": "CHM-RAW-SUL-001", "qty": 2.0, "uom": "Kg", "rate": 45.0},
+        ],
+    },
     {
         "item": "CHM-FIN-CLN-001",  # Industrial Cleaner Pro (per Litre)
         "qty": 100,

@@ -2,7 +2,14 @@
 Seeder: Bill of Materials for Crockery Manufacturing.
 
 Creates BOMs for all finished crockery pieces, linking them to clay and glazes
-and the Crockery Standard Route. BOMs are submitted (active) after creation.
+and the Crockery Standard Route.
+
+Key design point — multi-level BOM:
+GLZ-WH-001 (White Glossy Glaze, consumed by CRK-DIN-PLT-27, CRK-DIN-PLT-22,
+CRK-DIN-BWL-16 and CRK-DRK-CUP-150) carries its own BOM of frit and kaolin,
+so each of those finished pieces explodes two levels deep on the glaze line.
+
+BOMs are submitted (active) after creation.
 Idempotent — skips items that already have an active BOM.
 """
 
@@ -16,6 +23,15 @@ ROUTING_NAME = "Crockery Standard Route"
 
 # Each BOM: finished good item → list of {item_code, qty, uom, rate}
 BOMS = [
+    # ── Sub-assembly (consumed by the finished pieces below) ────────────────────
+    {
+        "item": "GLZ-WH-001",  # White Glossy Glaze (per 5 Kg batch)
+        "qty": 5,
+        "items": [
+            {"item_code": "GLZ-FRIT-001", "qty": 3.0, "uom": "Kg", "rate": 600.0},
+            {"item_code": "GLZ-KAOLIN-002", "qty": 2.0, "uom": "Kg", "rate": 200.0},
+        ],
+    },
     {
         "item": "CRK-DIN-PLT-27",
         "qty": 1,

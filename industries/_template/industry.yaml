@@ -67,7 +67,9 @@ site:
   timezone: "UTC"               # e.g. Asia/Kolkata, America/New_York
 
 # ── Modules ───────────────────────────────────────────────────────────────────
-# List only the modules relevant to this industry
+# List only the modules relevant to this industry.
+# Add "Assets" for an in-house Asset Register (pair with seeders/01_master/14_assets.py)
+# and "Support" for Warranty Claims / Issues (pair with seeders/01_master/15_issue_types.py).
 modules:
   - Accounts
   - Buying

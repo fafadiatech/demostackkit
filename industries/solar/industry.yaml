@@ -53,6 +53,8 @@ modules:
   - Stock
   - Projects
   - Manufacturing
+  - Assets
+  - Support
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:

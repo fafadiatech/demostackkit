@@ -51,6 +51,8 @@ modules:
   - Selling
   - Stock
   - Projects
+  - Assets
+  - Support
 
 seed:
   random_seed: 20240901

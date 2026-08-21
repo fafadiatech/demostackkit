@@ -77,6 +77,18 @@ def _fy_start_year(month: int, day: int, when: date) -> int:
     return when.year if (when.month, when.day) >= (month, day) else when.year - 1
 
 
+def resolve_saleable_items(ctx) -> list[str]:
+    """Item codes worth hanging a maintenance contract or warranty claim off.
+
+    Prefers ``fg_item_codes`` (finished goods, seeded by Manufacturing
+    industries) and falls back to the general ``item_codes`` cache used by
+    every other industry. Empty when the industry seeded no items at all —
+    the caller's own cache-emptiness guard is what should turn that into a
+    no-op.
+    """
+    return ctx.cache_get("fg_item_codes") or ctx.cache_get("item_codes") or []
+
+
 def opening_stock_date(range_start: date) -> date:
     """Posting date for opening balances: the day before the first seeded transaction.
 

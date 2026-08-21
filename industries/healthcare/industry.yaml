@@ -53,6 +53,8 @@ modules:
   - Stock
   - Projects
   - Healthcare
+  - Assets
+  - Support
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:

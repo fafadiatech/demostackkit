@@ -54,6 +54,8 @@ modules:
   - Selling
   - Stock
   - Projects
+  - Assets
+  - Support
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:

@@ -431,6 +431,30 @@ Volumes are tunable per industry: `seed.volumes.projects` trims the portfolio an
 
 Open the board at `/app/task/view/kanban/Project Tasks`, or a project's Gantt from `/app/project`.
 
+## Maintenance & Support
+
+ERPNext splits "maintenance" across two unrelated areas, and the seeding follows that split rather than blurring it: in-house fixed assets live under **Assets** (`Asset`, `Asset Maintenance`), while service on goods already sold to a customer lives under **Selling**/**Support** (`Maintenance Schedule`, `Maintenance Visit`, `Warranty Claim`, `Issue`). Every industry gets an Asset Register; the customer-facing pieces populate wherever the industry has customers and items to hang them off.
+
+### In-house Asset Register
+
+Each industry carries a handful of the equipment it would actually own — a plant's reactors and forklifts, a distributor's delivery vans, even `vanilla`'s single company vehicle — as `Asset` records: existing assets (no purchase document needed), submitted, with a Straight Line depreciation schedule. Categories get their own Fixed Asset ledger account, found or created rather than assumed from the Standard Chart of Accounts.
+
+Every maintenance-required Asset also gets an `Asset Maintenance` record with one Preventive Maintenance task, worked through ERPNext's own state machine rather than hand-inserted: the task starts overdue, gets marked Completed and submitted (landing one closed `Asset Maintenance Log` in the past), which advances the task to its next due date and — via ERPNext's own `on_update` — auto-creates the next `Asset Maintenance Log`, now Planned in the future.
+
+Shared engine: `demostackkit/seeder/asset_seeder.py` (`AssetCategorySeeder`, `AssetSeeder` — each industry supplies `ASSET_CATEGORIES` / `ASSETS` in `01_master/14_assets.py`) and `demostackkit/seeders/01_master/90_asset_maintenance.py` (`AssetMaintenanceSeeder`, fully shared — no per-industry data at all).
+
+### Customer-facing Maintenance Schedule, Visit, Warranty Claim & Issue
+
+These need **no per-industry data** — they auto-pair the `customer_names` and `item_codes` (or `fg_item_codes`) caches the same way `ProjectSeeder` auto-pairs customers onto projects, and no-op wherever either cache is empty. That is what lets `vanilla` seed an Asset Register but zero of these: it has no customers or items to pair.
+
+A `Maintenance Schedule` is submitted per (customer, item) pair with a periodicity ERPNext can validate (Quarterly or Half Yearly, over a ~370-day span), then two of its generated schedule rows become `Maintenance Visit`s via ERPNext's own `make_maintenance_visit` mapper — one Completed in the past, one still open in the future. `Warranty Claim` and `Issue` are seeded independently against the same customer/item pool, with a mixed spread of statuses. `Issue Type` is the one per-industry taxonomy in this group (`01_master/15_issue_types.py`), gated on the `Support` module the same way `Issue` and `Warranty Claim` are.
+
+Shared engine: `demostackkit/seeder/support_seeder.py` (`IssueTypeSeeder`) and three fully-shared transaction seeders — `demostackkit/seeders/02_transactions/{245_maintenance_contracts,246_warranty_claims,247_issues}.py`.
+
+### Enabling it for an industry
+
+Add `Assets` and/or `Support` to `industry.yaml`'s `modules:` list — each seeder checks for its module the same way `ProjectTemplateSeeder` checks for `Projects`. `Assets` alone (no `Support`) is a valid combination, used by `vanilla`.
+
 ## Industrywise Breakdown
 
 ### Garment Manufacturing (`garment`)

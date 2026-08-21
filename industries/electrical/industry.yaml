@@ -53,6 +53,8 @@ modules:
   - Projects
   - Manufacturing
   - Quality Management
+  - Assets
+  - Support
 
 seed:
   random_seed: 20240820

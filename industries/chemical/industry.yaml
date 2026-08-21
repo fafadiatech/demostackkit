@@ -58,6 +58,8 @@ modules:
   - Quality Management
   - HR
   - Payroll
+  - Assets
+  - Support
 
 # ── Seed Configuration ───────────────────────────────────────────────────────
 seed:

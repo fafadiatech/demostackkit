@@ -39,6 +39,17 @@ x-erpnext-env: &erpnext-env
 x-erpnext-volumes: &erpnext-volumes
   - sites:/home/frappe/frappe-bench/sites
   - logs:/home/frappe/frappe-bench/logs
+  # Shared with backend so extra apps fetched via `bench get-app` (which lands
+  # in apps/ on the container's writable layer) are visible to every other
+  # Frappe process container. Without this, sites/apps.txt (on the shared
+  # `sites` volume) lists apps that scheduler/queue-*/websocket can't import,
+  # since they'd otherwise only have the image's baked-in frappe + erpnext.
+  - apps:/home/frappe/frappe-bench/apps
+  # `bench get-app` also `pip install -e`s the app into env/ (registering its
+  # import path via a .pth file). apps/ alone isn't enough — without sharing
+  # env/ too, only backend (where get-app actually ran) can import the app;
+  # every other container still raises ModuleNotFoundError.
+  - env:/home/frappe/frappe-bench/env
 
 x-erpnext-depends: &erpnext-depends
   depends_on:
@@ -343,3 +354,5 @@ volumes:
   redis-queue-data:
   sites:
   logs:
+  apps:
+  env:

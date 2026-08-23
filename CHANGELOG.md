@@ -27,6 +27,7 @@ All notable changes to DemoStackKit, grouped by week. Most recent week first.
 - **Extra app assets 404 in the frontend** — `demostackkit up` and `install-app` now build and materialize static assets for `extra_apps` into `sites/assets/` as real files instead of symlinks, so nginx can serve HRMS, Helpdesk and other app icons. (`5024503`)
 - **Missing Fiscal Year** — added a `01_master/00_fiscal_years.py` seeder and fiscal-year window helpers, wired into `demostackkit up`; every industry's company seeder now relies on it instead of assuming a year exists. (`396aee4`, ref #10)
 - **Missing seed data** across industries — corrected workstations, BOM linkage, sales-order generation and print3d item data. (`f475cf2`, ref #9)
+- **`ModuleNotFoundError` for extra apps in background workers** — `infra/docker-compose.yml` now shares the `apps` and `env` volumes with the scheduler, queue and websocket containers (previously only `sites` and `logs` were shared), so apps fetched via `bench get-app` on the backend are importable everywhere, not just in the container that ran `get-app`. (`dc4ccaa`, ref #3)
 
 ---
 

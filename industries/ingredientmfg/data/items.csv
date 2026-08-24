@@ -1,0 +1,32 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+ING-RAW-TUR-001,Turmeric Rhizome Dried,Raw Botanicals,Kg,Dried turmeric rhizome for curcuminoid extraction,1,220.00
+ING-RAW-GIN-002,Ginger Rhizome Dried,Raw Botanicals,Kg,Dried ginger rhizome for oleoresin extraction,1,180.00
+ING-RAW-ASH-003,Ashwagandha Root Dried,Raw Botanicals,Kg,Dried ashwagandha root for withanolide extraction,1,340.00
+ING-RAW-GRT-004,Green Tea Leaf Dried,Raw Botanicals,Kg,Dried green tea leaf for catechin extraction,1,410.00
+ING-RAW-HIB-005,Hibiscus Flower Dried,Raw Botanicals,Kg,Dried hibiscus calyx for anthocyanin extraction,1,260.00
+ING-RAW-MRG-006,Marigold Petal Dried,Raw Botanicals,Kg,Dried marigold petal for lutein extraction,1,190.00
+ING-RAW-ETL-007,Food Grade Ethanol 96%,Precursor Chemicals,Litre,Food grade ethanol used as extraction solvent,1,145.00
+ING-RAW-CIT-008,Citric Acid Anhydrous,Precursor Chemicals,Kg,Food grade acidulant and pH adjuster,1,88.00
+ING-RAW-MAL-009,Maltodextrin DE10,Precursor Chemicals,Kg,Carrier and bulking agent for extract standardisation,1,65.00
+ING-RAW-GUM-010,Xanthan Gum,Precursor Chemicals,Kg,Food grade hydrocolloid thickener,1,480.00
+ING-RAW-COL-011,Bovine Hide Collagen Peptide Crude,Precursor Chemicals,Kg,Crude collagen peptide input for hydrolysis,1,620.00
+ING-RAW-VNC-012,Vanillin Synthetic,Precursor Chemicals,Kg,Synthetic vanillin for flavour compounding,1,780.00
+ING-RAW-PEA-013,Pea Protein Isolate Crude,Precursor Chemicals,Kg,Crude pea protein isolate for concentration,1,210.00
+ING-INT-CUR-014,Standardized Curcuminoid Concentrate,Intermediates,Kg,In-house intermediate concentrate feeding curcumin extract,1,1200.00
+ING-INT-HYD-015,Hydrolyzed Collagen Concentrate,Intermediates,Kg,In-house hydrolysed collagen intermediate,1,1450.00
+PKG-DRM-025-016,HDPE Drum 25Kg,Packaging Materials,Nos,Food grade HDPE drum for bulk extract packing,1,320.00
+PKG-BAG-001-017,Aluminium Foil Pouch 1Kg,Packaging Materials,Nos,Laminated foil pouch for moisture-sensitive powders,1,12.00
+PKG-JAR-005-018,PET Jar 500g,Packaging Materials,Nos,Food grade PET jar with induction seal,1,22.00
+PKG-BTL-001-019,Amber Glass Bottle 1L,Packaging Materials,Nos,Amber glass bottle for liquid flavour concentrates,1,45.00
+ING-FIN-FLV-020,Natural Vanilla Flavour Compound,"Flavours, Colours & Functional Additives",Kg,Natural vanilla flavour compound for beverages and bakery,1,1850.00
+ING-FIN-FLV-021,Citrus Flavour Concentrate,"Flavours, Colours & Functional Additives",Kg,Citrus flavour concentrate for beverages,1,1450.00
+ING-FIN-CLR-022,Natural Turmeric Colour Extract,"Flavours, Colours & Functional Additives",Kg,Natural curcumin-based colour extract for food use,1,2200.00
+ING-FIN-CLR-023,Marigold Lutein Colour Extract,"Flavours, Colours & Functional Additives",Kg,Marigold-derived lutein colour extract,1,2450.00
+ING-FIN-STB-024,Hydrocolloid Stabiliser Blend,"Flavours, Colours & Functional Additives",Kg,Multi-hydrocolloid stabiliser system for beverages and dairy,1,980.00
+ING-FIN-SWT-025,High Intensity Sweetener Blend,"Flavours, Colours & Functional Additives",Kg,Functional sweetener blend for low-calorie formulations,1,3200.00
+ING-FIN-CUR-026,Curcumin Extract 95%,Nutraceutical & Botanical Actives,Kg,Standardized curcumin extract 95% curcuminoids,1,8500.00
+ING-FIN-ASH-027,Ashwagandha Extract 5% Withanolides,Nutraceutical & Botanical Actives,Kg,Standardized ashwagandha root extract,1,5200.00
+ING-FIN-GRT-028,Green Tea Extract 50% EGCG,Nutraceutical & Botanical Actives,Kg,Standardized green tea extract rich in EGCG,1,6800.00
+ING-FIN-COL-029,Hydrolyzed Collagen Peptide Powder,Nutraceutical & Botanical Actives,Kg,Hydrolysed collagen peptide powder for functional nutrition,1,4200.00
+ING-FIN-HIB-030,Hibiscus Extract Standardized,Nutraceutical & Botanical Actives,Kg,Standardized hibiscus extract rich in anthocyanins,1,4500.00
+ING-FIN-PRO-031,Plant Protein Concentrate 80%,Nutraceutical & Botanical Actives,Kg,Concentrated plant protein isolate for nutrition bars and shakes,1,3600.00

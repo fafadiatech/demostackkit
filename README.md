@@ -82,6 +82,7 @@ DemoStackKit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | Electrical Equipment Manufacturing | `electrical` | http://electrical.localhost | ✓ |
 | Abrasives & Industrial Polishing Equipment | `abrasives` | http://abrasives.localhost | ✓ |
 | Hobby Shop & TCG Retailer | `hobbytcg` | http://hobbytcg.localhost | — |
+| Ingredient Manufacturing | `ingredientmfg` | http://ingredientmfg.localhost | ✓ |
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
 | Distribution | `distribution` | http://distribution.localhost | — |

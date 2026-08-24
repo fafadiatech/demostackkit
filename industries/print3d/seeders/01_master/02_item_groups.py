@@ -18,6 +18,7 @@ _ITEM_GROUPS = [
     {"item_group_name": "Packaging", "parent_item_group": "All Item Groups"},
     {"item_group_name": "FDM Filaments", "parent_item_group": "Raw Material"},
     {"item_group_name": "SLA Resins", "parent_item_group": "Raw Material"},
+    {"item_group_name": "Semi-Finished", "parent_item_group": "Raw Material"},
     {"item_group_name": "Post-Processing Supplies", "parent_item_group": "Consumable"},
     {"item_group_name": "Prototypes", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Functional Parts", "parent_item_group": "Finished Goods"},

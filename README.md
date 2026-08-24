@@ -45,6 +45,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
   - [3D Printing Services](#3d-printing-services-print3d)
   - [EV Manufacturing](#ev-manufacturing-evmfg)
   - [Electrical Equipment Manufacturing](#electrical-equipment-manufacturing-electrical)
+  - [Abrasives & Industrial Polishing Equipment](#abrasives--industrial-polishing-equipment-abrasives)
   - [Hobby Shop & TCG Retailer](#hobby-shop--tcg-retailer-hobbytcg)
   - [Engineering Procurement & Construction](#engineering-procurement--construction-epc)
   - [Automobile Dealership](#automobile-dealership-automobile)
@@ -79,6 +80,7 @@ DemoStackKit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | 3D Printing Services | `print3d` | http://print3d.localhost | ✓ |
 | EV Manufacturing | `evmfg` | http://evmfg.localhost | ✓ |
 | Electrical Equipment Manufacturing | `electrical` | http://electrical.localhost | ✓ |
+| Abrasives & Industrial Polishing Equipment | `abrasives` | http://abrasives.localhost | ✓ |
 | Hobby Shop & TCG Retailer | `hobbytcg` | http://hobbytcg.localhost | — |
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
@@ -375,7 +377,7 @@ Seeded for all industries. Each industry carries a thin `12_payroll.py` with its
 
 | Industry | Payroll convention |
 | --- | --- |
-| `automobile`, `chemical`, `crockery`, `distribution`, `drones`, `electrical`, `epc`, `evmfg`, `garment`, `healthcare`, `jewellery`, `solar` | Monthly (India) |
+| `abrasives`, `automobile`, `chemical`, `crockery`, `distribution`, `drones`, `electrical`, `epc`, `evmfg`, `garment`, `healthcare`, `jewellery`, `solar` | Monthly (India) |
 | `hobbytcg`, `print3d`, `vanilla` | Hourly / timesheet (United States) |
 
 ## Project Management
@@ -552,6 +554,20 @@ PowerTech Electrical Pvt Ltd — switchgear and transformer manufacturer produci
 - **Electrical quality parameters** — turns ratio error (%), insulation resistance (MOhm), oil breakdown voltage (kV), and load loss (W)
 - **12 customers** — state electricity boards (MSEDCL, KSEB, TSSPDCL), EPC contractors (L&T, Tata Projects), industrial consumers, and export partners
 - **Projects** — LV Switchgear NPD - PowerLine 630A; 11kV Panel Build - Textile Park; IEC 62271 Type Test Campaign; plus Distribution Transformer NPD - 250 kVA generated from the "Electrical NPD Programme" Project Template
+
+### Abrasives & Industrial Polishing Equipment (`abrasives`)
+
+Alpha Abrasives Pvt Ltd — a hybrid abrasives manufacturer and industrial-tools wholesaler modelled on AJ Abrasives, running an in-house manufacturing line and a pure-trading line in the same company (mirroring `electrical`'s BOM/routing/QC pattern for the manufactured side and `automobile`/`distribution`'s buy-and-resell pattern for the traded side). Includes:
+
+- **In-house manufactured line** — bonded abrasive wheels (grinding and cutting wheels across diameters/grits), abrasive/flap discs, and coated abrasive belts, each with its own BOM
+- **Short manufacturing routing** — mixing/bonding → pressing/moulding → curing → grading/QC → packing (5 steps, comparable in length to crockery's kiln routing)
+- **Traded/distributed line with no BOM** — industrial polishing machines (flat, pipe/tube, single- and double-head mirror finish), power and pneumatic tools, and polishing pads/brushes/sheets/tool kits bought and resold directly
+- **Abrasive quality parameters** — grit consistency (%), wheel balance (g.mm), burst/RPM safety test, and bond hardness (Shore)
+- **Split sourcing and sales** — raw material suppliers feed the manufactured line while machine/tool import suppliers feed the traded line; sales orders split ~40% manufactured / ~60% traded across wheels/discs/belts, machines/power tools, and consumables
+- **Three-warehouse layout** — Raw Material Store, Finished Goods Store (manufactured), Traded Goods Store, plus the shared Scrap/Rejected/Rework warehouses
+- **18 customers, 12 suppliers** — metal fabrication workshops, auto body shops, furniture/wood workshops, stainless steel processors and wholesalers/resellers; abrasive raw material suppliers and machine/tool import suppliers
+- **Featured reports** — Abrasive Production Report, Machine Sales vs Consumables Report
+- **Projects** — New Grinding Wheel Line Commissioning; ISI Certification - Cutting Wheels; Export Buyer Onboarding - Middle East; plus Coated Belt NPD - Wide Belt Range generated from the "Abrasive NPD Programme" Project Template
 
 ### Hobby Shop & TCG Retailer (`hobbytcg`)
 

@@ -1,0 +1,47 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+ABR-RM-01,Aluminium Oxide Abrasive Grain,Abrasive Raw Materials,Kg,Fused aluminium oxide abrasive grain for grinding wheel manufacture,1,145.00
+ABR-RM-02,Silicon Carbide Abrasive Grain,Abrasive Raw Materials,Kg,Black silicon carbide abrasive grain for cutting wheels and belts,1,175.00
+ABR-RM-03,Phenolic Resin Bond Powder,Abrasive Raw Materials,Kg,Phenolic resin bonding powder for resin-bonded wheels and discs,1,210.00
+ABR-RM-04,Rubber Bond Compound,Abrasive Raw Materials,Kg,Rubber bonding compound for flexible cutting and flap wheels,1,260.00
+ABR-RM-05,Reinforcing Fibreglass Mesh,Abrasive Raw Materials,Meter,Fibreglass reinforcement mesh for cutting wheels and discs,1,38.00
+ABR-RM-06,Vitrified Bond Clay,Abrasive Raw Materials,Kg,Vitrified bond clay mix for precision grinding wheels,1,60.00
+ABR-RM-07,Cotton-Poly Backing Cloth,Abrasive Raw Materials,Meter,Cotton-polyester backing cloth for coated abrasive belts,1,85.00
+ABR-RM-08,Bonding Adhesive Resin Glue,Abrasive Raw Materials,Litre,Resin adhesive for coated abrasive belt lamination,1,320.00
+ABR-RM-09,Cryolite Filler Powder,Abrasive Raw Materials,Kg,Cryolite filler used as an active filler in bonded wheels,1,95.00
+ABR-PK-01,Corrugated Wheel Box,Packaging Materials,Nos,Corrugated carton for wheel and disc packing,1,18.00
+ABR-PK-02,Stretch Wrap Film,Packaging Materials,Nos,Stretch wrap film roll for pallet and carton wrapping,1,450.00
+ABR-WH-01,Grinding Wheel 100x6x16mm A36,Bonded Abrasive Wheels,Nos,Aluminium oxide bonded grinding wheel 100mm coarse grit A36,1,85.00
+ABR-WH-02,Grinding Wheel 150x6x22mm A46,Bonded Abrasive Wheels,Nos,Aluminium oxide bonded grinding wheel 150mm medium grit A46,1,165.00
+ABR-WH-03,Grinding Wheel 230x6x22mm A24,Bonded Abrasive Wheels,Nos,Aluminium oxide bonded grinding wheel 230mm coarse grit A24,1,310.00
+ABR-WH-04,Cutting Wheel 100x1x16mm A60,Bonded Abrasive Wheels,Nos,Thin resin-bonded cutting wheel 100mm fine grit A60,1,22.00
+ABR-WH-05,Cutting Wheel 115x1x22mm A46,Bonded Abrasive Wheels,Nos,Thin resin-bonded cutting wheel 115mm medium grit A46,1,28.00
+ABR-WH-06,Cutting Wheel 300x2.5x25mm A30,Bonded Abrasive Wheels,Nos,Heavy duty chop-saw cutting wheel 300mm coarse grit A30,1,145.00
+ABR-DC-01,Flap Disc 100mm Z40,Abrasive Discs & Flap Discs,Nos,Zirconia flap disc 100mm coarse grit Z40,1,65.00
+ABR-DC-02,Flap Disc 115mm Z60,Abrasive Discs & Flap Discs,Nos,Zirconia flap disc 115mm medium grit Z60,1,75.00
+ABR-DC-03,Fibre Sanding Disc 100mm A24,Abrasive Discs & Flap Discs,Nos,Vulcanised fibre sanding disc 100mm coarse grit A24,1,18.00
+ABR-DC-04,Quick Change Disc 50mm A60,Abrasive Discs & Flap Discs,Nos,Quick-change surface conditioning disc 50mm fine grit A60,1,32.00
+ABR-BT-01,Abrasive Belt 100x915mm A80,Coated Abrasive Belts,Nos,Coated abrasive sanding belt 100x915mm fine grit A80,1,95.00
+ABR-BT-02,Abrasive Belt 150x1220mm A60,Coated Abrasive Belts,Nos,Coated abrasive sanding belt 150x1220mm medium grit A60,1,145.00
+ABR-BT-03,Abrasive Belt 50x686mm A120,Coated Abrasive Belts,Nos,Coated abrasive sanding belt 50x686mm extra fine grit A120,1,55.00
+ABR-MC-01,Flat Surface Polishing Machine,Polishing Machines,Nos,Industrial flat surface polishing and buffing machine,1,185000.00
+ABR-MC-02,Pipe & Tube Polishing Machine,Polishing Machines,Nos,Rotary pipe and tube exterior polishing machine,1,225000.00
+ABR-MC-03,Mirror Finish Polishing Machine Single Head,Polishing Machines,Nos,Single-head mirror finish stainless steel polishing machine,1,165000.00
+ABR-MC-04,Mirror Finish Polishing Machine Double Head,Polishing Machines,Nos,Double-head mirror finish stainless steel polishing machine,1,295000.00
+ABR-MC-05,Belt Grinder Polishing Machine,Polishing Machines,Nos,Bench-mounted belt grinder and polishing machine,1,95000.00
+ABR-MC-06,Portable Pipe Polisher,Polishing Machines,Nos,Handheld portable pipe and tube polishing tool,1,42000.00
+ABR-PT-01,Angle Grinder 4 Inch Electric,Power & Pneumatic Tools,Nos,Electric angle grinder 4 inch for cutting and grinding wheels,1,2400.00
+ABR-PT-02,Angle Grinder 7 Inch Electric,Power & Pneumatic Tools,Nos,Electric angle grinder 7 inch for heavy duty grinding,1,5200.00
+ABR-PT-03,Die Grinder Pneumatic,Power & Pneumatic Tools,Nos,Pneumatic die grinder for fine finishing work,1,3800.00
+ABR-PT-04,Straight Grinder Pneumatic,Power & Pneumatic Tools,Nos,Pneumatic straight grinder for tool room finishing,1,4600.00
+ABR-PT-05,Belt Sander Pneumatic,Power & Pneumatic Tools,Nos,Pneumatic belt sander for surface preparation,1,6200.00
+ABR-PT-06,Random Orbital Sander Electric,Power & Pneumatic Tools,Nos,Electric random orbital sander for finishing work,1,3200.00
+ABR-CN-01,Wool Polishing Pad,Polishing Consumables & Accessories,Nos,Lambswool polishing pad for mirror finish buffing,1,320.00
+ABR-CN-02,Foam Polishing Pad,Polishing Consumables & Accessories,Nos,Foam polishing pad for fine finishing and waxing,1,180.00
+ABR-CN-03,Wire Brush Cup Type,Polishing Consumables & Accessories,Nos,Cup type wire brush for angle grinder deburring,1,145.00
+ABR-CN-04,Nylon Abrasive Brush,Polishing Consumables & Accessories,Nos,Nylon abrasive filament brush for surface conditioning,1,210.00
+ABR-CN-05,Emery Sheet 230x280mm,Polishing Consumables & Accessories,Nos,Emery abrasive sheet 230x280mm for hand sanding,1,12.00
+ABR-CN-06,Emery Cloth Roll 50m,Polishing Consumables & Accessories,Nos,Emery cloth roll 50 metre for workshop use,1,950.00
+ABR-CN-07,Abrasive Tool Kit Fabrication,Polishing Consumables & Accessories,Set,Assorted abrasive tool kit for metal fabrication workshops,1,4200.00
+ABR-CN-08,Abrasive Tool Kit Automotive,Polishing Consumables & Accessories,Set,Assorted abrasive and polishing kit for auto body shops,1,3600.00
+ABR-CN-09,Buffing Compound Bar,Polishing Consumables & Accessories,Nos,Buffing and polishing compound bar for mirror finishing,1,220.00
+ABR-CN-10,Polishing Mop Cloth,Polishing Consumables & Accessories,Nos,Cotton mop cloth wheel for buffing machines,1,95.00

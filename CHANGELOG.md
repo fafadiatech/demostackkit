@@ -4,6 +4,14 @@ All notable changes to DemoStackKit, grouped by week. Most recent week first.
 
 ---
 
+## Week of 2026-08-24 → 2026-08-30
+
+### Added
+
+- **Abrasives & Industrial Polishing Equipment industry (`abrasives`)** — Alpha Abrasives Pvt Ltd, a hybrid abrasives manufacturer and industrial-tools wholesaler modelled on AJ Abrasives. Combines `electrical`'s in-house BOM/routing/QC pattern (bonded abrasive wheels, abrasive/flap discs, coated abrasive belts through a 5-step mixing-bonding → pressing → curing → grading/QC → packing routing, with grit consistency/wheel balance/burst-RPM/bond hardness quality checks) with `automobile`/`distribution`'s buy-and-resell pattern (polishing machines, power/pneumatic tools, polishing consumables — no BOM) in a single company. 18 customers, 12 suppliers split raw-material vs. machine-import, three-warehouse layout, 13 manufactured BOMs, split sales/purchase generation (~40% manufactured / ~60% traded), full HR/payroll/asset/project seeding.
+
+---
+
 ## Week of 2026-08-17 → 2026-08-23
 
 ### Added

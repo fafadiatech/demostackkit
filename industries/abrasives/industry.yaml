@@ -1,0 +1,129 @@
+# Abrasives & Industrial Polishing Equipment Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up abrasives
+# URL: http://abrasives.localhost  (admin / admin)
+
+name: "Abrasives & Industrial Polishing Equipment"
+slug: "abrasives"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for a hybrid abrasives manufacturer and
+  industrial-tools wholesaler modelled on AJ Abrasives. In-house manufactures
+  bonded abrasive wheels (grinding and cutting wheels), abrasive/flap discs
+  and coated abrasive belts through a mixing-bonding, pressing, curing,
+  grading and packing routing with grit consistency, wheel balance,
+  burst/RPM safety and bond hardness quality checks — while also importing
+  and reselling industrial polishing machines, power/pneumatic tools and
+  polishing consumables with no BOM at all. Demonstrates running a
+  make-to-stock manufacturing line and a pure trading line side by side in
+  one company.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# Extra apps fetched at runtime via bench get-app
+extra_apps:
+  - name: hrms
+    source: frappe
+    branch: version-15
+  - name: telephony
+    source: frappe
+  - name: helpdesk
+    source: frappe
+    branch: v1.28.0
+
+company:
+  name: "Alpha Abrasives Pvt Ltd"
+  abbr: "AAP"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+site:
+  name: "abrasives.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Projects
+  - Manufacturing
+  - Quality Management
+  - Assets
+  - Support
+
+seed:
+  random_seed: 20240925
+  volumes:
+    customers: 18
+    suppliers: 12
+    sales_orders: 50
+    purchase_orders: 30
+    quality_inspections: 24
+    projects: 4
+  date_range:
+    start: "-180d"
+    end: "-1d"
+  opening_stock:
+    enabled: true
+    warehouse: "Raw Material Store"
+    fg_warehouse: "Finished Goods Store"
+    qty_scale: 1.0
+
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+users:
+  - email: "production.manager@abrasives.demo"
+    full_name: "Suresh Iyer"
+    roles:
+      - Manufacturing Manager
+      - Stock Manager
+  - email: "quality@abrasives.demo"
+    full_name: "Meera Pillai"
+    roles:
+      - Manufacturing Manager
+  - email: "sales@abrasives.demo"
+    full_name: "Rajiv Malhotra"
+    roles:
+      - Sales Manager
+  - email: "purchase@abrasives.demo"
+    full_name: "Kavita Rao"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@abrasives.demo"
+    full_name: "Ashwin Bhatt"
+    roles:
+      - Accounts Manager
+
+dashboards:
+  default: ""
+
+reports:
+  featured:
+    - "Abrasive Production Report"
+    - "Machine Sales vs Consumables Report"
+
+workspaces:
+  default: ""
+
+validate:
+  min_sales_orders: 40
+  min_items: 40
+  min_customers: 15
+  required_doctypes:
+    - BOM
+    - Routing
+    - Workstation
+    - Operation

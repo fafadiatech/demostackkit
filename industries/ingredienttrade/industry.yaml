@@ -1,0 +1,129 @@
+# Ingredient Trading & Distribution Industry Demo
+# ─────────────────────────────────────────────────────────────────────────────
+# Run: demostackkit up ingredienttrade
+# URL: http://ingredienttrade.localhost  (admin / admin)
+
+name: "Ingredient Trading & Distribution"
+slug: "ingredienttrade"
+version: "1.0.0"
+description: >
+  Full-featured ERPNext demo for a bulk food-ingredient trading and distribution
+  company. Covers procurement from commodity growers, processors and broad-line
+  distributors, multi-warehouse stock management, and bulk order fulfilment for
+  food and beverage manufacturers and exporters.
+maintainer: "DemoStackKit Contributors"
+license: "MIT"
+
+# ── ERPNext ───────────────────────────────────────────────────────────────────
+erpnext_version: "v15"
+required_apps:
+  - frappe
+  - erpnext
+
+# Extra apps fetched at runtime via bench get-app
+extra_apps:
+  - name: hrms
+    source: frappe
+    branch: version-15
+  - name: telephony
+    source: frappe
+  - name: helpdesk
+    source: frappe
+    branch: v1.28.0
+
+# ── Company ───────────────────────────────────────────────────────────────────
+company:
+  name: "Ingredient Traders & Distributors Pvt Ltd"
+  abbr: "ITD"
+  currency: "INR"
+  country: "India"
+  fiscal_year_start: "04-01"
+
+# ── Site ─────────────────────────────────────────────────────────────────────
+site:
+  name: "ingredienttrade.localhost"
+  admin_password: "${SITE_ADMIN_PASSWORD:-admin}"
+  language: "en"
+  timezone: "Asia/Kolkata"
+
+# ── Modules ──────────────────────────────────────────────────────────────────
+modules:
+  - Accounts
+  - Buying
+  - Selling
+  - Stock
+  - Projects
+  - Assets
+  - Support
+
+# ── Seed Configuration ───────────────────────────────────────────────────────
+seed:
+  random_seed: 20260825
+  volumes:
+    customers: 20
+    suppliers: 20
+    sales_orders: 50
+    purchase_orders: 30
+    production_orders: 0
+    stock_entries: 50
+  date_range:
+    start: "-180d"
+    end: "-1d"
+
+# ── Fixture Files ─────────────────────────────────────────────────────────────
+fixtures:
+  print_formats: "fixtures/print_formats/*.json"
+  reports: "fixtures/reports/*.json"
+  workspaces: "fixtures/workspaces/*.json"
+  dashboards: "fixtures/dashboards/*.json"
+
+# ── Data Files ────────────────────────────────────────────────────────────────
+data:
+  items: "data/items.csv"
+  customers: "data/customers.csv"
+  suppliers: "data/suppliers.csv"
+
+# ── Sample Users ──────────────────────────────────────────────────────────────
+users:
+  - email: "sales.exec@ingredienttrade.demo"
+    full_name: "Ananya Rao"
+    roles:
+      - Sales Manager
+  - email: "procurement.manager@ingredienttrade.demo"
+    full_name: "Suresh Iyer"
+    roles:
+      - Purchase Manager
+      - Stock Manager
+  - email: "accounts@ingredienttrade.demo"
+    full_name: "Karan Mehta"
+    roles:
+      - Accounts Manager
+  - email: "warehouse.manager@ingredienttrade.demo"
+    full_name: "Deepak Chauhan"
+    roles:
+      - Stock Manager
+
+# ── Dashboards ────────────────────────────────────────────────────────────────
+dashboards:
+  default: "ingredienttrade_dashboard"
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+reports:
+  featured:
+    - "Stock Ageing"
+    - "Sales Analytics"
+    - "Purchase Analytics"
+    - "Delivery Note Trends"
+
+# ── Workspaces ────────────────────────────────────────────────────────────────
+workspaces:
+  default: "Ingredient Trading & Distribution"
+
+# ── Validation Thresholds ─────────────────────────────────────────────────────
+validate:
+  min_sales_orders: 40
+  min_items: 15
+  min_customers: 10
+  required_doctypes:
+    - Item Group
+    - Warehouse

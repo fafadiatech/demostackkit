@@ -1,0 +1,26 @@
+item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
+ITD-STC-CST-001,Corn Starch (Food Grade),Starches & Carbohydrates,Kg,Refined corn starch for food processing; price tracks the seasonal maize harvest,1,42.00
+ITD-STC-TPS-002,Tapioca Starch (Native),Starches & Carbohydrates,Kg,Native tapioca starch for bakery and snacks,1,58.00
+ITD-STC-MST-003,Maize Starch (Industrial Bulk),Starches & Carbohydrates,MT,Bulk maize starch for industrial and paper applications,1,38000.00
+ITD-STC-DXM-004,Dextrose Monohydrate,Starches & Carbohydrates,Kg,Food grade dextrose monohydrate powder,1,48.00
+ITD-STC-GLS-005,Glucose Syrup 42 DE,Starches & Carbohydrates,Drum,Liquid glucose syrup supplied in 300kg drums,1,10500.00
+ITD-STC-WGL-006,Wheat Gluten (Vital 75%),Starches & Carbohydrates,Kg,Vital wheat gluten 75% protein for bakery,1,95.00
+ITD-FTO-RPO-001,Refined Palm Oil (RBD Olein),Fats & Oils,MT,RBD palm olein; price moves with Malaysian palm oil futures,1,92000.00
+ITD-FTO-SFO-002,Refined Sunflower Oil,Fats & Oils,MT,Refined sunflower oil for food processing,1,118000.00
+ITD-FTO-SBO-003,Refined Soybean Oil,Fats & Oils,MT,Refined soybean oil supplied in bulk tanker or drums,1,102000.00
+ITD-FTO-CCB-004,Cocoa Butter (Deodorised),Fats & Oils,Kg,Deodorised cocoa butter for confectionery,1,650.00
+ITD-FTO-GHE-005,Pure Ghee (Bulk Tins),Fats & Oils,Drum,Clarified butter ghee packed in 15kg tins,1,9200.00
+ITD-FTO-PKO-006,Palm Kernel Oil,Fats & Oils,MT,Palm kernel oil for bakery shortening,1,98000.00
+"ITD-FNS-CSW-001",Cashew Kernels W320,"Fruits, Nuts & Spices",Kg,Whole cashew kernels grade W320,1,780.00
+"ITD-FNS-ALM-002",California Almonds (Shelled),"Fruits, Nuts & Spices",Kg,Whole shelled almonds,1,720.00
+"ITD-FNS-RSN-003",Golden Raisins,"Fruits, Nuts & Spices",Kg,Sun-dried golden raisins,1,290.00
+"ITD-FNS-DMG-004",Dried Mango Slices,"Fruits, Nuts & Spices",Kg,Dehydrated mango slices for snacking and cereal mixes,1,410.00
+"ITD-FNS-BPP-005",Black Pepper (Malabar Garbled),"Fruits, Nuts & Spices",Kg,Malabar garbled black pepper; price sensitive to monsoon crop arrivals,1,620.00
+"ITD-FNS-CRD-006",Green Cardamom (8mm Bold),"Fruits, Nuts & Spices",Kg,Bold green cardamom 8mm and above,1,2450.00
+"ITD-FNS-TMR-007",Turmeric Powder (Alleppey Finger),"Fruits, Nuts & Spices",Kg,Alleppey finger turmeric powder,1,185.00
+"ITD-FNS-WLN-008",Walnut Kernels (Light Halves),"Fruits, Nuts & Spices",Kg,Light halves walnut kernels,1,880.00
+ITD-MSR-CGN-001,Refined Carrageenan (Kappa),Marine & Seaweed Raw Materials,Kg,Food grade kappa carrageenan for dairy and processed meat,1,980.00
+ITD-MSR-AGA-002,Agar Agar Powder,Marine & Seaweed Raw Materials,Kg,High gel strength agar agar powder,1,1250.00
+ITD-MSR-FGL-003,Fish Gelatin (Bloom 220),Marine & Seaweed Raw Materials,Kg,Halal fish gelatin bloom 220,1,1450.00
+ITD-MSR-SGX-004,Seaweed Extract Powder,Marine & Seaweed Raw Materials,Kg,Kappaphycus seaweed extract for biostimulant and food use,1,760.00
+ITD-MSR-SAL-005,Sodium Alginate (Food Grade),Marine & Seaweed Raw Materials,Kg,Food grade sodium alginate for thickening and stabilising,1,890.00

@@ -86,6 +86,7 @@ DemoStackKit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 | Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
 | Automobile Dealership | `automobile` | http://automobile.localhost | — |
 | Distribution | `distribution` | http://distribution.localhost | — |
+| Ingredient Trading & Distribution | `ingredienttrade` | http://ingredienttrade.localhost | — |
 | Healthcare | `healthcare` | http://healthcare.localhost | — |
 | Vanilla (clean slate) | `vanilla` | http://vanilla.localhost | — |
 
@@ -378,7 +379,7 @@ Seeded for all industries. Each industry carries a thin `12_payroll.py` with its
 
 | Industry | Payroll convention |
 | --- | --- |
-| `abrasives`, `automobile`, `chemical`, `crockery`, `distribution`, `drones`, `electrical`, `epc`, `evmfg`, `garment`, `healthcare`, `jewellery`, `solar` | Monthly (India) |
+| `abrasives`, `automobile`, `chemical`, `crockery`, `distribution`, `drones`, `electrical`, `epc`, `evmfg`, `garment`, `healthcare`, `ingredienttrade`, `jewellery`, `solar` | Monthly (India) |
 | `hobbytcg`, `print3d`, `vanilla` | Hourly / timesheet (United States) |
 
 ## Project Management

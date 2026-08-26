@@ -284,7 +284,7 @@ fi
             f"cd {self.bench_path} && "
             f"bench drop-site {self.site} "
             f"--root-password {db_root_password!r} "
-            "--archived-sites /tmp --force"
+            "--archived-sites-path /tmp --force"
         )
         self._docker_exec(["bash", "-c", cmd])
 

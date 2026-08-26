@@ -37,7 +37,6 @@ def reset(
             raise typer.Abort()
 
     db_root_pw = os.environ.get("DB_ROOT_PASSWORD", "erpnext")
-    admin_pw = os.environ.get("SITE_ADMIN_PASSWORD", "admin")
 
     bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
 
@@ -56,14 +55,14 @@ def reset(
         console.print(f"[bold]Fetching app '{entry.name}' (source={entry.source})...[/bold]")
         bench.get_app(entry)
 
-    # 3. Create site
+    # 3. Create site, install apps, and run the ERPNext setup wizard — reuses
+    # the same helper `up` uses so a reset produces a site that is set up
+    # identically (fiscal year, company, chart of accounts) rather than just
+    # a bare site with no root docs (Item Group, Customer Group, etc).
+    from demostackkit.cli.commands.up import _create_site_if_needed
+
     console.print(f"[bold]Creating site {config.site.name}...[/bold]")
-    bench.new_site(
-        admin_password=admin_pw,
-        db_root_password=db_root_pw,
-        install_apps=[a for a in config.required_apps if a != "frappe"]
-        + [e.name for e in config.extra_apps],
-    )
+    _create_site_if_needed(config, industries_root.parent)
 
     # 4. Reseed
     console.print("[bold cyan]Running seeders...[/bold cyan]")

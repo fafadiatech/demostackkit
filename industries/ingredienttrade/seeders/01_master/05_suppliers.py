@@ -26,8 +26,19 @@ class SupplierSeeder(BaseMasterSeeder):
         csv_path = self.ctx.industry_config.industry_dir / self.ctx.industry_config.data.suppliers
         rows = _read_csv(csv_path)
         rows_json = json.dumps(rows)
+        groups = sorted({r["supplier_group"] for r in rows if r.get("supplier_group")})
+        groups_json = json.dumps(groups)
         script = f"""
 import json
+groups = json.loads('''{groups_json}''')
+for grp in groups:
+    if not frappe.db.exists('Supplier Group', grp):
+        frappe.get_doc({{
+            'doctype': 'Supplier Group',
+            'supplier_group_name': grp,
+            'parent_supplier_group': 'All Supplier Groups',
+        }}).insert(ignore_permissions=True)
+frappe.db.commit()
 rows = json.loads('''{rows_json}''')
 created = skipped = 0
 for r in rows:

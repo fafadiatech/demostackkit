@@ -624,7 +624,7 @@ Alpha Ingredient Manufacturing Pvt Ltd — batch-process food and nutraceutical 
 Ingredient Traders & Distributors Pvt Ltd — bulk food-ingredient trading and distribution company procuring from commodity growers, processors and broad-line distributors, and fulfilling bulk orders for food and beverage manufacturers and exporters. No manufacturing. Includes:
 
 - **Pure trading flow** — no BOMs or production orders; workflow is procurement → multi-warehouse stock → bulk fulfilment
-- **20 customers, 20 suppliers** — food and beverage manufacturers, exporters, commodity growers, processors and broad-line distributors
+- **20 customers, 17 suppliers** — food and beverage manufacturers, exporters, commodity growers, processors and broad-line distributors
 - **50 sales orders, 30 purchase orders** — bulk ingredient trade over 180 days
 - **Featured reports** — Stock Ageing, Purchase Analytics, Delivery Note Trends
 - **Projects** — Regional Depot Commissioning - Mundra; Distributor Network Expansion - South Zone; Bulk Supply Contract Renewal - FY27; plus Satellite Depot Setup - Kandla generated from the "Depot Commissioning" Project Template

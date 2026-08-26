@@ -36,21 +36,23 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
   - [Dates drive statuses](#dates-drive-statuses)
   - [Seeding order](#seeding-order)
 - [Industrywise Breakdown](#industrywise-breakdown)
-  - [Garment Manufacturing](#garment-manufacturing-garment)
-  - [Chemical Manufacturing](#chemical-manufacturing-chemical)
-  - [Solar Energy](#solar-energy-solar)
-  - [Jewellery Manufacturing](#jewellery-manufacturing-jewellery)
-  - [Drones Manufacturing](#drones-manufacturing-drones)
-  - [Crockery Manufacturing](#crockery-manufacturing-crockery)
   - [3D Printing Services](#3d-printing-services-print3d)
-  - [EV Manufacturing](#ev-manufacturing-evmfg)
-  - [Electrical Equipment Manufacturing](#electrical-equipment-manufacturing-electrical)
   - [Abrasives & Industrial Polishing Equipment](#abrasives--industrial-polishing-equipment-abrasives)
-  - [Hobby Shop & TCG Retailer](#hobby-shop--tcg-retailer-hobbytcg)
-  - [Engineering Procurement & Construction](#engineering-procurement--construction-epc)
   - [Automobile Dealership](#automobile-dealership-automobile)
+  - [Chemical Manufacturing](#chemical-manufacturing-chemical)
+  - [Crockery Manufacturing](#crockery-manufacturing-crockery)
+  - [Drones Manufacturing](#drones-manufacturing-drones)
+  - [Electrical Equipment Manufacturing](#electrical-equipment-manufacturing-electrical)
+  - [Engineering Procurement & Construction](#engineering-procurement--construction-epc)
+  - [EV Manufacturing](#ev-manufacturing-evmfg)
   - [FMCG Distribution](#fmcg-distribution-distribution)
+  - [Garment Manufacturing](#garment-manufacturing-garment)
   - [Healthcare & Pharma](#healthcare--pharma-healthcare)
+  - [Hobby Shop & TCG Retailer](#hobby-shop--tcg-retailer-hobbytcg)
+  - [Ingredient Manufacturing](#ingredient-manufacturing-ingredientmfg)
+  - [Ingredient Trading & Distribution](#ingredient-trading--distribution-ingredienttrade)
+  - [Jewellery Manufacturing](#jewellery-manufacturing-jewellery)
+  - [Solar Energy](#solar-energy-solar)
   - [Vanilla](#vanilla-vanilla)
 - [Contributing](#contributing)
 - [License](#license)
@@ -71,23 +73,23 @@ DemoStackKit makes it trivial to spin up a **fully seeded** ERPNext demo environ
 
 | Industry | Slug | URL | Quality Inspections |
 |---|---|---|---|
-| Garment Manufacturing | `garment` | http://garment.localhost | ✓ |
-| Chemical Manufacturing | `chemical` | http://chemical.localhost | ✓ |
-| Solar Manufacturing | `solar` | http://solar.localhost | ✓ |
-| Jewellery Manufacturing | `jewellery` | http://jewellery.localhost | ✓ |
-| Drones Manufacturing | `drones` | http://drones.localhost | ✓ |
-| Crockery Manufacturing | `crockery` | http://crockery.localhost | ✓ |
 | 3D Printing Services | `print3d` | http://print3d.localhost | ✓ |
-| EV Manufacturing | `evmfg` | http://evmfg.localhost | ✓ |
-| Electrical Equipment Manufacturing | `electrical` | http://electrical.localhost | ✓ |
 | Abrasives & Industrial Polishing Equipment | `abrasives` | http://abrasives.localhost | ✓ |
+| Automobile Dealership | `automobile` | http://automobile.localhost | — |
+| Chemical Manufacturing | `chemical` | http://chemical.localhost | ✓ |
+| Crockery Manufacturing | `crockery` | http://crockery.localhost | ✓ |
+| Distribution | `distribution` | http://distribution.localhost | — |
+| Drones Manufacturing | `drones` | http://drones.localhost | ✓ |
+| Electrical Equipment Manufacturing | `electrical` | http://electrical.localhost | ✓ |
+| Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
+| EV Manufacturing | `evmfg` | http://evmfg.localhost | ✓ |
+| Garment Manufacturing | `garment` | http://garment.localhost | ✓ |
+| Healthcare | `healthcare` | http://healthcare.localhost | — |
 | Hobby Shop & TCG Retailer | `hobbytcg` | http://hobbytcg.localhost | — |
 | Ingredient Manufacturing | `ingredientmfg` | http://ingredientmfg.localhost | ✓ |
-| Engineering Procurement & Construction | `epc` | http://epc.localhost | — |
-| Automobile Dealership | `automobile` | http://automobile.localhost | — |
-| Distribution | `distribution` | http://distribution.localhost | — |
 | Ingredient Trading & Distribution | `ingredienttrade` | http://ingredienttrade.localhost | — |
-| Healthcare | `healthcare` | http://healthcare.localhost | — |
+| Jewellery Manufacturing | `jewellery` | http://jewellery.localhost | ✓ |
+| Solar Manufacturing | `solar` | http://solar.localhost | ✓ |
 | Vanilla (clean slate) | `vanilla` | http://vanilla.localhost | — |
 
 ## Quick Start
@@ -461,69 +463,6 @@ Add `Assets` and/or `Support` to `industry.yaml`'s `modules:` list — each seed
 
 ## Industrywise Breakdown
 
-### Garment Manufacturing (`garment`)
-
-Alpha Garments Pvt Ltd — apparel manufacturer producing T-shirts, shirts, jeans, jackets, and dresses through a complete cut-make-trim workflow. Includes:
-
-- **7 workstations** — Cutting Table, Sewing Machine, Overlock Machine, Button Machine, Pressing Station, QC Table, Packaging Station
-- **Single CMT routing** — 7 sequential operations totalling ~2.5 hrs per garment
-- **11 finished-goods BOMs** — fabric + thread + trims + packaging per garment type
-- **Quality inspections** — thread count, tensile strength, colour fastness, shrinkage (30 QIs, 85% pass rate)
-- **Payroll** — plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
-- **HR & Payroll enabled** — 20 customers, 15 suppliers, 50 sales orders, 30 purchase orders
-- **Projects** — AW26 Collection Development; Export Buyer Order Ramp - Nordwear; SEDEX Compliance Audit; plus SS27 Capsule Line generated from the "Seasonal Collection Development" Project Template
-
-### Chemical Manufacturing (`chemical`)
-
-Alpha Chemicals Pvt Ltd — batch-process chemical manufacturer covering raw material procurement, formulation, quality testing, and finished goods dispatch. Includes:
-
-- **Batch production** — manufacture orders against BOMs with raw material consumption by weight and volume
-- **Quality management** — chemical composition, viscosity, pH, and purity inspection parameters
-- **50 sales orders, 30 purchase orders** — industrial buyers and chemical raw material vendors seeded over 180 days
-- **25 quality inspections** across incoming, in-process, and outgoing stages
-- **Payroll** — 11 plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
-- **Projects** — Specialty Resin Scale-up - RX-400; Reactor-3 Turnaround; REACH Registration - Export Grades; plus Pilot Batch Qualification - Additive AD-9 generated from the "Process Scale-up Protocol" Project Template
-
-### Solar Energy (`solar`)
-
-SunPower Solar Pvt Ltd — solar equipment distributor and EPC contractor. Covers panel and inverter procurement, balance-of-system components, battery storage, and project-based customer installations. Includes:
-
-- **Projects module** — project-linked sales orders with milestone billing for installation contracts
-- **BOMs with routing** — panel assembly workstations and operations for system integration
-- **Items across technologies** — monocrystalline panels, string/micro inverters, MPPT charge controllers, lithium battery banks, mounting structures
-- **12 customers, 10 suppliers** — EPC contractors, housing societies, commercial buyers, equipment vendors
-- **Projects** — 2 MW Ground-Mount Farm - Jodhpur; 500 kW Factory Rooftop - Chakan; Annual O&M Contract - Western Cluster; plus Residential Rooftop Cluster - Kothrud generated from the "Rooftop Solar Installation" Project Template
-
-### Jewellery Manufacturing (`jewellery`)
-
-GoldStar Jewellers Pvt Ltd — jewellery manufacturer and wholesaler producing gold, silver, diamond, and platinum pieces. Covers precious metal procurement by weight, gemstone inventory, manufacturing orders, and retail/wholesale sales. Includes:
-
-- **Precious metal procurement** — gold alloy, silver granules, platinum by gram and troy oz
-- **Gemstone inventory** — diamonds, rubies, emeralds, sapphires tracked by carat and quality grade
-- **Manufacturing BOMs** — rings, necklaces, bangles, earrings with metal + stone + setting components
-- **50 sales orders** — retail boutiques and wholesale buyers across 180 days
-- **Projects** — Bridal Collection Launch - Vivaha; Bespoke Commission - Mehta Necklace Set; India Jewellery Show - Mumbai; plus Festive Collection - Deepavali generated from the "Collection Development" Project Template
-
-### Drones Manufacturing (`drones`)
-
-SkyForge Drones Pvt Ltd — drone manufacturer covering component procurement, PCB and frame assembly, firmware calibration, flight testing, quality inspection, and dispatch. Includes:
-
-- **Full assembly routing** — from component sourcing through PCB assembly, frame build, calibration, and flight test
-- **Quality inspections** — flight performance, sensor accuracy, communication range, hover stability (25 QIs)
-- **HR & Payroll enabled** — 15 customers, 10 suppliers, 40 sales orders, 25 purchase orders
-- **Featured reports** — Drone Assembly Report, Component Consumption Report
-- **Projects** — Agri-Spray Drone NPD - AgriHawk 8L; DGCA Type Certification - SurveyWing; Survey Fleet Deployment - NHAI Corridor; plus Payload Variant NPD - Thermal Pod generated from the "Drone NPD Programme" Project Template
-
-### Crockery Manufacturing (`crockery`)
-
-PotteryPro Ceramics Pvt Ltd — ceramics and crockery manufacturer covering clay procurement, throwing, casting, bisque firing, glazing, and kiln firing. Includes:
-
-- **Multi-stage kiln routing** — throwing/casting → bisque firing → glaze application → glaze firing → QC inspection
-- **Quality inspections** — glaze coverage, dimensional tolerance, chip resistance, colour consistency (20 QIs)
-- **HR & Payroll enabled** — 12 customers, 8 suppliers, 40 sales orders, 20 purchase orders
-- **Featured reports** — Kiln Firing Report, Glaze Consumption Report
-- **Projects** — Stoneware Dinnerware Launch - Terra Series; Kiln-2 Refractory Rebuild; Flagship Store Rollout - Bandra; plus Glazed Serveware Launch - Monsoon generated from the "Collection Development" Project Template
-
 ### 3D Printing Services (`print3d`)
 
 A 3D print farm (PrintForge 3D Services) taking customer orders for parts printed via FDM (fused deposition modeling) and SLA (stereolithography) technologies. Includes:
@@ -534,28 +473,6 @@ A 3D print farm (PrintForge 3D Services) taking customer orders for parts printe
 - **9 finished-goods BOMs** — small/medium/large prototypes, functional parts, display models, each linked to its routing
 - **Quality inspections** — dimensional accuracy (mm), surface roughness Ra (μm), layer adhesion, print completion (%)
 - **Projects** — Aerospace Bracket Prototype Programme; Dental Aligner Batch Run - Q3; SLS Cell Installation; plus Automotive Jig Prototype Run generated from the "Prototype Delivery Programme" Project Template
-
-### EV Manufacturing (`evmfg`)
-
-Voltara EV Manufacturing Pvt Ltd — Indian EV manufacturer producing both electric cars and electric bikes. The central demo story is **shared component procurement** — the DC-DC converter, CCS2 charging port, instrument cluster, HV contactor, HV fuse, disc brake assemblies, copper busbars, and thermal pads all appear in BOMs for both vehicle families, naturally driving consolidated purchasing scenarios. Includes:
-
-- **3 electric cars** — Sedan (72 kWh dual-motor), SUV (90 kWh dual-motor), Hatchback (54 kWh single-motor)
-- **3 electric bikes** — Sport, City Commuter, Cargo; each using 18650-cell packs and hub motors
-- **Two manufacturing routings** — EV Car Route (9 steps, ~40 hrs) and EV Bike Route (8 steps, ~6.5 hrs)
-- **6 BOMs with 19–21 components each** — car BOMs use 21700 cells + 60 kW PMSM motors; bike BOMs use 18650 cells + 3 kW hub motors
-- **Split sales order generation** — 40% car orders (qty 1–3, ₹12–22 lakh, 30–90 day lead) and 60% bike orders (qty 1–15, ₹80k–1.8 lakh, 7–30 day lead)
-- **Projects** — 2W Powertrain NPD - Volt 3.5kW; Battery Pack Line Commissioning; ARAI Homologation - Voltara City; plus Fleet Variant NPD - Cargo 2W generated from the "EV Product Development" Project Template
-
-### Electrical Equipment Manufacturing (`electrical`)
-
-PowerTech Electrical Pvt Ltd — switchgear and transformer manufacturer producing distribution transformers (100kVA–500kVA), power transformers (1MVA), HT switchgear panels (11kV), LT distribution panels (415V), and motor control centres. Covers a project-driven B2B sales cycle where state electricity boards and EPC contractors place high-value made-to-order contracts. Includes:
-
-- **Two manufacturing routings** — Transformer Route (7 steps: coil winding → core lamination → assembly → tank fabrication → oil filling → HV testing → packing) and Switchgear Route (3 steps: panel assembly → HV testing → packing)
-- **7 BOMs** — 4 transformer BOMs (100kVA, 250kVA, 500kVA, 1MVA) and 3 switchgear panel BOMs (HT 11kV, LT 415V, MCC 415V); each with domain-accurate copper, CRGO steel, and insulating oil quantities
-- **Split sales order generation** — 60% transformer orders (qty 1–5, 60–120 day lead) and 40% switchgear orders (qty 1–3, 30–60 day lead)
-- **Electrical quality parameters** — turns ratio error (%), insulation resistance (MOhm), oil breakdown voltage (kV), and load loss (W)
-- **12 customers** — state electricity boards (MSEDCL, KSEB, TSSPDCL), EPC contractors (L&T, Tata Projects), industrial consumers, and export partners
-- **Projects** — LV Switchgear NPD - PowerLine 630A; 11kV Panel Build - Textile Park; IEC 62271 Type Test Campaign; plus Distribution Transformer NPD - 250 kVA generated from the "Electrical NPD Programme" Project Template
 
 ### Abrasives & Industrial Polishing Equipment (`abrasives`)
 
@@ -570,6 +487,111 @@ Alpha Abrasives Pvt Ltd — a hybrid abrasives manufacturer and industrial-tools
 - **18 customers, 12 suppliers** — metal fabrication workshops, auto body shops, furniture/wood workshops, stainless steel processors and wholesalers/resellers; abrasive raw material suppliers and machine/tool import suppliers
 - **Featured reports** — Abrasive Production Report, Machine Sales vs Consumables Report
 - **Projects** — New Grinding Wheel Line Commissioning; ISI Certification - Cutting Wheels; Export Buyer Onboarding - Middle East; plus Coated Belt NPD - Wide Belt Range generated from the "Abrasive NPD Programme" Project Template
+
+### Automobile Dealership (`automobile`)
+
+AutoDrive Motors Pvt Ltd — automobile dealership and service centre. Vehicle sales, spare parts procurement, lubricants, tyres, and fleet customer management — no manufacturing. Includes:
+
+- **Sales-focused** — vehicles as stock items sold directly; no BOMs or production orders
+- **Spare parts inventory** — multi-category parts catalogue across vehicle makes and models
+- **20 customers, 15 suppliers** — fleet operators, individual buyers, OEM and aftermarket parts vendors
+- **50 sales orders** — vehicle and parts sales with Featured reports: Vehicle Sales Report, Spare Parts Consumption
+- **Projects** — Service Bay Expansion - Andheri Workshop; Recall Campaign - Model X Brake Actuator; Dealer DMS Rollout; plus Annual Service Camp - Pune generated from the "Service Campaign Playbook" Project Template
+
+### Chemical Manufacturing (`chemical`)
+
+Alpha Chemicals Pvt Ltd — batch-process chemical manufacturer covering raw material procurement, formulation, quality testing, and finished goods dispatch. Includes:
+
+- **Batch production** — manufacture orders against BOMs with raw material consumption by weight and volume
+- **Quality management** — chemical composition, viscosity, pH, and purity inspection parameters
+- **50 sales orders, 30 purchase orders** — industrial buyers and chemical raw material vendors seeded over 180 days
+- **25 quality inspections** across incoming, in-process, and outgoing stages
+- **Payroll** — 11 plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
+- **Projects** — Specialty Resin Scale-up - RX-400; Reactor-3 Turnaround; REACH Registration - Export Grades; plus Pilot Batch Qualification - Additive AD-9 generated from the "Process Scale-up Protocol" Project Template
+
+### Crockery Manufacturing (`crockery`)
+
+PotteryPro Ceramics Pvt Ltd — ceramics and crockery manufacturer covering clay procurement, throwing, casting, bisque firing, glazing, and kiln firing. Includes:
+
+- **Multi-stage kiln routing** — throwing/casting → bisque firing → glaze application → glaze firing → QC inspection
+- **Quality inspections** — glaze coverage, dimensional tolerance, chip resistance, colour consistency (20 QIs)
+- **HR & Payroll enabled** — 12 customers, 8 suppliers, 40 sales orders, 20 purchase orders
+- **Featured reports** — Kiln Firing Report, Glaze Consumption Report
+- **Projects** — Stoneware Dinnerware Launch - Terra Series; Kiln-2 Refractory Rebuild; Flagship Store Rollout - Bandra; plus Glazed Serveware Launch - Monsoon generated from the "Collection Development" Project Template
+
+### Drones Manufacturing (`drones`)
+
+SkyForge Drones Pvt Ltd — drone manufacturer covering component procurement, PCB and frame assembly, firmware calibration, flight testing, quality inspection, and dispatch. Includes:
+
+- **Full assembly routing** — from component sourcing through PCB assembly, frame build, calibration, and flight test
+- **Quality inspections** — flight performance, sensor accuracy, communication range, hover stability (25 QIs)
+- **HR & Payroll enabled** — 15 customers, 10 suppliers, 40 sales orders, 25 purchase orders
+- **Featured reports** — Drone Assembly Report, Component Consumption Report
+- **Projects** — Agri-Spray Drone NPD - AgriHawk 8L; DGCA Type Certification - SurveyWing; Survey Fleet Deployment - NHAI Corridor; plus Payload Variant NPD - Thermal Pod generated from the "Drone NPD Programme" Project Template
+
+### Electrical Equipment Manufacturing (`electrical`)
+
+PowerTech Electrical Pvt Ltd — switchgear and transformer manufacturer producing distribution transformers (100kVA–500kVA), power transformers (1MVA), HT switchgear panels (11kV), LT distribution panels (415V), and motor control centres. Covers a project-driven B2B sales cycle where state electricity boards and EPC contractors place high-value made-to-order contracts. Includes:
+
+- **Two manufacturing routings** — Transformer Route (7 steps: coil winding → core lamination → assembly → tank fabrication → oil filling → HV testing → packing) and Switchgear Route (3 steps: panel assembly → HV testing → packing)
+- **7 BOMs** — 4 transformer BOMs (100kVA, 250kVA, 500kVA, 1MVA) and 3 switchgear panel BOMs (HT 11kV, LT 415V, MCC 415V); each with domain-accurate copper, CRGO steel, and insulating oil quantities
+- **Split sales order generation** — 60% transformer orders (qty 1–5, 60–120 day lead) and 40% switchgear orders (qty 1–3, 30–60 day lead)
+- **Electrical quality parameters** — turns ratio error (%), insulation resistance (MOhm), oil breakdown voltage (kV), and load loss (W)
+- **12 customers** — state electricity boards (MSEDCL, KSEB, TSSPDCL), EPC contractors (L&T, Tata Projects), industrial consumers, and export partners
+- **Projects** — LV Switchgear NPD - PowerLine 630A; 11kV Panel Build - Textile Park; IEC 62271 Type Test Campaign; plus Distribution Transformer NPD - 250 kVA generated from the "Electrical NPD Programme" Project Template
+
+### Engineering Procurement & Construction (`epc`)
+
+BuildRight EPC Pvt Ltd — EPC company running project-based operations covering material procurement per site, equipment tracking, sub-contractor billing, and milestone-based customer invoicing. No manufacturing. Includes:
+
+- **Projects module** — project costing, milestone tracking, and material consumption linked per project
+- **Pure procurement + billing** — no BOMs or production orders; workflow is PO → stock → project billing
+- **50 sales orders, 30 purchase orders** — project milestones and material POs over 180 days
+- **Featured reports** — Project Costing Report, Material Procurement Summary
+- **Projects** — 220kV Substation Package - Nashik; Industrial Warehouse Shell - Bhiwandi; Water Treatment Plant Upgrade - Pune; plus Metro Depot MEP Fit-out - Wadala generated from the "MEP Retrofit Package" Project Template
+
+### EV Manufacturing (`evmfg`)
+
+Voltara EV Manufacturing Pvt Ltd — Indian EV manufacturer producing both electric cars and electric bikes. The central demo story is **shared component procurement** — the DC-DC converter, CCS2 charging port, instrument cluster, HV contactor, HV fuse, disc brake assemblies, copper busbars, and thermal pads all appear in BOMs for both vehicle families, naturally driving consolidated purchasing scenarios. Includes:
+
+- **3 electric cars** — Sedan (72 kWh dual-motor), SUV (90 kWh dual-motor), Hatchback (54 kWh single-motor)
+- **3 electric bikes** — Sport, City Commuter, Cargo; each using 18650-cell packs and hub motors
+- **Two manufacturing routings** — EV Car Route (9 steps, ~40 hrs) and EV Bike Route (8 steps, ~6.5 hrs)
+- **6 BOMs with 19–21 components each** — car BOMs use 21700 cells + 60 kW PMSM motors; bike BOMs use 18650 cells + 3 kW hub motors
+- **Split sales order generation** — 40% car orders (qty 1–3, ₹12–22 lakh, 30–90 day lead) and 60% bike orders (qty 1–15, ₹80k–1.8 lakh, 7–30 day lead)
+- **Projects** — 2W Powertrain NPD - Volt 3.5kW; Battery Pack Line Commissioning; ARAI Homologation - Voltara City; plus Fleet Variant NPD - Cargo 2W generated from the "EV Product Development" Project Template
+
+### FMCG Distribution (`distribution`)
+
+QuickMove Distributors Pvt Ltd — FMCG distributor procuring from brands and fulfilling orders to supermarket chains and retail customers. No manufacturing. Includes:
+
+- **High-volume trade flow** — 50 sales orders, 30 purchase orders across 20 customers and 15 suppliers
+- **Multi-warehouse stock management** — regional warehouses with dispatch area and stock ageing tracking
+- **Order fulfilment focus** — procurement, stock receipts, and delivery notes as the primary workflow
+- **Featured reports** — Stock Ageing, Delivery Note Trends, Purchase Analytics
+- **Projects** — Regional DC Commissioning - Nagpur; Tier-2 Route Expansion - Vidarbha; Festive Trade Programme - Diwali; plus Satellite Depot Setup - Aurangabad generated from the "Depot Commissioning" Project Template
+
+### Garment Manufacturing (`garment`)
+
+Alpha Garments Pvt Ltd — apparel manufacturer producing T-shirts, shirts, jeans, jackets, and dresses through a complete cut-make-trim workflow. Includes:
+
+- **7 workstations** — Cutting Table, Sewing Machine, Overlock Machine, Button Machine, Pressing Station, QC Table, Packaging Station
+- **Single CMT routing** — 7 sequential operations totalling ~2.5 hrs per garment
+- **11 finished-goods BOMs** — fabric + thread + trims + packaging per garment type
+- **Quality inspections** — thread count, tensile strength, colour fastness, shrinkage (30 QIs, 85% pass rate)
+- **Payroll** — plant employees on a submitted monthly Salary Structure, each with a submitted Salary Structure Assignment (see [Payroll](#payroll))
+- **HR & Payroll enabled** — 20 customers, 15 suppliers, 50 sales orders, 30 purchase orders
+- **Projects** — AW26 Collection Development; Export Buyer Order Ramp - Nordwear; SEDEX Compliance Audit; plus SS27 Capsule Line generated from the "Seasonal Collection Development" Project Template
+
+### Healthcare & Pharma (`healthcare`)
+
+MedCare Healthcare Pvt Ltd — healthcare and pharmaceutical distributor covering medicine procurement, medical device stock, pharmacy dispensing, and hospital supply chain. Includes:
+
+- **Healthcare module enabled** — patient registration, prescriptions, and clinical procedures
+- **Pharma inventory** — medicines tracked by batch and expiry, controlled substance handling
+- **Medical devices** — surgical instruments, diagnostic equipment, PPE alongside medicines
+- **12 customers** — hospitals, clinics, pharmacies, and institutional buyers
+- **Projects** — New OPD Wing Commissioning; NABH Accreditation Programme; Diabetes Care Programme Launch; plus Day-Care Dialysis Unit Setup generated from the "Clinical Facility Commissioning" Project Template
 
 ### Hobby Shop & TCG Retailer (`hobbytcg`)
 
@@ -586,45 +608,46 @@ Nexus TCG & Hobbies — a US-based hybrid hobby shop and trading card game retai
 - **50 sales orders** — split ~50% sealed product, ~30% singles, ~20% accessories with TCG-appropriate retail markups
 - **Projects** — Second Store Launch - Riverside; Regional Tournament Series - Spring Circuit; Holiday Season Programme; plus Pop-up Booth - Comic Expo generated from the "Store Launch Playbook" Project Template
 
-### Engineering Procurement & Construction (`epc`)
+### Ingredient Manufacturing (`ingredientmfg`)
 
-BuildRight EPC Pvt Ltd — EPC company running project-based operations covering material procurement per site, equipment tracking, sub-contractor billing, and milestone-based customer invoicing. No manufacturing. Includes:
+Alpha Ingredient Manufacturing Pvt Ltd — batch-process food and nutraceutical ingredient manufacturer covering raw botanical and chemical procurement, batch extraction and standardisation, quality management, and B2B dispatch to formulation and nutraceutical brand customers. Includes:
 
-- **Projects module** — project costing, milestone tracking, and material consumption linked per project
-- **Pure procurement + billing** — no BOMs or production orders; workflow is PO → stock → project billing
-- **50 sales orders, 30 purchase orders** — project milestones and material POs over 180 days
-- **Featured reports** — Project Costing Report, Material Procurement Summary
-- **Projects** — 220kV Substation Package - Nashik; Industrial Warehouse Shell - Bhiwandi; Water Treatment Plant Upgrade - Pune; plus Metro Depot MEP Fit-out - Wadala generated from the "MEP Retrofit Package" Project Template
+- **Single extraction routing** — 6 sequential operations: raw material weighing & dosing → solvent extraction → filtration & clarification → drying & standardization → quality testing → filling & packing
+- **14 finished-goods BOMs** — botanical extracts, flavour compounds, and nutraceutical actives combining raw ingredients, solvents, and packaging
+- **Quality inspections** — 25 QIs across incoming, in-process, and outgoing stages
+- **HR & Payroll enabled** — 15 customers, 15 suppliers, 50 sales orders, 30 purchase orders
+- **Featured reports** — Batch Production Report, Ingredient Consumption Report
+- **Projects** — New Flavour Compound Qualification - FC-220; GMP Facility Upgrade; Nutraceutical Extract Scale-up - NE-14; plus Botanical Actives Qualification - BA-7 generated from the "Ingredient Scale-up Protocol" Project Template
 
-### Automobile Dealership (`automobile`)
+### Ingredient Trading & Distribution (`ingredienttrade`)
 
-AutoDrive Motors Pvt Ltd — automobile dealership and service centre. Vehicle sales, spare parts procurement, lubricants, tyres, and fleet customer management — no manufacturing. Includes:
+Ingredient Traders & Distributors Pvt Ltd — bulk food-ingredient trading and distribution company procuring from commodity growers, processors and broad-line distributors, and fulfilling bulk orders for food and beverage manufacturers and exporters. No manufacturing. Includes:
 
-- **Sales-focused** — vehicles as stock items sold directly; no BOMs or production orders
-- **Spare parts inventory** — multi-category parts catalogue across vehicle makes and models
-- **20 customers, 15 suppliers** — fleet operators, individual buyers, OEM and aftermarket parts vendors
-- **50 sales orders** — vehicle and parts sales with Featured reports: Vehicle Sales Report, Spare Parts Consumption
-- **Projects** — Service Bay Expansion - Andheri Workshop; Recall Campaign - Model X Brake Actuator; Dealer DMS Rollout; plus Annual Service Camp - Pune generated from the "Service Campaign Playbook" Project Template
+- **Pure trading flow** — no BOMs or production orders; workflow is procurement → multi-warehouse stock → bulk fulfilment
+- **20 customers, 20 suppliers** — food and beverage manufacturers, exporters, commodity growers, processors and broad-line distributors
+- **50 sales orders, 30 purchase orders** — bulk ingredient trade over 180 days
+- **Featured reports** — Stock Ageing, Purchase Analytics, Delivery Note Trends
+- **Projects** — Regional Depot Commissioning - Mundra; Distributor Network Expansion - South Zone; Bulk Supply Contract Renewal - FY27; plus Satellite Depot Setup - Kandla generated from the "Depot Commissioning" Project Template
 
-### FMCG Distribution (`distribution`)
+### Jewellery Manufacturing (`jewellery`)
 
-QuickMove Distributors Pvt Ltd — FMCG distributor procuring from brands and fulfilling orders to supermarket chains and retail customers. No manufacturing. Includes:
+GoldStar Jewellers Pvt Ltd — jewellery manufacturer and wholesaler producing gold, silver, diamond, and platinum pieces. Covers precious metal procurement by weight, gemstone inventory, manufacturing orders, and retail/wholesale sales. Includes:
 
-- **High-volume trade flow** — 50 sales orders, 30 purchase orders across 20 customers and 15 suppliers
-- **Multi-warehouse stock management** — regional warehouses with dispatch area and stock ageing tracking
-- **Order fulfilment focus** — procurement, stock receipts, and delivery notes as the primary workflow
-- **Featured reports** — Stock Ageing, Delivery Note Trends, Purchase Analytics
-- **Projects** — Regional DC Commissioning - Nagpur; Tier-2 Route Expansion - Vidarbha; Festive Trade Programme - Diwali; plus Satellite Depot Setup - Aurangabad generated from the "Depot Commissioning" Project Template
+- **Precious metal procurement** — gold alloy, silver granules, platinum by gram and troy oz
+- **Gemstone inventory** — diamonds, rubies, emeralds, sapphires tracked by carat and quality grade
+- **Manufacturing BOMs** — rings, necklaces, bangles, earrings with metal + stone + setting components
+- **50 sales orders** — retail boutiques and wholesale buyers across 180 days
+- **Projects** — Bridal Collection Launch - Vivaha; Bespoke Commission - Mehta Necklace Set; India Jewellery Show - Mumbai; plus Festive Collection - Deepavali generated from the "Collection Development" Project Template
 
-### Healthcare & Pharma (`healthcare`)
+### Solar Energy (`solar`)
 
-MedCare Healthcare Pvt Ltd — healthcare and pharmaceutical distributor covering medicine procurement, medical device stock, pharmacy dispensing, and hospital supply chain. Includes:
+SunPower Solar Pvt Ltd — solar equipment distributor and EPC contractor. Covers panel and inverter procurement, balance-of-system components, battery storage, and project-based customer installations. Includes:
 
-- **Healthcare module enabled** — patient registration, prescriptions, and clinical procedures
-- **Pharma inventory** — medicines tracked by batch and expiry, controlled substance handling
-- **Medical devices** — surgical instruments, diagnostic equipment, PPE alongside medicines
-- **12 customers** — hospitals, clinics, pharmacies, and institutional buyers
-- **Projects** — New OPD Wing Commissioning; NABH Accreditation Programme; Diabetes Care Programme Launch; plus Day-Care Dialysis Unit Setup generated from the "Clinical Facility Commissioning" Project Template
+- **Projects module** — project-linked sales orders with milestone billing for installation contracts
+- **BOMs with routing** — panel assembly workstations and operations for system integration
+- **Items across technologies** — monocrystalline panels, string/micro inverters, MPPT charge controllers, lithium battery banks, mounting structures
+- **12 customers, 10 suppliers** — EPC contractors, housing societies, commercial buyers, equipment vendors
+- **Projects** — 2 MW Ground-Mount Farm - Jodhpur; 500 kW Factory Rooftop - Chakan; Annual O&M Contract - Western Cluster; plus Residential Rooftop Cluster - Kothrud generated from the "Rooftop Solar Installation" Project Template
 
 ### Vanilla (`vanilla`)
 

@@ -69,6 +69,11 @@ seed:
   date_range:
     start: "-180d"
     end: "-1d"
+  opening_stock:
+    enabled: true
+    warehouse: "Vault"
+    fg_warehouse: "Finished Goods Vault"
+    qty_scale: 1.0
 
 # ── Fixture Files ─────────────────────────────────────────────────────────────
 fixtures:

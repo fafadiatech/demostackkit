@@ -66,6 +66,11 @@ seed:
   date_range:
     start: "-180d"
     end: "-1d"
+  opening_stock:
+    enabled: true
+    warehouse: "Raw Material Store"
+    fg_warehouse: "Finished Goods Store"
+    qty_scale: 1.0
 
 data:
   items: "data/items.csv"

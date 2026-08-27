@@ -69,6 +69,13 @@ seed:
   date_range:
     start: "-180d"
     end: "-1d"
+  # No dedicated finished-goods warehouse — assembled systems stage for
+  # dispatch from the same store as their components, so fg_warehouse is
+  # left unset and falls back to `warehouse` in the shared seeder.
+  opening_stock:
+    enabled: true
+    warehouse: "Site Materials"
+    qty_scale: 1.0
 
 # ── Fixture Files ─────────────────────────────────────────────────────────────
 fixtures:

@@ -68,6 +68,8 @@ seed:
   # A print bureau stocks filament in tens of kilograms, not the hundreds the
   # default bands would open with for an item priced at USD 18/kg.
   opening_stock:
+    warehouse: "Raw Material Store"
+    fg_warehouse: "Finished Goods Store"
     qty_scale: 0.04
 
 data:

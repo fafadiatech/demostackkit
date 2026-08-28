@@ -54,6 +54,20 @@ BOMS = [
         ],
     },
     {
+        # Alternate BOM for PRT-FDM-PROTO-M — printed in PETG (functional
+        # material) instead of PLA, for a more durable prototype.
+        "item": "PRT-FDM-PROTO-M",
+        "qty": 1,
+        "routing": "FDM Standard Route",
+        "is_default": False,
+        "items": [
+            {"item_code": "MAT-PETG-CLR", "qty": 0.15, "uom": "Kg", "rate": 25.0},
+            {"item_code": "MAT-SAND-220", "qty": 0.10, "uom": "Pack", "rate": 4.0},
+            {"item_code": "MAT-PKG-BOX-S", "qty": 1, "uom": "Nos", "rate": 1.20},
+            {"item_code": "MAT-PKG-BUBBLE", "qty": 1, "uom": "Nos", "rate": 0.50},
+        ],
+    },
+    {
         "item": "PRT-FDM-PROTO-L",
         "qty": 1,
         "routing": "FDM Standard Route",
@@ -141,26 +155,34 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    # Skip if an active (submitted) BOM already exists for this item
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': b['routing'],
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

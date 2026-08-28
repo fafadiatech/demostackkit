@@ -100,6 +100,32 @@ BOMS = [
         ],
     },
     {
+        # Alternate BOM for SLR-SYS-RTF-5KW — bifacial panel + string inverter
+        # configuration instead of monofacial panels + hybrid inverter.
+        "item": "SLR-SYS-RTF-5KW",
+        "qty": 1,
+        "is_default": False,
+        "items": [
+            {
+                "item_code": "SLR-PNL-BFX-004",
+                "qty": 10,
+                "uom": "Nos",
+                "rate": 19500.0,
+            },  # 10× 550W bifacial
+            {
+                "item_code": "SLR-INV-STR-001",
+                "qty": 1,
+                "uom": "Nos",
+                "rate": 48000.0,
+            },  # String inverter
+            {"item_code": "SLR-MNT-RTF-001", "qty": 4, "uom": "Nos", "rate": 1200.0},
+            {"item_code": "SLR-BOS-CAB-001", "qty": 50, "uom": "Meter", "rate": 38.0},
+            {"item_code": "SLR-BOS-CAB-002", "qty": 10, "uom": "Meter", "rate": 52.0},
+            {"item_code": "SLR-BOS-MCB-003", "qty": 2, "uom": "Nos", "rate": 1850.0},
+            {"item_code": "SLR-BOS-SPD-004", "qty": 1, "uom": "Nos", "rate": 3200.0},
+        ],
+    },
+    {
         "item": "SLR-SYS-GRD-25KW",  # 25KW Ground Mount Solar System
         "qty": 1,
         "items": [
@@ -144,26 +170,35 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 routing_name = '{ROUTING_NAME}'
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': routing_name,
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

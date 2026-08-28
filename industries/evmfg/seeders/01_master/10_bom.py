@@ -131,6 +131,37 @@ BOMS = [
             {"item_code": "MAT-PKG-CRATE-L", "qty": 1, "uom": "Nos", "rate": 7100.0},
         ],
     },
+    {
+        # Alternate BOM for EV-CAR-HATCH — "Long Range" trim with a larger
+        # cell pack and matching thermal pads, same platform otherwise.
+        "item": "EV-CAR-HATCH",
+        "qty": 1,
+        "routing": "EV Car Manufacturing Route",
+        "is_default": False,
+        "items": [
+            {"item_code": "MAT-LICELL-21700", "qty": 900, "uom": "Nos", "rate": 265.0},
+            {"item_code": "MAT-THERMAL", "qty": 22, "uom": "Nos", "rate": 250.0},
+            {"item_code": "MAT-BUSBAR", "qty": 6, "uom": "Meter", "rate": 660.0},
+            {"item_code": "MAT-DCDC", "qty": 1, "uom": "Nos", "rate": 2900.0},
+            {"item_code": "MAT-CHARGEPORT", "qty": 1, "uom": "Nos", "rate": 5400.0},
+            {"item_code": "MAT-CLUSTER", "qty": 1, "uom": "Nos", "rate": 7900.0},
+            {"item_code": "MAT-CONTACTOR", "qty": 4, "uom": "Nos", "rate": 1850.0},
+            {"item_code": "MAT-FUSE-HV", "qty": 2, "uom": "Nos", "rate": 1000.0},
+            {"item_code": "MAT-BRAKE-DISC", "qty": 4, "uom": "Nos", "rate": 7100.0},
+            {"item_code": "MAT-BMS-HV", "qty": 1, "uom": "Nos", "rate": 15000.0},
+            {"item_code": "MAT-CTRL-HV", "qty": 1, "uom": "Nos", "rate": 26500.0},
+            {"item_code": "MAT-HARNESS-CAR", "qty": 1, "uom": "Set", "rate": 18500.0},
+            {"item_code": "MAT-FRAME-CAR", "qty": 1, "uom": "Set", "rate": 100000.0},
+            {"item_code": "MAT-BODY-CAR", "qty": 1, "uom": "Set", "rate": 70000.0},
+            {"item_code": "MAT-MOTOR-CAR", "qty": 1, "uom": "Nos", "rate": 150000.0},
+            {"item_code": "MAT-SUSP-CAR", "qty": 1, "uom": "Set", "rate": 35000.0},
+            {"item_code": "MAT-AXLE-REAR", "qty": 1, "uom": "Nos", "rate": 31500.0},
+            {"item_code": "MAT-TYRE-CAR", "qty": 1, "uom": "Set", "rate": 20000.0},
+            {"item_code": "MAT-SEALANT", "qty": 2, "uom": "Nos", "rate": 665.0},
+            {"item_code": "MAT-PKG-WRAP", "qty": 2, "uom": "Nos", "rate": 1250.0},
+            {"item_code": "MAT-PKG-CRATE-L", "qty": 1, "uom": "Nos", "rate": 7100.0},
+        ],
+    },
     # ── Electric Bikes ────────────────────────────────────────────────────────
     {
         "item": "EV-BIKE-SPORT",
@@ -224,26 +255,34 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    # Skip if an active (submitted) BOM already exists for this item
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': b['routing'],
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

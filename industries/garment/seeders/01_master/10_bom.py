@@ -56,6 +56,20 @@ BOMS = [
         ],
     },
     {
+        # Alternate BOM for GRM-TSH-WH-M — relaxed-fit cut, uses more
+        # fabric per garment but the same materials otherwise.
+        "item": "GRM-TSH-WH-M",
+        "qty": 1,
+        "is_default": False,
+        "items": [
+            {"item_code": "FAB-COT-WH-001", "qty": 1.1, "uom": "Meter", "rate": 180.0},
+            {"item_code": "THR-COT-WH-001", "qty": 2, "uom": "Spool", "rate": 45.0},
+            {"item_code": "BTN-PLY-BK-001", "qty": 5, "uom": "Piece", "rate": 2.5},
+            {"item_code": "LBL-WVN-001", "qty": 1, "uom": "Piece", "rate": 3.5},
+            {"item_code": "PKG-PLY-001", "qty": 1, "uom": "Piece", "rate": 4.0},
+        ],
+    },
+    {
         "item": "GRM-TSH-WH-L",
         "qty": 1,
         "items": [
@@ -170,27 +184,35 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 routing_name = '{ROUTING_NAME}'
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    # Skip if an active (submitted) BOM already exists for this item
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': routing_name,
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

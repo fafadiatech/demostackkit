@@ -46,6 +46,22 @@ BOMS = [
         ],
     },
     {
+        # Alternate BOM for CRK-DIN-PLT-27 — premium porcelain body with
+        # blue glaze instead of stoneware body with white glaze.
+        "item": "CRK-DIN-PLT-27",
+        "qty": 1,
+        "is_default": False,
+        "items": [
+            {"item_code": "CLY-POR-001", "qty": 0.35, "uom": "Kg", "rate": 1200.0},
+            {"item_code": "GLZ-BL-002", "qty": 0.1, "uom": "Kg", "rate": 950.0},
+            {"item_code": "SND-PPR-001", "qty": 2, "uom": "Piece", "rate": 15.0},
+            {"item_code": "SPG-WET-001", "qty": 0.1, "uom": "Piece", "rate": 80.0},
+            {"item_code": "LBL-STK-001", "qty": 1, "uom": "Piece", "rate": 4.0},
+            {"item_code": "PKG-BOX-SGL", "qty": 1, "uom": "Piece", "rate": 65.0},
+            {"item_code": "PKG-BUB-001", "qty": 0.2, "uom": "Roll", "rate": 25.0},
+        ],
+    },
+    {
         "item": "CRK-DIN-PLT-22",
         "qty": 1,
         "items": [
@@ -135,27 +151,35 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 routing_name = '{ROUTING_NAME}'
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    # Skip if an active (submitted) BOM already exists for this item
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': routing_name,
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

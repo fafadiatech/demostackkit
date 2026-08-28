@@ -57,6 +57,31 @@ BOMS = [
         ],
     },
     {
+        # Alternate BOM for DRN-AGR-5L — budget build using the F4 flight
+        # controller (no Pixhawk sub-assembly) instead of FCS-PIX-001.
+        "item": "DRN-AGR-5L",
+        "qty": 1,
+        "is_default": False,
+        "items": [
+            {"item_code": "FRM-CF-650", "qty": 1, "uom": "Nos", "rate": 4500.0},
+            {"item_code": "MTR-BLDC-2212", "qty": 6, "uom": "Nos", "rate": 850.0},
+            {"item_code": "ESC-30A-001", "qty": 6, "uom": "Nos", "rate": 650.0},
+            {"item_code": "BAT-LIPO-4S", "qty": 2, "uom": "Nos", "rate": 3500.0},
+            {"item_code": "FCS-F4-001", "qty": 1, "uom": "Nos", "rate": 1200.0},
+            {"item_code": "PRO-CF-15IN", "qty": 3, "uom": "Nos", "rate": 850.0},
+            {"item_code": "GPS-M8N-001", "qty": 1, "uom": "Nos", "rate": 1800.0},
+            {"item_code": "RCV-868-001", "qty": 1, "uom": "Nos", "rate": 950.0},
+            {"item_code": "SPR-TANK-5L", "qty": 1, "uom": "Nos", "rate": 1200.0},
+            {"item_code": "SPR-PUMP-001", "qty": 1, "uom": "Nos", "rate": 800.0},
+            {"item_code": "LDG-GEAR-001", "qty": 1, "uom": "Nos", "rate": 1500.0},
+            {"item_code": "SCW-M3-SS", "qty": 2, "uom": "Set", "rate": 120.0},
+            {"item_code": "ADH-EP2-001", "qty": 2, "uom": "Piece", "rate": 95.0},
+            {"item_code": "LBL-QR-001", "qty": 1, "uom": "Piece", "rate": 5.0},
+            {"item_code": "PKG-BOX-DRN", "qty": 1, "uom": "Piece", "rate": 350.0},
+            {"item_code": "PKG-FOM-001", "qty": 1, "uom": "Piece", "rate": 120.0},
+        ],
+    },
+    {
         "item": "DRN-SRV-4K",
         "qty": 1,
         "items": [
@@ -128,27 +153,35 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 routing_name = '{ROUTING_NAME}'
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    # Skip if an active (submitted) BOM already exists for this item
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': routing_name,
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

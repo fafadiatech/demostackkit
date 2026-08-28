@@ -100,6 +100,33 @@ BOMS = [
         ],
     },
     {
+        # Alternate BOM for EFG-TRANS-100 — built directly from raw copper
+        # wire/CRGO steel on-site instead of pre-wound coil/core
+        # sub-assemblies (a shop that winds in-house vs. one that
+        # outsources winding).
+        "item": "EFG-TRANS-100",
+        "qty": 1,
+        "routing": "Transformer Manufacturing Route",
+        "is_default": False,
+        "items": [
+            {"item_code": "ERM-CU-WIRE-15", "qty": 220.0, "uom": "Kg", "rate": 750.0},
+            {"item_code": "ERM-CU-WIRE-30", "qty": 55.0, "uom": "Kg", "rate": 740.0},
+            {"item_code": "ERM-CRGO-STEEL", "qty": 320.0, "uom": "Kg", "rate": 120.0},
+            {"item_code": "ERM-TRANS-OIL", "qty": 150.0, "uom": "Litre", "rate": 95.0},
+            {"item_code": "ERM-INS-PAPER", "qty": 18.0, "uom": "Kg", "rate": 180.0},
+            {"item_code": "ERM-MS-SHEET", "qty": 80.0, "uom": "Kg", "rate": 65.0},
+            {"item_code": "ECOMP-BUSH-HV", "qty": 3, "uom": "Nos", "rate": 3500.0},
+            {"item_code": "ECOMP-BUSH-LV", "qty": 6, "uom": "Nos", "rate": 850.0},
+            {"item_code": "ECOMP-BUCHHOLZ", "qty": 1, "uom": "Nos", "rate": 4500.0},
+            {"item_code": "ECOMP-TEMP-IND", "qty": 1, "uom": "Nos", "rate": 2800.0},
+            {"item_code": "ECOMP-PRD", "qty": 1, "uom": "Nos", "rate": 2200.0},
+            {"item_code": "ECOMP-GASKET", "qty": 1, "uom": "Set", "rate": 1200.0},
+            {"item_code": "ECOMP-CABLE-LUG", "qty": 6, "uom": "Nos", "rate": 95.0},
+            {"item_code": "EPKG-CRATE-LG", "qty": 1, "uom": "Nos", "rate": 8500.0},
+            {"item_code": "EPKG-WRAP", "qty": 2, "uom": "Nos", "rate": 950.0},
+        ],
+    },
+    {
         "item": "EFG-TRANS-250",
         "qty": 1,
         "routing": "Transformer Manufacturing Route",
@@ -225,26 +252,34 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    # Skip if an active (submitted) BOM already exists for this item
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': b['routing'],
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

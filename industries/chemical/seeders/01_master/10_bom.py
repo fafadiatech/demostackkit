@@ -52,6 +52,19 @@ BOMS = [
         ],
     },
     {
+        # Alternate BOM for CHM-FIN-CLN-001 — same formulation, bulk 20L can
+        # packaging instead of retail bottles.
+        "item": "CHM-FIN-CLN-001",
+        "qty": 100,
+        "is_default": False,
+        "items": [
+            {"item_code": "CHM-RAW-HCL-002", "qty": 15.0, "uom": "Kg", "rate": 22.0},
+            {"item_code": "CHM-RAW-NaOH-003", "qty": 8.0, "uom": "Kg", "rate": 38.0},
+            {"item_code": "CHM-RAW-IPA-006", "qty": 5.0, "uom": "Litre", "rate": 125.0},
+            {"item_code": "PKG-CAN-020-002", "qty": 5, "uom": "Nos", "rate": 185.0},
+        ],
+    },
+    {
         "item": "CHM-FIN-CLN-002",  # Alkaline Degreaser 5X (per Litre)
         "qty": 100,
         "items": [
@@ -107,26 +120,35 @@ class BOMSeeder(BaseMasterSeeder):
         boms_json = json.dumps(BOMS)
         script = f"""
 import json
+from collections import defaultdict
 
 routing_name = '{ROUTING_NAME}'
 company_name = '{company_name}'
 boms = json.loads('''{boms_json}''')
 created = skipped = errors = 0
 
+existing_counts = {{}}
+seen_counts = defaultdict(int)
+
 for b in boms:
-    if frappe.db.exists('BOM', {{'item': b['item'], 'docstatus': 1}}):
+    item = b['item']
+    if item not in existing_counts:
+        existing_counts[item] = frappe.db.count('BOM', {{'item': item, 'docstatus': 1}})
+    idx = seen_counts[item]
+    seen_counts[item] += 1
+    if idx < existing_counts[item]:
         skipped += 1
         continue
     try:
         doc = frappe.get_doc({{
             'doctype': 'BOM',
             'company': company_name,
-            'item': b['item'],
+            'item': item,
             'quantity': b.get('qty', 1),
             'with_operations': 1,
             'routing': routing_name,
             'is_active': 1,
-            'is_default': 1,
+            'is_default': b.get('is_default', True),
             'items': [
                 {{
                     'item_code': it['item_code'],

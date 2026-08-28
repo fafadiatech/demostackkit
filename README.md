@@ -347,6 +347,8 @@ seed:
 
 The seeder is idempotent: items that already carry a Stock Ledger Entry are skipped, so re-running tops up a partially seeded site instead of double-counting.
 
+> **Note on report date filters:** transaction seeders backdate postings relative to when the site was *seeded*, not to "today." If you seeded a site weeks or months ago, reports like **Stock Balance** default their date range to the last month and will show nothing until you widen `From Date` to cover the seeding period (e.g. back to the site's creation date). The data is there — `Stock Ledger Entry` will show it — it's just outside the report's default window. This affects any ERPNext report with a rolling default date filter (Stock Balance, Stock Ageing, Sales/Purchase Analytics, etc.).
+
 ## Payroll
 
 Industries that seed employees can also seed payroll, so HRMS opens with a payable workforce rather than an empty Payroll Entry. The seeder creates, in order: a **Holiday List** (set as the company default — no Salary Slip can be raised without one), the **Salary Components** the structure needs, a submitted **Salary Structure**, and a submitted **Salary Structure Assignment** for every active employee. It is idempotent; anything that already exists is left alone.

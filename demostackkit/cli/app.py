@@ -60,6 +60,7 @@ from demostackkit.cli.commands import (  # noqa: E402
     reset,
     restore,
     seed,
+    status,
     up,
     use,
     validate,
@@ -76,6 +77,7 @@ app.command("restore")(restore.restore)
 app.command("validate")(validate.validate)
 app.command("list")(list_cmd.list_industries)
 app.command("doctor")(doctor.doctor)
+app.command("status")(status.status)
 app.command("use")(use.use)
 app.command("purge")(purge.purge)
 app.command("install-app")(install_app.install_app)

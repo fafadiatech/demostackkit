@@ -131,6 +131,7 @@ demostackkit up vanilla    # Clean slate            → http://vanilla.localhost
 demostackkit init              # First-time setup (creates infra/.env)
 demostackkit list              # Show all available industries
 demostackkit doctor            # Check host prerequisites
+demostackkit status            # Show which industries are running, and their URLs
 demostackkit use v16           # Switch active ERPNext version (v15 or v16)
 demostackkit create garment    # Create Frappe site (no seeding)
 demostackkit up garment        # Start stack + seed data

@@ -68,6 +68,15 @@ class SeedVolumes(BaseModel):
     timesheets: int = Field(
         default=40, ge=0, description="Upper bound on time logs booked against project tasks"
     )
+    subcontracting_orders: int = Field(
+        default=3,
+        ge=0,
+        description=(
+            "Upper bound on Subcontracting Orders raised against subcontracted "
+            "Purchase Orders. Only manufacturing industries with a BOM-backed "
+            "finished good produce any."
+        ),
+    )
 
 
 class OpeningStockConfig(BaseModel):

@@ -350,6 +350,18 @@ The seeder is idempotent: items that already carry a Stock Ledger Entry are skip
 
 > **Note on report date filters:** transaction seeders backdate postings relative to when the site was *seeded*, not to "today." If you seeded a site weeks or months ago, reports like **Stock Balance** default their date range to the last month and will show nothing until you widen `From Date` to cover the seeding period (e.g. back to the site's creation date). The data is there — `Stock Ledger Entry` will show it — it's just outside the report's default window. This affects any ERPNext report with a rolling default date filter (Stock Balance, Stock Ageing, Sales/Purchase Analytics, etc.).
 
+## Subcontracting
+
+Manufacturing industries also seed ERPNext's Subcontracting module end to end. A shared master seeder flags a few BOM-backed finished goods as subcontractable (`Item.is_sub_contracted_item`), creates a **Sub Contractors** Supplier Group with two Suppliers, a `<Supplier> - Subcontract Store` Warehouse per Supplier, a non-stock Service Item per flagged finished good, an Outsourced Workstation per Supplier and a shared **Subcontracted Processing** Operation. A shared transaction seeder then raises and submits subcontracted Purchase Orders and calls ERPNext's own `make_subcontracting_order()` to raise the Subcontracting Order against each — raw-material consumption is derived straight from the finished good's BOM, exactly as the "Subcontracting Order" button on the PO would do it.
+
+Only runs for industries carrying the **Manufacturing** module and only against companies that already have a submitted default BOM (i.e. after the industry's own BOM seeder ran). Tune the order count in `industry.yaml`:
+
+```yaml
+seed:
+  volumes:
+    subcontracting_orders: 3
+```
+
 ## Payroll
 
 Industries that seed employees can also seed payroll, so HRMS opens with a payable workforce rather than an empty Payroll Entry. The seeder creates, in order: a **Holiday List** (set as the company default — no Salary Slip can be raised without one), the **Salary Components** the structure needs, a submitted **Salary Structure**, and a submitted **Salary Structure Assignment** for every active employee. It is idempotent; anything that already exists is left alone.

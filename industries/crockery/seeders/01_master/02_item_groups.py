@@ -19,6 +19,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Dinnerware", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Serveware", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Drinkware", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Kiln Firing Modules", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Glaze Spray Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
 ]
 
 

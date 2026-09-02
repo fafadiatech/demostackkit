@@ -38,3 +38,5 @@ EV-CAR-HATCH,Voltara Hatchback EV,Electric Cars,Nos,5-seat electric hatchback 54
 EV-BIKE-SPORT,Voltara Sport E-Bike,Electric Bikes,Nos,Sport electric motorcycle 1.5kWh 120kmph top speed,1,150000.00
 EV-BIKE-CITY,Voltara City Commuter E-Bike,Electric Bikes,Nos,Urban electric scooter 1kWh 80kmph top speed,1,100000.00
 EV-BIKE-CARGO,Voltara Cargo E-Bike,Electric Bikes,Nos,Electric cargo bike 2kWh 250kg payload capacity,1,125000.00
+SA-BATTPACK-01,Battery Pack Module,Battery Pack Modules,Nos,Pre-assembled lithium-ion battery pack module with BMS wiring harness,1,1250.00
+SA-MOTORDRIVE-01,Motor Drive Sub-Assembly,Motor Drive Sub-Assemblies,Nos,Pre-assembled traction motor and inverter drive sub-assembly,1,980.00

@@ -22,6 +22,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Trousers & Jeans", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Dresses", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Jackets & Outerwear", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Cutting Die Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Stitching Head Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

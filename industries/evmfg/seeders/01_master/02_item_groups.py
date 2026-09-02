@@ -23,6 +23,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Manufacturing Supplies", "parent_item_group": "Consumable"},
     {"item_group_name": "Electric Cars", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Electric Bikes", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Battery Pack Modules", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Motor Drive Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
 ]
 
 

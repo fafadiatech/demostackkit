@@ -12,6 +12,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Project Services", "parent_item_group": "All Item Groups"},
     {"item_group_name": "DC Components", "parent_item_group": "Balance of System"},
     {"item_group_name": "AC Components", "parent_item_group": "Balance of System"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Panel Junction-Box Modules", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Microinverter Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

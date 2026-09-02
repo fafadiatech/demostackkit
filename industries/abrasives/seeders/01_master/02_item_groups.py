@@ -28,6 +28,9 @@ _ITEM_GROUPS = [
         "item_group_name": "Polishing Consumables & Accessories",
         "parent_item_group": "Traded Goods",
     },
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Bonded Wheel Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Coated Belt Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

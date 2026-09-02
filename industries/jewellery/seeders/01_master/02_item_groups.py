@@ -12,6 +12,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Necklaces", "parent_item_group": "Gold Jewellery"},
     {"item_group_name": "Rings", "parent_item_group": "Gold Jewellery"},
     {"item_group_name": "Earrings", "parent_item_group": "Gold Jewellery"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Setting Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Clasp Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

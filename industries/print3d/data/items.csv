@@ -22,3 +22,6 @@ PRT-SLA-PROTO-S,SLA Prototype Small,Prototypes,Nos,SLA high-detail prototype und
 PRT-SLA-PROTO-M,SLA Prototype Medium,Prototypes,Nos,SLA high-detail prototype 30-150cm3 volume,1,40.00
 PRT-SLA-FUNC-S,SLA Functional Part Small,Functional Parts,Nos,SLA engineering resin functional part under 30cm3,1,25.00
 PRT-SLA-DISP-M,SLA Display Model Medium,Display Models,Nos,SLA high-detail display or art model 30-150cm3,1,50.00
+SA-HOTEND-01,Hotend Module (Brass Nozzle 0.4mm),Hotend Modules,Nos,Pre-assembled hotend: heater block + brass nozzle + thermistor,1,14.50
+SA-CARRIAGE-01,X-Axis Motion Carriage Assembly,Motion Carriage Assemblies,Nos,Pre-built carriage with linear bearings and belt clamp,1,22.00
+SA-BEDLEVEL-01,Auto Bed Leveling Sensor Module,Bed Leveling Modules,Nos,Inductive proximity sensor with mounting bracket,1,9.75

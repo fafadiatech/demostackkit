@@ -252,6 +252,55 @@ class TestItemsCsvFormat:
         )
 
 
+@pytest.mark.unit
+class TestSubAssemblyMedia:
+    """ITEM_MEDIA entries must reference real assets and declared items."""
+
+    @pytest.mark.parametrize("industry_dir", _INDUSTRY_DIRS, ids=_INDUSTRY_IDS)
+    def test_media_assets_exist_on_disk(self, industry_dir: Path) -> None:
+        media_path = industry_dir / "seeders" / "01_master" / "16_subassembly_media.py"
+        entries = _read_literal(media_path, "ITEM_MEDIA", None)
+        if entries is None:
+            pytest.skip("no subassembly media seeder")
+
+        assets_dir = industry_dir / "assets"
+        missing = [
+            f"{e['item_code']}: {e[key]}"
+            for e in entries
+            for key in ("image", "pdf")
+            if e.get(key) and not (assets_dir / e[key]).exists()
+        ]
+        assert not missing, f"[{industry_dir.name}] missing bundled asset(s): {missing}"
+
+    @pytest.mark.parametrize("industry_dir", _INDUSTRY_DIRS, ids=_INDUSTRY_IDS)
+    def test_media_item_codes_exist_in_csv(self, industry_dir: Path) -> None:
+        media_path = industry_dir / "seeders" / "01_master" / "16_subassembly_media.py"
+        entries = _read_literal(media_path, "ITEM_MEDIA", None)
+        if entries is None:
+            pytest.skip("no subassembly media seeder")
+
+        csv_path = industry_dir / "data" / "items.csv"
+        with csv_path.open(newline="", encoding="utf-8") as f:
+            codes = {row["item_code"] for row in csv.DictReader(f)}
+
+        missing = [e["item_code"] for e in entries if e["item_code"] not in codes]
+        assert not missing, (
+            f"[{industry_dir.name}] ITEM_MEDIA references undeclared item_code(s): {missing}"
+        )
+
+    @pytest.mark.parametrize("industry_dir", _INDUSTRY_DIRS, ids=_INDUSTRY_IDS)
+    def test_sub_assemblies_group_declared(self, industry_dir: Path) -> None:
+        media_path = industry_dir / "seeders" / "01_master" / "16_subassembly_media.py"
+        if not media_path.exists():
+            pytest.skip("no subassembly media seeder")
+
+        groups = {g["item_group_name"] for g in _read_item_groups_from_seeder(industry_dir)}
+        assert "Sub Assemblies" in groups, (
+            f"[{industry_dir.name}] has a subassembly media seeder but no 'Sub Assemblies' "
+            "item group declared in 02_item_groups.py"
+        )
+
+
 # ---------------------------------------------------------------------------
 # Project blueprints
 # ---------------------------------------------------------------------------

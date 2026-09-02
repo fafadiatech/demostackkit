@@ -23,6 +23,10 @@ _ITEM_GROUPS = [
     {"item_group_name": "Prototypes", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Functional Parts", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Display Models", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Hotend Modules", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Motion Carriage Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Bed Leveling Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

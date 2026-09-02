@@ -22,6 +22,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Switchgear Assemblies", "parent_item_group": "Raw Material"},
     {"item_group_name": "Transformers", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Switchgear", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Control Panel Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Wiring Harness Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

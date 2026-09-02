@@ -15,6 +15,9 @@ _ITEM_GROUPS = [
         "parent_item_group": "All Item Groups",
     },
     {"item_group_name": "Packaging Materials", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Mixing Head Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Dosing Pump Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

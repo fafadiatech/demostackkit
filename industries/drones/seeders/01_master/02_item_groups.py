@@ -21,6 +21,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Agricultural Drones", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Surveillance Drones", "parent_item_group": "Finished Goods"},
     {"item_group_name": "Delivery Drones", "parent_item_group": "Finished Goods"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Flight Controller Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Motor-ESC Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
 ]
 
 

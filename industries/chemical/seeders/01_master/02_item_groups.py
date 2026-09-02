@@ -11,6 +11,9 @@ _ITEM_GROUPS = [
     {"item_group_name": "Hazardous Materials", "parent_item_group": "Raw Chemicals"},
     {"item_group_name": "Organic Chemicals", "parent_item_group": "Raw Chemicals"},
     {"item_group_name": "Inorganic Chemicals", "parent_item_group": "Raw Chemicals"},
+    {"item_group_name": "Sub Assemblies", "parent_item_group": "All Item Groups"},
+    {"item_group_name": "Reactor Sub-Assemblies", "parent_item_group": "Sub Assemblies"},
+    {"item_group_name": "Valve Manifold Modules", "parent_item_group": "Sub Assemblies"},
 ]
 
 

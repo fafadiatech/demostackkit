@@ -43,6 +43,9 @@ BOMS = [
             {"item_code": "LBL-STK-001", "qty": 1, "uom": "Piece", "rate": 4.0},
             {"item_code": "PKG-BOX-SGL", "qty": 1, "uom": "Piece", "rate": 65.0},
             {"item_code": "PKG-BUB-001", "qty": 0.2, "uom": "Roll", "rate": 25.0},
+            # Bundled kiln/booth spares kit (studio-maintenance add-on)
+            {"item_code": "SA-KILNMOD-01", "qty": 1, "uom": "Nos", "rate": 410.0},
+            {"item_code": "SA-GLAZEBOOTH-01", "qty": 1, "uom": "Nos", "rate": 260.0},
         ],
     },
     {

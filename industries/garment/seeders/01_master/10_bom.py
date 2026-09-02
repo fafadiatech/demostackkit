@@ -53,6 +53,9 @@ BOMS = [
             {"item_code": "BTN-PLY-BK-001", "qty": 5, "uom": "Piece", "rate": 2.5},
             {"item_code": "LBL-WVN-001", "qty": 1, "uom": "Piece", "rate": 3.5},
             {"item_code": "PKG-PLY-001", "qty": 1, "uom": "Piece", "rate": 4.0},
+            # Bundled tooling-spares kit (line-maintenance add-on)
+            {"item_code": "SA-CUTDIE-01", "qty": 1, "uom": "Nos", "rate": 95.0},
+            {"item_code": "SA-STITCHHEAD-01", "qty": 1, "uom": "Nos", "rate": 140.0},
         ],
     },
     {

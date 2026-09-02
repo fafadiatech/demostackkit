@@ -73,6 +73,8 @@ BOMS = [
             {"item_code": "MAT-SEALANT", "qty": 3, "uom": "Nos", "rate": 665.0},
             {"item_code": "MAT-PKG-WRAP", "qty": 2, "uom": "Nos", "rate": 1250.0},
             {"item_code": "MAT-PKG-CRATE-L", "qty": 1, "uom": "Nos", "rate": 7100.0},
+            {"item_code": "SA-BATTPACK-01", "qty": 1, "uom": "Nos", "rate": 1250.0},
+            {"item_code": "SA-MOTORDRIVE-01", "qty": 1, "uom": "Nos", "rate": 980.0},
         ],
     },
     {

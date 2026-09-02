@@ -50,6 +50,9 @@ BOMS = [
             {"item_code": "ING-RAW-ETL-007", "qty": 20.0, "uom": "Litre", "rate": 145.0},
             {"item_code": "ING-RAW-MAL-009", "qty": 15.0, "uom": "Kg", "rate": 65.0},
             {"item_code": "PKG-JAR-005-018", "qty": 100, "uom": "Nos", "rate": 22.0},
+            # Bundled process-equipment spares kit shipped with this batch
+            {"item_code": "SA-MIXHEAD-01", "qty": 1, "uom": "Nos", "rate": 620.0},
+            {"item_code": "SA-DOSEPUMP-01", "qty": 1, "uom": "Nos", "rate": 340.0},
         ],
     },
     {

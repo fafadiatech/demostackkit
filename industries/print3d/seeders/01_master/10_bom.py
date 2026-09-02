@@ -97,6 +97,10 @@ BOMS = [
             {"item_code": "MAT-SAND-220", "qty": 0.10, "uom": "Pack", "rate": 4.0},
             {"item_code": "MAT-PKG-BOX-S", "qty": 1, "uom": "Nos", "rate": 1.20},
             {"item_code": "MAT-PKG-BUBBLE", "qty": 1, "uom": "Nos", "rate": 0.50},
+            # Bundled printer-spares kit (enterprise fleet-maintenance add-on)
+            {"item_code": "SA-HOTEND-01", "qty": 1, "uom": "Nos", "rate": 14.5},
+            {"item_code": "SA-CARRIAGE-01", "qty": 1, "uom": "Nos", "rate": 22.0},
+            {"item_code": "SA-BEDLEVEL-01", "qty": 1, "uom": "Nos", "rate": 9.75},
         ],
     },
     {

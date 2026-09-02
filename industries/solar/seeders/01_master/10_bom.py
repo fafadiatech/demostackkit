@@ -64,6 +64,8 @@ BOMS = [
                 "uom": "Nos",
                 "rate": 3200.0,
             },  # Surge protection
+            {"item_code": "SA-JBOX-01", "qty": 1, "uom": "Nos", "rate": 8.5},
+            {"item_code": "SA-MICROINV-01", "qty": 1, "uom": "Nos", "rate": 145.0},
         ],
     },
     {

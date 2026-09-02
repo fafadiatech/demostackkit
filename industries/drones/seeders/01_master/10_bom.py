@@ -100,6 +100,8 @@ BOMS = [
             {"item_code": "LBL-QR-001", "qty": 1, "uom": "Piece", "rate": 5.0},
             {"item_code": "PKG-BOX-DRN", "qty": 1, "uom": "Piece", "rate": 350.0},
             {"item_code": "PKG-FOM-001", "qty": 1, "uom": "Piece", "rate": 120.0},
+            {"item_code": "SA-FCMOD-01", "qty": 1, "uom": "Nos", "rate": 65.0},
+            {"item_code": "SA-MOTORESC-01", "qty": 1, "uom": "Nos", "rate": 42.0},
         ],
     },
     {

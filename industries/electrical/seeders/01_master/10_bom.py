@@ -224,6 +224,8 @@ BOMS = [
             {"item_code": "ECOMP-BUSBAR-AL", "qty": 12.0, "uom": "Meter", "rate": 210.0},
             {"item_code": "EPKG-CRATE-MD", "qty": 1, "uom": "Nos", "rate": 3500.0},
             {"item_code": "EPKG-WRAP", "qty": 1, "uom": "Nos", "rate": 950.0},
+            {"item_code": "SA-CTRLPANEL-01", "qty": 1, "uom": "Nos", "rate": 480.0},
+            {"item_code": "SA-HARNESS-01", "qty": 1, "uom": "Nos", "rate": 38.0},
         ],
     },
     {

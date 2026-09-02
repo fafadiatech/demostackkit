@@ -35,6 +35,7 @@ BOMS = [
             {"item_code": "ABR-RM-03", "qty": 0.05, "uom": "Kg", "rate": 210.0},
             {"item_code": "ABR-RM-09", "qty": 0.02, "uom": "Kg", "rate": 95.0},
             {"item_code": "ABR-PK-01", "qty": 1, "uom": "Nos", "rate": 18.0},
+            {"item_code": "SA-WHEELHUB-01", "qty": 1, "uom": "Nos", "rate": 12.0},
         ],
     },
     {
@@ -162,6 +163,7 @@ BOMS = [
             {"item_code": "ABR-RM-07", "qty": 0.92, "uom": "Meter", "rate": 85.0},
             {"item_code": "ABR-RM-08", "qty": 0.05, "uom": "Litre", "rate": 320.0},
             {"item_code": "ABR-PK-01", "qty": 1, "uom": "Nos", "rate": 18.0},
+            {"item_code": "SA-BELTMOD-01", "qty": 1, "uom": "Nos", "rate": 6.5},
         ],
     },
     {

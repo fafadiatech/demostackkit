@@ -36,6 +36,7 @@ BOMS = [
             # below), plus loose gold for the pendant and clasp work.
             {"item_code": "JWL-GLD-CHN-007", "qty": 10.0, "uom": "Gram", "rate": 6050.0},
             {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 6000.0},
+            {"item_code": "SA-CLASP-01", "qty": 1, "uom": "Nos", "rate": 6.5},
         ],
     },
     {
@@ -50,6 +51,7 @@ BOMS = [
         "qty": 1,
         "items": [
             {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 6000.0},
+            {"item_code": "SA-PRONGSET-01", "qty": 1, "uom": "Nos", "rate": 28.0},
         ],
     },
     {

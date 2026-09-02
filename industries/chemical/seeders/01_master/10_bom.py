@@ -49,6 +49,9 @@ BOMS = [
             {"item_code": "CHM-RAW-NaOH-003", "qty": 8.0, "uom": "Kg", "rate": 38.0},
             {"item_code": "CHM-RAW-IPA-006", "qty": 5.0, "uom": "Litre", "rate": 125.0},
             {"item_code": "PKG-BTL-001-004", "qty": 100, "uom": "Nos", "rate": 18.0},
+            # Bundled process-equipment spares kit shipped with this batch
+            {"item_code": "SA-REACTOR-01", "qty": 1, "uom": "Nos", "rate": 850.0},
+            {"item_code": "SA-VALVEMANIFOLD-01", "qty": 1, "uom": "Nos", "rate": 320.0},
         ],
     },
     {

@@ -30,6 +30,7 @@ DemoStackKit is an open-source toolkit for quickly spinning up industry-specific
 - [Deterministic Resets](#deterministic-resets)
 - [Standard Warehouses](#standard-warehouses)
 - [Opening Stock Balances](#opening-stock-balances)
+- [Rejection & Returns](#rejection--returns)
 - [Payroll](#payroll)
 - [Project Management](#project-management)
   - [Logins for employees](#logins-for-employees)
@@ -328,8 +329,10 @@ On top of each industry's own themed warehouse tree, a shared seeder creates the
 | `Scrap` | every industry | Work Order `scrap_warehouse`, write-offs and damaged stock |
 | `Rejected` | every industry | Purchase Receipt / Subcontracting Receipt `rejected_warehouse` (flagged `is_rejected_warehouse`, so the field defaults to it) |
 | `Rework` | industries running the **Manufacturing** module | stock sent back for repair after a failed inspection, rather than scrapped |
+| `Vendor Rejected` | every industry | [Rejection & Returns](#rejection--returns): rejected-qty stock earmarked for Return to Vendor, kept isolated from `Rejected` |
+| `Customer Returns` | every industry | [Rejection & Returns](#rejection--returns): finished goods returned by customers, kept isolated from saleable Finished Goods stock |
 
-All three hang off `All Warehouses - <ABBR>` and are idempotent — an existing warehouse of the same name is left untouched. Nothing to configure; the seeder runs right after the industry's own Warehouse seeder.
+All five hang off `All Warehouses - <ABBR>` and are idempotent — an existing warehouse of the same name is left untouched. Nothing to configure; the seeder runs right after the industry's own Warehouse seeder.
 
 ## Opening Stock Balances
 
@@ -361,6 +364,36 @@ seed:
   volumes:
     subcontracting_orders: 3
 ```
+
+## Rejection & Returns
+
+Every industry gets a full receiving-through-invoicing chain — Purchase Receipts against submitted Purchase Orders, Purchase Invoices against those receipts, Delivery Notes against submitted Sales Orders, and Sales Invoices against those deliveries — all raised via ERPNext's own mapper functions (`make_purchase_receipt`, `make_purchase_invoice`, `make_delivery_note`, `make_sales_invoice`), the same mappings the corresponding UI buttons use.
+
+Industries carrying the **Quality Management** module layer a full rejection-and-return trail on top:
+
+- A share of Purchase Receipts get one line split into accepted/rejected quantities, with the rejected portion parked in a dedicated `Vendor Rejected` warehouse — kept separate from the generic `Rejected` warehouse so vendor-side rejections never mix with customer-side ones. Every receipt line, accepted or rejected, gets a submitted **Quality Inspection** linked back to it via `reference_type`/`reference_name` (the per-industry `03_quality_inspections.py` seeders no longer generate "Incoming" inspections themselves, to avoid duplicates).
+- Rejected receipts get a **Return to Vendor** — a return Purchase Receipt raised via ERPNext's `make_purchase_return_against_rejected_warehouse()` (so the stock movement correctly ships back out of `Vendor Rejected`), followed by a **Debit Note** (return Purchase Invoice) against it.
+- A share of Delivery Notes get a **Customer Return**: either a physical return-with-stock (a return Delivery Note redirected into a dedicated `Customer Returns` warehouse, followed by a **Credit Note**), or a stock-less write-off Credit Note with no linked stock document at all (`update_stock = 0`).
+
+`Vendor Rejected` and `Customer Returns` are seeded by the same shared warehouse seeder as `Scrap`/`Rejected`/`Rework` (see [Standard Warehouses](#standard-warehouses)) — every Stock-module industry gets them, whether or not it runs Quality Management.
+
+Tune the receiving/shipping volumes in `industry.yaml`; the derived documents (invoices, RTV, returns) have no separate knobs — they follow 1:1 or at a fixed rate from whatever gets received/shipped:
+
+```yaml
+seed:
+  volumes:
+    purchase_receipts: 20
+    delivery_notes: 35
+```
+
+| Priority | Seeder | |
+| --- | --- | --- |
+| 211 | `02_transactions/211_purchase_receipts.py` | Purchase Receipts, rejected-qty split, linked Quality Inspections |
+| 212 | `02_transactions/212_purchase_invoices.py` | Purchase Invoices against every receipt |
+| 213 | `02_transactions/213_return_to_vendor.py` | Return to Vendor + Debit Note for rejected lines |
+| 220 | `02_transactions/220_delivery_notes.py` | Delivery Notes against submitted Sales Orders |
+| 221 | `02_transactions/221_sales_invoices.py` | Sales Invoices against every delivery |
+| 222 | `02_transactions/222_customer_returns.py` | Customer Returns + Credit Notes |
 
 ## Payroll
 

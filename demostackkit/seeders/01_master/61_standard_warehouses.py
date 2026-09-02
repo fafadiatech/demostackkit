@@ -11,6 +11,13 @@ missing almost everywhere:
                 where a failed incoming inspection parks the rejected qty.
     Rework    — where a Quality Inspection failure sends stock that can be
                 repaired and re-offered, rather than scrapped.
+    Vendor Rejected   — where the Rejection & Returns flow (ref #35) parks
+                rejected-qty stock earmarked for Return to Vendor, kept
+                separate from the generic `Rejected` warehouse above so
+                vendor-side rejections never mix with customer-side ones.
+    Customer Returns  — where finished goods returned by customers land,
+                separate from saleable Finished Goods stock and from
+                Vendor Rejected (ref #35).
 
 Without them the demo cannot show a rejection or a scrap flow at all: the
 warehouse picker on those fields comes up empty.
@@ -20,7 +27,9 @@ Relevance:
     (i.e. all of them) — anyone who receives goods can reject them, and anyone
     holding stock can scrap it. Rework only appears for industries that run the
     Manufacturing module, since rework is a production-floor concept; a
-    distributor or retail demo has no route to rework a purchased item.
+    distributor or retail demo has no route to rework a purchased item. Vendor
+    Rejected and Customer Returns follow the same "everyone with Stock gets
+    one" rule as Scrap/Rejected.
 
 Idempotent, as master seeders must be. Priority 61 puts it just after the
 industry Warehouse seeders (60), so `All Warehouses - <ABBR>` is in place, and
@@ -39,6 +48,8 @@ _STANDARD_WAREHOUSES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("Scrap", ()),
     ("Rejected", ()),
     ("Rework", ("Manufacturing",)),
+    ("Vendor Rejected", ()),
+    ("Customer Returns", ()),
 )
 
 

@@ -85,6 +85,15 @@ class TestStandardWarehouseSeeder:
         assert "Rejected" in names
 
     @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
+    def test_seeds_vendor_rejected_and_customer_returns_everywhere(
+        self, industry_dir: Path
+    ) -> None:
+        """ref #35: RTV/Customer Return flows need their own isolated warehouses."""
+        names = _warehouse_names(_run(industry_dir))
+        assert "Vendor Rejected" in names
+        assert "Customer Returns" in names
+
+    @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
     def test_rework_follows_the_manufacturing_module(self, industry_dir: Path) -> None:
         cfg = load_industry_config(industry_dir / "industry.yaml")
         names = _warehouse_names(_run(industry_dir))

@@ -25,7 +25,11 @@ _QI_PARAMETERS = [
     ("Bond Hardness (Shore)", 40.0, 70.0),
 ]
 
-_INSPECTION_TYPES = ["Incoming", "In Process", "Outgoing"]
+# "Incoming" is deliberately excluded: incoming inspections are now created
+# and linked back to their Purchase Receipt by the shared
+# 211_purchase_receipts.py seeder (ref #35); keeping it here would produce
+# duplicate, unlinked incoming inspections.
+_INSPECTION_TYPES = ["In Process", "Outgoing"]
 
 
 class QualityInspectionSeeder(BaseTransactionSeeder):

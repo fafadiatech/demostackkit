@@ -87,6 +87,24 @@ class SeedVolumes(BaseModel):
             "finished good produce any."
         ),
     )
+    purchase_receipts: int = Field(
+        default=20,
+        ge=0,
+        description=(
+            "Upper bound on Purchase Receipts raised against submitted Purchase "
+            "Orders. A share of these are seeded with a rejected quantity, "
+            "driving the Return to Vendor / Debit Note flow (ref #35)."
+        ),
+    )
+    delivery_notes: int = Field(
+        default=35,
+        ge=0,
+        description=(
+            "Upper bound on Delivery Notes raised against submitted Sales "
+            "Orders. A share of these are seeded with a Sales Return / Credit "
+            "Note against them (ref #35)."
+        ),
+    )
 
 
 class OpeningStockConfig(BaseModel):

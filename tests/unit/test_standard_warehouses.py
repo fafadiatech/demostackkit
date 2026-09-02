@@ -9,59 +9,28 @@ an industry gets, and that the script is syntactically valid Python.
 from __future__ import annotations
 
 import ast
-import importlib.util
 import json
-import random
 import re
 from pathlib import Path
 
 import pytest
+from _seeder_harness import (
+    REPO_ROOT,
+    SHARED_SEEDERS,
+    all_industry_dirs,
+    load_seeder_class,
+    run_seeder,
+)
 
 from demostackkit.core.config import load_industry_config
-from demostackkit.seeder.base import BaseSeeder, SeedContext
 from demostackkit.seeder.loader import discover_seeders
 
-REPO_ROOT = Path(__file__).parent.parent.parent
-SHARED_SEEDERS = REPO_ROOT / "demostackkit" / "seeders"
 SEEDER_PATH = SHARED_SEEDERS / "01_master" / "61_standard_warehouses.py"
 
 
-def _load_seeder_class() -> type[BaseSeeder]:
-    spec = importlib.util.spec_from_file_location("_test_standard_warehouses", SEEDER_PATH)
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module.StandardWarehouseSeeder
-
-
-def _all_industry_dirs() -> list[Path]:
-    return sorted(
-        d
-        for d in (REPO_ROOT / "industries").iterdir()
-        if d.is_dir() and not d.name.startswith("_") and (d / "industry.yaml").is_file()
-    )
-
-
 def _run(industry_dir: Path) -> str:
-    """Run the seeder against an industry, returning the script it would execute."""
-    captured: list[str] = []
-    seeder_cls = _load_seeder_class()
-
-    class Recording(seeder_cls):  # type: ignore[valid-type, misc]
-        def _exec(self, script: str, timeout: int = 120) -> str:
-            captured.append(script)
-            return ""
-
-    cfg = load_industry_config(industry_dir / "industry.yaml")
-    ctx = SeedContext(
-        site=cfg.site.name,
-        industry_slug=industry_dir.name,
-        industry_config=cfg,
-        bench_path="/home/frappe/frappe-bench",
-        random=random.Random(cfg.seed.random_seed),
-    )
-    Recording(ctx).run()
-    return captured[0] if captured else ""
+    seeder_cls = load_seeder_class(SEEDER_PATH, "StandardWarehouseSeeder")
+    return run_seeder(seeder_cls, industry_dir)
 
 
 def _warehouse_names(script: str) -> list[str]:
@@ -72,19 +41,19 @@ def _warehouse_names(script: str) -> list[str]:
 
 @pytest.mark.unit
 class TestStandardWarehouseSeeder:
-    @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
+    @pytest.mark.parametrize("industry_dir", all_industry_dirs(), ids=lambda d: d.name)
     def test_runs_for_every_industry(self, industry_dir: Path) -> None:
         """Discovery must pick the shared seeder up for every industry package."""
         labels = [cls.label for cls in discover_seeders(industry_dir, shared_dirs=[SHARED_SEEDERS])]
         assert "Standard Warehouses" in labels
 
-    @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
+    @pytest.mark.parametrize("industry_dir", all_industry_dirs(), ids=lambda d: d.name)
     def test_seeds_scrap_and_rejected_everywhere(self, industry_dir: Path) -> None:
         names = _warehouse_names(_run(industry_dir))
         assert "Scrap" in names
         assert "Rejected" in names
 
-    @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
+    @pytest.mark.parametrize("industry_dir", all_industry_dirs(), ids=lambda d: d.name)
     def test_seeds_vendor_rejected_and_customer_returns_everywhere(
         self, industry_dir: Path
     ) -> None:
@@ -93,13 +62,13 @@ class TestStandardWarehouseSeeder:
         assert "Vendor Rejected" in names
         assert "Customer Returns" in names
 
-    @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
+    @pytest.mark.parametrize("industry_dir", all_industry_dirs(), ids=lambda d: d.name)
     def test_rework_follows_the_manufacturing_module(self, industry_dir: Path) -> None:
         cfg = load_industry_config(industry_dir / "industry.yaml")
         names = _warehouse_names(_run(industry_dir))
         assert ("Rework" in names) is ("Manufacturing" in cfg.modules)
 
-    @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
+    @pytest.mark.parametrize("industry_dir", all_industry_dirs(), ids=lambda d: d.name)
     def test_generated_script_is_valid_python(self, industry_dir: Path) -> None:
         ast.parse(_run(industry_dir))
 
@@ -114,7 +83,7 @@ class TestStandardWarehouseSeeder:
         ]
         assert flagged == ["Rejected"]
 
-    @pytest.mark.parametrize("industry_dir", _all_industry_dirs(), ids=lambda d: d.name)
+    @pytest.mark.parametrize("industry_dir", all_industry_dirs(), ids=lambda d: d.name)
     def test_industries_do_not_redeclare_the_standard_warehouses(self, industry_dir: Path) -> None:
         """A themed warehouse tree must not duplicate what the shared seeder owns."""
         seeder = industry_dir / "seeders" / "01_master" / "06_warehouses.py"

@@ -98,6 +98,7 @@ class ItemMediaSeeder(BaseMasterSeeder):
         container_dir_json = json.dumps(container_dir)
 
         script = f"""
+import hashlib
 import json
 import os
 from frappe.utils.file_manager import save_file
@@ -107,15 +108,23 @@ entries = json.loads('''{entries_json}''')
 
 
 def attach(item_code, file_name):
+    with open(os.path.join(container_dir, file_name), 'rb') as fh:
+        content = fh.read()
+
+    # save_file() renames the stored file with a random hash suffix
+    # (foo.jpg -> foo83d599.jpg), so file_name can't be used as the
+    # idempotency key on a re-run. content_hash is the same MD5 digest
+    # Frappe itself computes in get_content_hash(), so it survives that
+    # rename and correctly identifies "this exact file already attached
+    # to this exact item" across runs.
+    content_hash = hashlib.md5(content, usedforsecurity=False).hexdigest()
     existing = frappe.db.get_value(
         'File',
-        {{'attached_to_doctype': 'Item', 'attached_to_name': item_code, 'file_name': file_name}},
+        {{'attached_to_doctype': 'Item', 'attached_to_name': item_code, 'content_hash': content_hash}},
         'file_url',
     )
     if existing:
         return existing
-    with open(os.path.join(container_dir, file_name), 'rb') as fh:
-        content = fh.read()
     file_doc = save_file(file_name, content, 'Item', item_code, is_private=0)
     return file_doc.file_url
 

@@ -21,9 +21,18 @@ referenced through `use_serial_batch_fields`, which is the only way to open a
 balance for items whose Item master carries no batch/serial naming series.
 
 Idempotent, as master seeders must be: items that already carry a Stock Ledger
-Entry are skipped, so a re-run adds nothing and a partially seeded site is topped
-up rather than double-counted. Priority 90 puts it after Items (30), Warehouses
-(60) and BOMs (70), and still ahead of every transaction seeder.
+Entry *for the company being opened* are skipped, so a re-run adds nothing and a
+partially seeded site is topped up rather than double-counted. Priority 90 puts
+it after Items (30), Warehouses (60) and BOMs (70), and still ahead of every
+transaction seeder.
+
+Runs once per company in `ctx.cache_get("all_companies", ...)` — industries with
+a single company (the default) get exactly today's behavior; an industry seeding
+a multi-company group (see electrical's `additional_companies`) gets its own
+Opening Stock posted per company, each against that company's own warehouses and
+each company's own `CompanyConfig.opening_stock_qty_scale` (on top of the shared
+`seed.opening_stock.qty_scale`), so a smaller subsidiary visibly opens with less
+stock than the parent rather than merely landing in a different warehouse.
 """
 
 from __future__ import annotations
@@ -56,10 +65,26 @@ class OpeningStockSeeder(BaseMasterSeeder):
         if not cfg.seed.opening_stock.enabled:
             return
 
-        plan = self._fetch_plan()
+        default_companies = [{"name": cfg.company.name, "abbr": cfg.company.abbr}]
+        companies = self.ctx.cache_get("all_companies", default_companies)
+        company_scales = {
+            c.name: c.opening_stock_qty_scale for c in [cfg.company, *cfg.additional_companies]
+        }
+
+        for entry in companies:
+            company_scale = company_scales.get(entry["name"], 1.0)
+            self._run_for_company(entry["name"], entry["abbr"], company_scale)
+
+    def _run_for_company(self, company: str, abbr: str, company_scale: float) -> None:
+        cfg = self.ctx.industry_config
+
+        plan = self._fetch_plan(company, abbr)
         items = plan.get("items") or []
         if not items:
-            print("Opening Stock: every item already has stock ledger entries, nothing to open")
+            print(
+                f"Opening Stock ({company}): every item already has stock ledger "
+                "entries, nothing to open"
+            )
             return
 
         if plan.get("perpetual") and not plan.get("expense_account"):
@@ -75,7 +100,7 @@ class OpeningStockSeeder(BaseMasterSeeder):
             )
 
         posting_date = opening_stock_date(parse_relative_date(cfg.seed.date_range.start))
-        documents = self._build_documents(plan)
+        documents = self._build_documents(plan, company_scale)
 
         payload = {
             "company": plan["company"],
@@ -88,7 +113,7 @@ class OpeningStockSeeder(BaseMasterSeeder):
 
     # ── Planning ──────────────────────────────────────────────────────────────
 
-    def _fetch_plan(self) -> dict[str, Any]:
+    def _fetch_plan(self, company: str, abbr: str) -> dict[str, Any]:
         """Read back from the site everything the opening entry depends on.
 
         Queried rather than taken from the seed cache so the roster covers every
@@ -96,8 +121,6 @@ class OpeningStockSeeder(BaseMasterSeeder):
         items CSV, and so BOM/batch/serial flags come from the Item master itself.
         """
         cfg = self.ctx.industry_config
-        company = self.ctx.cache_get("company_name", cfg.company.name)
-        abbr = self.ctx.cache_get("company_abbr", cfg.company.abbr)
         opening = cfg.seed.opening_stock
 
         script = f"""
@@ -149,7 +172,12 @@ manufactured = set(
     )
 )
 already_stocked = set(
-    frappe.get_all('Stock Ledger Entry', filters={{'is_cancelled': 0}}, distinct=True, pluck='item_code')
+    frappe.get_all(
+        'Stock Ledger Entry',
+        filters={{'is_cancelled': 0, 'company': company}},
+        distinct=True,
+        pluck='item_code',
+    )
 )
 
 items = []
@@ -185,15 +213,22 @@ print('{_PAYLOAD_MARKER}' + json.dumps({{
 """
         return self._extract_payload(self._exec(script, timeout=180))
 
-    def _build_documents(self, plan: dict[str, Any]) -> list[dict[str, Any]]:
+    def _build_documents(
+        self, plan: dict[str, Any], company_scale: float = 1.0
+    ) -> list[dict[str, Any]]:
         """Group priced opening rows into one document per warehouse.
 
         One Stock Reconciliation could hold every warehouse at once, but splitting
         keeps a failure in one warehouse from taking the rest of the opening
         balance down with it, and reads better in the demo's document list.
+
+        `company_scale` layers the posting company's own
+        `CompanyConfig.opening_stock_qty_scale` on top of the industry-wide
+        `seed.opening_stock.qty_scale`, so a smaller subsidiary in a multi-company
+        group opens with visibly less stock than the parent.
         """
         rng = self.ctx.random
-        scale = self.ctx.industry_config.seed.opening_stock.qty_scale
+        scale = self.ctx.industry_config.seed.opening_stock.qty_scale * company_scale
         by_warehouse: dict[str, list[dict[str, Any]]] = {}
 
         for item in plan["items"]:

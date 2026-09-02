@@ -18,6 +18,11 @@ families with realistic price points and lead times:
 Orders are shuffled before submission to produce a realistic interleaved
 transaction timeline matching a project-driven B2B sales cycle.
 
+Customers and items are shared masters across the PowerTech group, but each SO
+belongs to one company (picked from `all_companies`) and delivers from that
+company's own Finished Goods Store, so the group's separate inventories stay
+separate even though the masters are common.
+
 Uses deterministic random (self.ctx.random) for reproducibility.
 """
 
@@ -61,7 +66,10 @@ class SalesOrderSeeder(BaseTransactionSeeder):
 
     def run(self) -> None:
         rng = self.ctx.random
-        company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
+        default_company = self.ctx.industry_config.company
+        companies = self.ctx.cache_get(
+            "all_companies", [{"name": default_company.name, "abbr": default_company.abbr}]
+        )
         customers = self.ctx.cache_get("customer_names", [])
         transformer_items = self.ctx.cache_get("transformer_item_codes", [])
         switchgear_items = self.ctx.cache_get("switchgear_item_codes", [])
@@ -84,6 +92,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
         for _ in range(n_trans_orders):
             order_date = start_date + timedelta(days=rng.randint(0, span))
             delivery_date = order_date + timedelta(days=rng.randint(60, 120))
+            company_entry = rng.choice(companies)
             customer = rng.choice(customers)
             item_code = rng.choice(transformer_items) if transformer_items else None
             if not item_code:
@@ -93,6 +102,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
             rate = round(rng.uniform(rate_min, rate_max), 2)
             orders.append(
                 {
+                    "company": company_entry["name"],
                     "customer": customer,
                     "transaction_date": order_date.isoformat(),
                     "delivery_date": delivery_date.isoformat(),
@@ -102,6 +112,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
                             "qty": qty,
                             "rate": rate,
                             "delivery_date": delivery_date.isoformat(),
+                            "warehouse": f"Finished Goods Store - {company_entry['abbr']}",
                         }
                     ],
                 }
@@ -111,6 +122,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
         for _ in range(n_swgr_orders):
             order_date = start_date + timedelta(days=rng.randint(0, span))
             delivery_date = order_date + timedelta(days=rng.randint(30, 60))
+            company_entry = rng.choice(companies)
             customer = rng.choice(customers)
             item_code = rng.choice(switchgear_items) if switchgear_items else None
             if not item_code:
@@ -120,6 +132,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
             rate = round(rng.uniform(rate_min, rate_max), 2)
             orders.append(
                 {
+                    "company": company_entry["name"],
                     "customer": customer,
                     "transaction_date": order_date.isoformat(),
                     "delivery_date": delivery_date.isoformat(),
@@ -129,6 +142,7 @@ class SalesOrderSeeder(BaseTransactionSeeder):
                             "qty": qty,
                             "rate": rate,
                             "delivery_date": delivery_date.isoformat(),
+                            "warehouse": f"Finished Goods Store - {company_entry['abbr']}",
                         }
                     ],
                 }
@@ -141,14 +155,13 @@ class SalesOrderSeeder(BaseTransactionSeeder):
         script = f"""
 import json
 
-company = '{company}'
 orders = json.loads('''{orders_json}''')
 created = 0
 for o in orders:
     try:
         so = frappe.get_doc({{
             'doctype': 'Sales Order',
-            'company': company,
+            'company': o['company'],
             'customer': o['customer'],
             'transaction_date': o['transaction_date'],
             'delivery_date': o['delivery_date'],
@@ -161,6 +174,7 @@ for o in orders:
                 'uom': 'Nos',
                 'stock_uom': 'Nos',
                 'conversion_factor': 1,
+                'warehouse': it['warehouse'],
             }} for it in o['items']],
         }})
         so.insert(ignore_permissions=True)

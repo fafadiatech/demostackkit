@@ -154,6 +154,107 @@ class TestIndustryConfigValidation:
         with pytest.raises(FileNotFoundError):
             load_industry_config(tmp_path / "nonexistent.yaml")
 
+    def test_additional_companies_default_empty(self, tmp_path: Path) -> None:
+        config = load_industry_config(
+            _write_yaml(
+                tmp_path,
+                {
+                    "name": "Test",
+                    "slug": "test",
+                    "company": {
+                        "name": "Co",
+                        "abbr": "CO",
+                        "currency": "USD",
+                        "country": "United States",
+                    },
+                    "site": {"name": "test.localhost"},
+                },
+            )
+        )
+        assert config.additional_companies == []
+
+    def test_additional_companies_parsed(self, tmp_path: Path) -> None:
+        config = load_industry_config(
+            _write_yaml(
+                tmp_path,
+                {
+                    "name": "Test",
+                    "slug": "test",
+                    "company": {
+                        "name": "Parent Co",
+                        "abbr": "PC",
+                        "currency": "INR",
+                        "country": "India",
+                    },
+                    "additional_companies": [
+                        {
+                            "name": "Subsidiary Co",
+                            "abbr": "SC",
+                            "currency": "INR",
+                            "country": "India",
+                        },
+                    ],
+                    "site": {"name": "test.localhost"},
+                },
+            )
+        )
+        assert len(config.additional_companies) == 1
+        assert config.additional_companies[0].name == "Subsidiary Co"
+
+    def test_duplicate_company_abbr_raises(self, tmp_path: Path) -> None:
+        with pytest.raises(Exception):
+            load_industry_config(
+                _write_yaml(
+                    tmp_path,
+                    {
+                        "name": "Test",
+                        "slug": "test",
+                        "company": {
+                            "name": "Parent Co",
+                            "abbr": "CO",
+                            "currency": "USD",
+                            "country": "United States",
+                        },
+                        "additional_companies": [
+                            {
+                                "name": "Sibling Co",
+                                "abbr": "CO",  # duplicate abbr
+                                "currency": "USD",
+                                "country": "United States",
+                            },
+                        ],
+                        "site": {"name": "test.localhost"},
+                    },
+                )
+            )
+
+    def test_duplicate_company_name_raises(self, tmp_path: Path) -> None:
+        with pytest.raises(Exception):
+            load_industry_config(
+                _write_yaml(
+                    tmp_path,
+                    {
+                        "name": "Test",
+                        "slug": "test",
+                        "company": {
+                            "name": "Same Co",
+                            "abbr": "SC1",
+                            "currency": "USD",
+                            "country": "United States",
+                        },
+                        "additional_companies": [
+                            {
+                                "name": "Same Co",  # duplicate name
+                                "abbr": "SC2",
+                                "currency": "USD",
+                                "country": "United States",
+                            },
+                        ],
+                        "site": {"name": "test.localhost"},
+                    },
+                )
+            )
+
     def test_garment_industry_config_is_valid(self) -> None:
         """The real garment industry.yaml must pass validation."""
         repo_root = Path(__file__).parent.parent.parent

@@ -39,6 +39,23 @@ company:
   country: "India"
   fiscal_year_start: "04-01"
 
+# Sibling legal entities in the PowerTech group. Item/Customer/Supplier masters
+# are shared across all companies (seeded once, no `company` restriction); each
+# company gets its own Chart of Accounts, warehouse tree, and Opening Stock.
+additional_companies:
+  - name: "PowerTech Transformers South Pvt Ltd"
+    abbr: "PTS"
+    currency: "INR"
+    country: "India"
+    fiscal_year_start: "04-01"
+    opening_stock_qty_scale: 0.55
+  - name: "PowerTech Switchgear North Pvt Ltd"
+    abbr: "PSN"
+    currency: "INR"
+    country: "India"
+    fiscal_year_start: "04-01"
+    opening_stock_qty_scale: 0.35
+
 site:
   name: "electrical.localhost"
   admin_password: "${SITE_ADMIN_PASSWORD:-admin}"

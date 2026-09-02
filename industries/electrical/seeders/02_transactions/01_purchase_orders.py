@@ -7,6 +7,11 @@ busbars, and packaging) from the supplier list. Each PO contains 1-4 randomly
 chosen raw material lines with quantities between 5-300 units and rates derived
 from the item's valuation_rate (with ±10% market variance).
 
+Suppliers and items are shared masters across the PowerTech group, but each PO
+belongs to one company (picked from `all_companies`) and its lines are received
+into that company's own Raw Material Store, so the group's separate inventories
+stay separate even though the masters are common.
+
 Uses deterministic random (self.ctx.random) for reproducibility.
 Running `demostackkit reset electrical` always produces identical POs.
 """
@@ -35,7 +40,10 @@ class PurchaseOrderSeeder(BaseTransactionSeeder):
 
     def run(self) -> None:
         rng = self.ctx.random
-        company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
+        default_company = self.ctx.industry_config.company
+        companies = self.ctx.cache_get(
+            "all_companies", [{"name": default_company.name, "abbr": default_company.abbr}]
+        )
         suppliers = self.ctx.cache_get("supplier_names", [])
         rm_items = self.ctx.cache_get("rm_items", [])
 
@@ -51,6 +59,7 @@ class PurchaseOrderSeeder(BaseTransactionSeeder):
         for i in range(self.volume):
             order_date = start_date + timedelta(days=rng.randint(0, span))
             required_date = order_date + timedelta(days=rng.randint(14, 45))
+            company_entry = rng.choice(companies)
             supplier = rng.choice(suppliers)
             n_items = rng.randint(1, 4)
             chosen = rng.sample(rm_items, min(n_items, len(rm_items)))
@@ -64,10 +73,12 @@ class PurchaseOrderSeeder(BaseTransactionSeeder):
                         "rate": rate,
                         "uom": rm["stock_uom"],
                         "schedule_date": required_date.isoformat(),
+                        "warehouse": f"Raw Material Store - {company_entry['abbr']}",
                     }
                 )
             orders.append(
                 {
+                    "company": company_entry["name"],
                     "supplier": supplier,
                     "transaction_date": order_date.isoformat(),
                     "schedule_date": required_date.isoformat(),
@@ -79,14 +90,13 @@ class PurchaseOrderSeeder(BaseTransactionSeeder):
         script = f"""
 import json
 
-company = '{company}'
 orders = json.loads('''{orders_json}''')
 created = 0
 for o in orders:
     try:
         po = frappe.get_doc({{
             'doctype': 'Purchase Order',
-            'company': company,
+            'company': o['company'],
             'supplier': o['supplier'],
             'transaction_date': o['transaction_date'],
             'schedule_date': o['schedule_date'],
@@ -98,6 +108,7 @@ for o in orders:
                 'uom': it['uom'],
                 'stock_uom': it['uom'],
                 'conversion_factor': 1,
+                'warehouse': it['warehouse'],
             }} for it in o['items']],
         }})
         po.insert(ignore_permissions=True)

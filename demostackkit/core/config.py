@@ -36,6 +36,16 @@ class CompanyConfig(BaseModel):
         pattern=r"^\d{2}-\d{2}$",
         description="Fiscal year start in MM-DD format",
     )
+    opening_stock_qty_scale: float = Field(
+        default=1.0,
+        gt=0,
+        description=(
+            "Multiplier on this company's opening-stock quantities, layered on top "
+            "of seed.opening_stock.qty_scale. Use <1 for a smaller subsidiary, >1 "
+            "for a larger parent, so a multi-company group's Stock Balance report "
+            "visibly differs by company rather than only by warehouse."
+        ),
+    )
 
 
 class SiteConfig(BaseModel):
@@ -228,6 +238,14 @@ class IndustryConfig(BaseModel):
 
     # Sub-configs
     company: CompanyConfig
+    additional_companies: list[CompanyConfig] = Field(
+        default_factory=list,
+        description=(
+            "Extra companies seeded alongside the primary `company`, for industries "
+            "demoing a multi-company group with shared masters and separate inventory "
+            "per legal entity. Empty by default."
+        ),
+    )
     site: SiteConfig = Field(default_factory=lambda: SiteConfig(name="demo.localhost"))
     modules: list[str] = Field(default_factory=list, description="ERPNext modules to enable")
     seed: SeedConfig = Field(default_factory=SeedConfig)
@@ -279,6 +297,17 @@ class IndustryConfig(BaseModel):
         emails = [u.email for u in self.users]
         if len(emails) != len(set(emails)):
             raise ValueError("users list contains duplicate email addresses")
+        return self
+
+    @model_validator(mode="after")
+    def no_duplicate_companies(self) -> IndustryConfig:
+        companies = [self.company, *self.additional_companies]
+        names = [c.name for c in companies]
+        abbrs = [c.abbr for c in companies]
+        if len(names) != len(set(names)):
+            raise ValueError("company + additional_companies contain duplicate names")
+        if len(abbrs) != len(set(abbrs)):
+            raise ValueError("company + additional_companies contain duplicate abbreviations")
         return self
 
 

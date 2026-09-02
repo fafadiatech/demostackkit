@@ -1,11 +1,14 @@
 """
 Seeder: Warehouses for PowerTech Electrical Manufacturing.
 
-Creates the warehouse hierarchy for raw material storage (copper wire, CRGO
+Creates the same warehouse hierarchy — raw material storage (copper wire, CRGO
 steel, oil), work-in-progress areas (coil winding, assembly), finished goods
-holding for transformers and switchgear, quality hold and dispatch. The Scrap /
-Rejected / Rework warehouses come from the shared Standard Warehouses seeder.
-Idempotent — skips existing warehouses.
+holding for transformers and switchgear, quality hold and dispatch — once per
+company in the group (see 01_company.py's `all_companies` cache), so each
+company has its own physically separate inventory locations even though Item/
+Customer/Supplier masters are shared. The Scrap / Rejected / Rework warehouses
+come from the shared Standard Warehouses seeder. Idempotent — skips existing
+warehouses.
 """
 
 from __future__ import annotations
@@ -20,9 +23,15 @@ class WarehouseSeeder(BaseMasterSeeder):
     priority = 60
 
     def run(self) -> None:
-        company = self.ctx.cache_get("company_name", self.ctx.industry_config.company.name)
-        abbr = self.ctx.cache_get("company_abbr", self.ctx.industry_config.company.abbr)
+        default_company = self.ctx.industry_config.company
+        companies = self.ctx.cache_get(
+            "all_companies",
+            [{"name": default_company.name, "abbr": default_company.abbr}],
+        )
+        for entry in companies:
+            self._seed_for_company(entry["name"], entry["abbr"])
 
+    def _seed_for_company(self, company: str, abbr: str) -> None:
         warehouses = [
             {
                 "warehouse_name": "Raw Material Store",

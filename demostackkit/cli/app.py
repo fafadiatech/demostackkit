@@ -13,6 +13,7 @@ import typer
 from rich.console import Console
 
 from demostackkit import __version__
+from demostackkit.cli.banner import print_banner
 
 console = Console()
 
@@ -21,7 +22,6 @@ app = typer.Typer(
     help="Create, manage and distribute ERPNext demo environments for different industries.",
     add_completion=True,
     rich_markup_mode="rich",
-    no_args_is_help=True,
 )
 
 # ── Global state ──────────────────────────────────────────────────────────────
@@ -93,6 +93,11 @@ def main_callback(
 ) -> None:
     if version:
         console.print(f"demostackkit {__version__}")
+        raise typer.Exit()
+
+    if ctx.invoked_subcommand is None:
+        print_banner(console)
+        console.print(ctx.get_help())
         raise typer.Exit()
 
 

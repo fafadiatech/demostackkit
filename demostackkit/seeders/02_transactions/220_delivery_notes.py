@@ -20,6 +20,14 @@ same run, so draining them briefly is not the problem this guards against.
 Caches "delivery_notes" (all DN names) for `221_sales_invoices.py` and
 `222_customer_returns.py`.
 
+`make_delivery_note()` doesn't map `posting_date`, and ERPNext's
+`validate_posting_time()` forces an unset posting_date to "today" on every
+save — so without an explicit override every DN (and therefore every Sales
+Invoice made from it) would collapse onto the seed run date regardless of
+its source Sales Order's `transaction_date`. Each DN is posted on its
+Sales Order's `delivery_date` instead (capped at today, ref #37 — this is
+what starves the Accounts Receivable aging buckets of any real spread).
+
 Random selection of which Sales Orders to ship happens inside the container
 script for the same reason as `211_purchase_receipts.py`: no seeder caches
 created Sales Order names client-side. `self.ctx.random` draws a single seed
@@ -131,6 +139,7 @@ def cap_finished_goods(dn):
     dn.set('items', kept)
 
 
+today = frappe.utils.getdate()
 created = errors = 0
 dn_names = []
 for so_name in so_names:
@@ -141,6 +150,15 @@ for so_name in so_names:
         cap_finished_goods(dn)
         if not dn.items:
             continue
+        # ERPNext's own mapper leaves posting_date unset, which
+        # validate_posting_time() then forces to "today" on every DN
+        # regardless of the source Sales Order's transaction_date —
+        # collapsing every shipment onto the seed run date. Ship on the
+        # SO's own delivery_date instead (capped at today, since nothing
+        # ships in the future).
+        so_delivery_date = frappe.db.get_value('Sales Order', so_name, 'delivery_date')
+        dn.set_posting_time = 1
+        dn.posting_date = min(so_delivery_date, today) if so_delivery_date else today
         dn.insert(ignore_permissions=True)
         dn.submit()
         created += 1

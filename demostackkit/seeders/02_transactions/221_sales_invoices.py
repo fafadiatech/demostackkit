@@ -18,6 +18,22 @@ Caches "sales_invoices" (a dn_name -> invoice_name map) for
 `222_customer_returns.py`'s stock-less write-off case, which needs an
 original Sales Invoice to build a stock-less return against.
 
+Also explicitly copies `posting_date` from the source Delivery Note (which
+itself now pins its own posting_date, see `220_delivery_notes.py`), for the
+same reason cost_center/taxes are copied: the mapper doesn't map it, and
+ERPNext forces an unset posting_date to "today" on every save — collapsing
+every invoice's due_date onto the seed run date and starving Accounts
+Receivable's aging buckets of any real spread (ref #37).
+
+`make_sales_invoice()`'s postprocess already runs `set_missing_values()`
+against the *unset* (today-dated) posting_date, which computes and sets
+`due_date` before we ever touch `posting_date` below. `set_missing_values()`
+only fills `due_date` when it's falsy, so leaving the mapper's stale value in
+place means every invoice's `due_date` stays pinned to the seed run date
+regardless of `posting_date` — silently reintroducing the exact bug this
+posting_date fix was meant to solve. Clearing `due_date` alongside
+`posting_date` forces it to be recomputed off the corrected date.
+
 Priority 221 — right after Delivery Notes (220), ahead of Customer Returns
 (222).
 """
@@ -66,6 +82,19 @@ for dn_name in dn_names:
                 )
                 if dn_taxes:
                     si.set('taxes', dn_taxes)
+        # As with cost_center/taxes above: make_sales_invoice() doesn't map
+        # posting_date, and validate_posting_time() forces an unset one to
+        # "today" — so without this every invoice collapses onto the seed
+        # run date, leaving due_date with no real spread (ref #37, this is
+        # what starves Accounts Receivable's aging buckets).
+        si.set_posting_time = 1
+        si.posting_date = frappe.db.get_value('Delivery Note', dn_name, 'posting_date')
+        # set_missing_values() (run by make_sales_invoice()'s postprocess)
+        # already computed due_date off the pre-override (today-dated)
+        # posting_date above, and only fills due_date when it's falsy — so
+        # without clearing it here, due_date stays pinned to the seed run
+        # date on every invoice regardless of posting_date (ref #37).
+        si.due_date = None
         si.insert(ignore_permissions=True)
         si.submit()
         created += 1

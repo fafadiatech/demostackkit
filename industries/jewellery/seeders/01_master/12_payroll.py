@@ -5,19 +5,19 @@ from __future__ import annotations
 from demostackkit.seeder.payroll_seeder import PayrollSeeder as _PayrollSeederBase
 
 ANNUAL_CTC = {
-    "Production Manager": 1_140_000,
-    "Karigar Supervisor": 600_000,
-    "Melting Furnace Operator": 384_000,
-    "Rolling Mill Operator": 360_000,
-    "Casting Technician": 396_000,
-    "Filing & Shaping Artisan": 420_000,
-    "Stone Setter": 456_000,
-    "Polishing Artisan": 336_000,
-    "Hallmarking Technician": 360_000,
-    "QC Inspector": 384_000,
+    "Production Manager": 114_000,
+    "Karigar Supervisor": 60_000,
+    "Melting Furnace Operator": 38_400,
+    "Rolling Mill Operator": 36_000,
+    "Casting Technician": 39_600,
+    "Filing & Shaping Artisan": 42_000,
+    "Stone Setter": 45_600,
+    "Polishing Artisan": 33_600,
+    "Hallmarking Technician": 36_000,
+    "QC Inspector": 38_400,
 }
 
-FALLBACK_CTC = 300_000
+FALLBACK_CTC = 30_000
 
 
 class PayrollSeeder(_PayrollSeederBase):

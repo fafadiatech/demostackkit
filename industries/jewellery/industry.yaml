@@ -34,7 +34,7 @@ extra_apps:
 company:
   name: "GoldStar Jewellers Pvt Ltd"
   abbr: "GSJ"
-  currency: "INR"
+  currency: "USD"
   country: "India"
   fiscal_year_start: "04-01"
 

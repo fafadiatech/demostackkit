@@ -1,23 +1,23 @@
 item_code,item_name,item_group,stock_uom,description,is_stock_item,valuation_rate
-JWL-GLD-NCK-001,22K Gold Necklace Classic,Gold Jewellery,Gram,22 karat traditional gold necklace,1,6200.00
-JWL-GLD-NCK-002,22K Gold Temple Necklace,Necklaces,Gram,Temple design 22K gold necklace,1,6300.00
-JWL-GLD-RNG-003,22K Gold Wedding Ring,Rings,Gram,Traditional gold wedding band,1,6150.00
-JWL-GLD-RNG-004,18K Gold Diamond Ring,Rings,Gram,18K gold solitaire setting,1,5800.00
-JWL-GLD-EAR-005,22K Gold Jhumka Earrings,Earrings,Gram,Traditional jhumka ear drops,1,6250.00
-JWL-GLD-BNG-006,22K Gold Bangle Set,Gold Jewellery,Gram,Set of 4 plain gold bangles,1,6100.00
-JWL-GLD-CHN-007,22K Gold Chain 18 inch,Gold Jewellery,Gram,Box link gold chain,1,6050.00
-JWL-GLD-BRC-008,22K Gold Bracelet,Gold Jewellery,Gram,Flexible link gold bracelet,1,6200.00
-JWL-SLV-ANK-001,Pure Silver Anklet Pair,Silver Jewellery,Gram,925 silver anklet pair,1,120.00
-JWL-SLV-NCK-002,Silver Oxidised Necklace,Silver Jewellery,Gram,Oxidised silver boho necklace,1,130.00
-JWL-SLV-EAR-003,Silver Jhumki Set,Silver Jewellery,Gram,Traditional silver jhumki,1,125.00
-JWL-SLV-BNG-004,Silver Kada Bangle,Silver Jewellery,Gram,Plain silver kada bangle,1,115.00
-JWL-DMD-RNG-001,Diamond Solitaire Ring 0.5ct,Diamond Jewellery,Piece,0.5 carat natural diamond ring,1,85000.00
-JWL-DMD-EAR-002,Diamond Stud Earrings 0.3ct,Diamond Jewellery,Piece,0.3ct diamond stud pair,1,55000.00
-JWL-DMD-PDN-003,Diamond Pendant 0.2ct,Diamond Jewellery,Piece,18K gold diamond pendant,1,38000.00
-JWL-DMD-BRC-004,Diamond Tennis Bracelet,Diamond Jewellery,Piece,18K gold diamond line bracelet,1,185000.00
-RM-GLD-22K-001,Gold Bar 22K 10 Gram,Raw Materials,Gram,Hallmarked 22K gold bar,1,6000.00
-RM-GLD-18K-002,Gold Bar 18K 10 Gram,Raw Materials,Gram,Hallmarked 18K gold bar,1,4800.00
-RM-SLV-999-003,Silver Ingot 999 Pure,Raw Materials,Gram,Fine silver 999 purity ingot,1,110.00
-RM-DMD-RND-004,Natural Diamond Round 0.1ct,Gemstones,Carat,VS2 clarity natural diamond,1,25000.00
-SA-PRONGSET-01,Prong Setting Sub-Assembly,Setting Sub-Assemblies,Nos,Pre-fabricated prong setting sub-assembly for gemstone mounting,1,28.00
-SA-CLASP-01,Clasp Module,Clasp Modules,Nos,Pre-assembled lobster clasp module with jump ring and safety catch,1,6.50
+JWL-GLD-NCK-001,22K Gold Necklace Classic,Gold Jewellery,Gram,22 karat traditional gold necklace,1,74.70
+JWL-GLD-NCK-002,22K Gold Temple Necklace,Necklaces,Gram,Temple design 22K gold necklace,1,75.90
+JWL-GLD-RNG-003,22K Gold Wedding Ring,Rings,Gram,Traditional gold wedding band,1,74.10
+JWL-GLD-RNG-004,18K Gold Diamond Ring,Rings,Gram,18K gold solitaire setting,1,69.90
+JWL-GLD-EAR-005,22K Gold Jhumka Earrings,Earrings,Gram,Traditional jhumka ear drops,1,75.30
+JWL-GLD-BNG-006,22K Gold Bangle Set,Gold Jewellery,Gram,Set of 4 plain gold bangles,1,73.50
+JWL-GLD-CHN-007,22K Gold Chain 18 inch,Gold Jewellery,Gram,Box link gold chain,1,72.90
+JWL-GLD-BRC-008,22K Gold Bracelet,Gold Jewellery,Gram,Flexible link gold bracelet,1,74.70
+JWL-SLV-ANK-001,Pure Silver Anklet Pair,Silver Jewellery,Gram,925 silver anklet pair,1,1.45
+JWL-SLV-NCK-002,Silver Oxidised Necklace,Silver Jewellery,Gram,Oxidised silver boho necklace,1,1.57
+JWL-SLV-EAR-003,Silver Jhumki Set,Silver Jewellery,Gram,Traditional silver jhumki,1,1.51
+JWL-SLV-BNG-004,Silver Kada Bangle,Silver Jewellery,Gram,Plain silver kada bangle,1,1.39
+JWL-DMD-RNG-001,Diamond Solitaire Ring 0.5ct,Diamond Jewellery,Piece,0.5 carat natural diamond ring,1,1024.00
+JWL-DMD-EAR-002,Diamond Stud Earrings 0.3ct,Diamond Jewellery,Piece,0.3ct diamond stud pair,1,662.50
+JWL-DMD-PDN-003,Diamond Pendant 0.2ct,Diamond Jewellery,Piece,18K gold diamond pendant,1,458.00
+JWL-DMD-BRC-004,Diamond Tennis Bracelet,Diamond Jewellery,Piece,18K gold diamond line bracelet,1,2229.00
+RM-GLD-22K-001,Gold Bar 22K 10 Gram,Raw Materials,Gram,Hallmarked 22K gold bar,1,72.30
+RM-GLD-18K-002,Gold Bar 18K 10 Gram,Raw Materials,Gram,Hallmarked 18K gold bar,1,57.80
+RM-SLV-999-003,Silver Ingot 999 Pure,Raw Materials,Gram,Fine silver 999 purity ingot,1,1.33
+RM-DMD-RND-004,Natural Diamond Round 0.1ct,Gemstones,Carat,VS2 clarity natural diamond,1,301.20
+SA-PRONGSET-01,Prong Setting Sub-Assembly,Setting Sub-Assemblies,Nos,Pre-fabricated prong setting sub-assembly for gemstone mounting,1,0.34
+SA-CLASP-01,Clasp Module,Clasp Modules,Nos,Pre-assembled lobster clasp module with jump ring and safety catch,1,0.08

@@ -34,24 +34,24 @@ BOMS = [
         "items": [
             # Chain sub-assembly (carries its own BOM — see JWL-GLD-CHN-007
             # below), plus loose gold for the pendant and clasp work.
-            {"item_code": "JWL-GLD-CHN-007", "qty": 10.0, "uom": "Gram", "rate": 6050.0},
-            {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 6000.0},
-            {"item_code": "SA-CLASP-01", "qty": 1, "uom": "Nos", "rate": 6.5},
+            {"item_code": "JWL-GLD-CHN-007", "qty": 10.0, "uom": "Gram", "rate": 72.90},
+            {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 72.30},
+            {"item_code": "SA-CLASP-01", "qty": 1, "uom": "Nos", "rate": 0.08},
         ],
     },
     {
         "item": "JWL-GLD-NCK-002",  # 22K Gold Temple Necklace (~20g)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 20.0, "uom": "Gram", "rate": 6000.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 20.0, "uom": "Gram", "rate": 72.30},
         ],
     },
     {
         "item": "JWL-GLD-RNG-003",  # 22K Gold Wedding Ring (~5g)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 6000.0},
-            {"item_code": "SA-PRONGSET-01", "qty": 1, "uom": "Nos", "rate": 28.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 72.30},
+            {"item_code": "SA-PRONGSET-01", "qty": 1, "uom": "Nos", "rate": 0.34},
         ],
     },
     {
@@ -61,74 +61,74 @@ BOMS = [
         "qty": 1,
         "is_default": False,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 6000.0},
-            {"item_code": "RM-DMD-RND-004", "qty": 0.1, "uom": "Carat", "rate": 25000.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 5.0, "uom": "Gram", "rate": 72.30},
+            {"item_code": "RM-DMD-RND-004", "qty": 0.1, "uom": "Carat", "rate": 301.20},
         ],
     },
     {
         "item": "JWL-GLD-RNG-004",  # 18K Gold Diamond Ring (~4g gold + 0.5ct diamond)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-18K-002", "qty": 4.0, "uom": "Gram", "rate": 4800.0},
-            {"item_code": "RM-DMD-RND-004", "qty": 0.5, "uom": "Carat", "rate": 25000.0},
+            {"item_code": "RM-GLD-18K-002", "qty": 4.0, "uom": "Gram", "rate": 57.80},
+            {"item_code": "RM-DMD-RND-004", "qty": 0.5, "uom": "Carat", "rate": 301.20},
         ],
     },
     {
         "item": "JWL-GLD-EAR-005",  # 22K Gold Jhumka Earrings (~8g pair)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 8.0, "uom": "Gram", "rate": 6000.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 8.0, "uom": "Gram", "rate": 72.30},
         ],
     },
     {
         "item": "JWL-GLD-BNG-006",  # 22K Gold Bangle Set (~30g set of 4)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 30.0, "uom": "Gram", "rate": 6000.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 30.0, "uom": "Gram", "rate": 72.30},
         ],
     },
     {
         "item": "JWL-GLD-CHN-007",  # 22K Gold Chain 18 inch (~10g)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 10.0, "uom": "Gram", "rate": 6000.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 10.0, "uom": "Gram", "rate": 72.30},
         ],
     },
     {
         "item": "JWL-GLD-BRC-008",  # 22K Gold Bracelet (~12g)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-22K-001", "qty": 12.0, "uom": "Gram", "rate": 6000.0},
+            {"item_code": "RM-GLD-22K-001", "qty": 12.0, "uom": "Gram", "rate": 72.30},
         ],
     },
     {
         "item": "JWL-SLV-ANK-001",  # Pure Silver Anklet Pair (~20g)
         "qty": 1,
         "items": [
-            {"item_code": "RM-SLV-999-003", "qty": 20.0, "uom": "Gram", "rate": 110.0},
+            {"item_code": "RM-SLV-999-003", "qty": 20.0, "uom": "Gram", "rate": 1.33},
         ],
     },
     {
         "item": "JWL-SLV-NCK-002",  # Silver Oxidised Necklace (~18g)
         "qty": 1,
         "items": [
-            {"item_code": "RM-SLV-999-003", "qty": 18.0, "uom": "Gram", "rate": 110.0},
+            {"item_code": "RM-SLV-999-003", "qty": 18.0, "uom": "Gram", "rate": 1.33},
         ],
     },
     {
         "item": "JWL-DMD-EAR-002",  # Diamond Stud Earrings 0.3ct (~2g gold + 2× 0.15ct)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-18K-002", "qty": 2.0, "uom": "Gram", "rate": 4800.0},
-            {"item_code": "RM-DMD-RND-004", "qty": 0.3, "uom": "Carat", "rate": 25000.0},
+            {"item_code": "RM-GLD-18K-002", "qty": 2.0, "uom": "Gram", "rate": 57.80},
+            {"item_code": "RM-DMD-RND-004", "qty": 0.3, "uom": "Carat", "rate": 301.20},
         ],
     },
     {
         "item": "JWL-DMD-PDN-003",  # Diamond Pendant 0.2ct (~3g gold + 0.2ct)
         "qty": 1,
         "items": [
-            {"item_code": "RM-GLD-18K-002", "qty": 3.0, "uom": "Gram", "rate": 4800.0},
-            {"item_code": "RM-DMD-RND-004", "qty": 0.2, "uom": "Carat", "rate": 25000.0},
+            {"item_code": "RM-GLD-18K-002", "qty": 3.0, "uom": "Gram", "rate": 57.80},
+            {"item_code": "RM-DMD-RND-004", "qty": 0.2, "uom": "Carat", "rate": 301.20},
         ],
     },
 ]

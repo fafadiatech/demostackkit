@@ -29,6 +29,11 @@ runs in the master phase, before the Purchase Order / Sales Order transaction
 seeders, and a "Stop" action would block them the moment a seeded document
 crosses the budget line.
 
+Budgets are submitted after insert. ERPNext's Budget doctype is submittable,
+and the Budget Variance Report (and budget-exceeded checks) only consider
+docstatus=1 — leaving them Draft would leave the report empty even after
+`230_budget_actuals.py` posts spend against them (ref #39).
+
 Idempotent: Cost Centers are skipped if already present; Budgets are matched
 on (company, fiscal_year, cost_center) or (company, fiscal_year, project).
 Priority 89 runs after Standard Warehouses (61), Employee Users (84) and every
@@ -166,7 +171,8 @@ else:
         if not rows:
             continue
 
-        frappe.get_doc({{
+        # Budget is submittable; Budget Variance Report only reads docstatus=1.
+        doc = frappe.get_doc({{
             'doctype': 'Budget',
             'budget_against': 'Cost Center',
             'cost_center': cc_full,
@@ -182,7 +188,9 @@ else:
             'action_if_annual_budget_exceeded_on_po': 'Warn',
             'action_if_accumulated_monthly_budget_exceeded_on_po': 'Warn',
             'accounts': rows,
-        }}).insert(ignore_permissions=True)
+        }})
+        doc.insert(ignore_permissions=True)
+        doc.submit()
         budget_created += 1
 
     projects = frappe.get_all(
@@ -207,7 +215,7 @@ else:
         if not rows:
             continue
 
-        frappe.get_doc({{
+        doc = frappe.get_doc({{
             'doctype': 'Budget',
             'budget_against': 'Project',
             'project': proj,
@@ -217,7 +225,9 @@ else:
             'action_if_annual_budget_exceeded': 'Warn',
             'action_if_accumulated_monthly_budget_exceeded': 'Warn',
             'accounts': rows,
-        }}).insert(ignore_permissions=True)
+        }})
+        doc.insert(ignore_permissions=True)
+        doc.submit()
         budget_created += 1
 
 frappe.db.commit()

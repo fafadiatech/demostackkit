@@ -8,10 +8,12 @@ All notable changes to DemoStackKit, grouped by week. Most recent week first.
 
 ### Added
 
+- **Budget Variance actuals** — new shared `02_transactions/230_budget_actuals.py` posts Journal Entries against every submitted Budget from `89_budgets.py`, with a deliberate under / on-target / over mix so the Budget Variance Report has a meaningful actual side. Credits Cash (not the bank ledger) so Bank Reconciliation from #38 stays intact; P&L lines always carry a leaf Cost Center (Company default when the Budget is against a Project). (ref #39)
 - **Rejection & Returns demo data** — every industry now seeds a full receiving-through-invoicing chain (Purchase Receipts, Purchase Invoices, Delivery Notes, Sales Invoices) via ERPNext's own mapper functions. Industries carrying the Quality Management module layer a quality-driven rejection trail on top: new shared `01_master/61_standard_warehouses.py` warehouses `Vendor Rejected` and `Customer Returns`, `02_transactions/211_purchase_receipts.py` (rejected-qty splitting + linked Quality Inspections via `reference_type`/`reference_name`), `212_purchase_invoices.py`, `213_return_to_vendor.py` (Return to Vendor + Debit Note via `make_purchase_return_against_rejected_warehouse`), `220_delivery_notes.py`, `221_sales_invoices.py`, and `222_customer_returns.py` (physical Customer Return + Credit Note, and stock-less write-off Credit Notes). The 11 per-industry `03_quality_inspections.py` seeders no longer generate "Incoming" inspections, since those are now created and linked by `211_purchase_receipts.py`. Adds `seed.volumes.purchase_receipts` / `seed.volumes.delivery_notes` to `core/config.py`. (ref #35)
 
 ### Fixed
 
+- **Budgets left as Draft** — `01_master/89_budgets.py` now submits each Budget after insert. ERPNext v15's Budget Variance Report only reads `docstatus=1`, so Draft budgets left the report empty even when actual spend existed. (ref #20, #39)
 - **Missing app icons on `/apps`** — `demostackkit up` and `install-app` now also materialize extra-app assets inside the frontend container, not just the backend. The frontend (nginx) container that serves `/apps` icons is a separate container over the same `sites` volume as the backend that runs `bench get-app`/`bench build`; asset files written from the backend container weren't reliably visible from the frontend, so HRMS/Helpdesk/Telephony icons could 404 even after the earlier symlink-materialization fix. (ref #30)
 
 ---

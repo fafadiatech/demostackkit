@@ -165,6 +165,40 @@ def _round_to_nice(qty: float) -> int:
     return max(1, int(round(qty / step)) * step)
 
 
+#: (unit value below which the band applies, (qty_min, qty_max), (lead_days_min, lead_days_max)),
+#: ascending. Sales Order qty/lead-time banded by item value, inverted from
+#: OPENING_STOCK_QTY_BANDS above: an expensive item (e.g. a ₹750,000 vehicle)
+#: sells in units of one on a long lead time, a cheap one (a spare bolt) sells
+#: by the dozen on a short lead time. This is what lets a single shared Sales
+#: Order seeder reproduce the kind of price/qty differentiation industries used
+#: to hand-code per item family (e.g. cars vs bikes) — it falls out of each
+#: item's own valuation_rate instead.
+SALES_ORDER_BANDS: tuple[tuple[float, tuple[int, int], tuple[int, int]], ...] = (
+    (1_000, (20, 100), (7, 21)),
+    (10_000, (5, 40), (14, 30)),
+    (100_000, (2, 15), (21, 45)),
+    (1_000_000, (1, 5), (30, 75)),
+    (float("inf"), (1, 3), (30, 90)),
+)
+
+
+def sales_order_qty_and_lead(unit_value: float, rng: _random_module.Random) -> tuple[int, int]:
+    """Deterministic (qty, lead_days) for one Sales Order line, banded by item value.
+
+    Args:
+        unit_value: Item valuation/standard rate. Non-positive values fall into
+            the cheapest band, which is the safe direction to guess.
+        rng: Seeded Random from SeedContext — never the global random module.
+    """
+    value = max(float(unit_value or 0), 0.0)
+    qty_range, lead_range = next(
+        (qty_range, lead_range)
+        for ceiling, qty_range, lead_range in SALES_ORDER_BANDS
+        if value < ceiling
+    )
+    return rng.randint(*qty_range), rng.randint(*lead_range)
+
+
 ITEM_ROW_HELPERS = '''
 from fractions import Fraction as _DskFraction
 from math import gcd as _dsk_gcd

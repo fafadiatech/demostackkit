@@ -26,6 +26,16 @@ created Sales Order names client-side. `self.ctx.random` draws a single seed
 that drives a `random.Random` inside the script, keeping `demostackkit reset`
 deterministic without a second round trip to fetch SO names first.
 
+A share of shipped SOs (`_PARTIAL_SHARE`) get a Delivery Note against only
+part of the ordered qty rather than the full remaining amount — ERPNext marks
+such an SO "Partly Delivered" the moment a DN ships less than it ordered, with
+no explicit status field to set. Combined with SOs that never get a DN at all
+(today's behavior whenever `delivery_notes` volume < `sales_orders` volume),
+this gives the Sales Order Analysis report a genuine fully/partly/not
+delivered mix (ref #36) instead of an all-or-nothing split. The partial trim
+runs before `cap_finished_goods`, so the FG-availability cap still gets the
+final say on quantity.
+
 Priority 220 — after the vendor-side chain (Purchase Receipts 211 through
 Return to Vendor 213) wraps up, ahead of Sales Invoices (221) and Customer
 Returns (222).
@@ -44,6 +54,13 @@ _PAYLOAD_MARKER = "DSK_DELIVERY_NOTES::"
 #: a Delivery Note ships it, so "Stock Balance" never bottoms out at zero.
 _FG_RESERVE_QTY = 1
 
+#: Share of shipped Sales Orders that get a partial-qty Delivery Note instead
+#: of the full remaining amount.
+_PARTIAL_SHARE = 0.35
+
+#: Fraction of the mapped qty actually shipped, on a partial Delivery Note.
+_PARTIAL_QTY_MIN, _PARTIAL_QTY_MAX = 0.3, 0.9
+
 
 class DeliveryNoteSeeder(BaseTransactionSeeder):
     label = "Delivery Notes"
@@ -60,6 +77,9 @@ class DeliveryNoteSeeder(BaseTransactionSeeder):
         payload = {
             "volume": self.volume,
             "seed": self.ctx.random.randint(0, 2**31 - 1),
+            "partial_share": _PARTIAL_SHARE,
+            "partial_qty_min": _PARTIAL_QTY_MIN,
+            "partial_qty_max": _PARTIAL_QTY_MAX,
         }
         payload_json = json.dumps(payload)
 
@@ -75,6 +95,7 @@ rng = _random_mod.Random(payload['seed'])
 so_names = frappe.get_all('Sales Order', filters={{'docstatus': 1}}, pluck='name')
 rng.shuffle(so_names)
 so_names = so_names[:payload['volume']]
+partial_so_names = {{so for so in so_names if rng.random() < payload['partial_share']}}
 
 manufactured = set(
     frappe.get_all(
@@ -82,6 +103,13 @@ manufactured = set(
     )
 )
 reserve_qty = {_FG_RESERVE_QTY}
+
+
+def trim_partial(dn):
+    \"\"\"Ship only a random fraction of each row's mapped qty.\"\"\"
+    for row in dn.items:
+        frac = rng.uniform(payload['partial_qty_min'], payload['partial_qty_max'])
+        row.qty = max(1, int(row.qty * frac))
 
 
 def cap_finished_goods(dn):
@@ -108,6 +136,8 @@ dn_names = []
 for so_name in so_names:
     try:
         dn = make_delivery_note(so_name)
+        if so_name in partial_so_names:
+            trim_partial(dn)
         cap_finished_goods(dn)
         if not dn.items:
             continue

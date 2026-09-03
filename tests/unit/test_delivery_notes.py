@@ -54,3 +54,14 @@ class TestDeliveryNoteSeeder:
             "from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note"
             in script
         )
+
+    def test_payload_carries_partial_delivery_config(self) -> None:
+        payload = payload_from_script(_run(REPO_ROOT / "industries" / "garment"))
+        assert 0 < payload["partial_share"] < 1
+        assert 0 < payload["partial_qty_min"] < payload["partial_qty_max"] <= 1
+
+    def test_partial_deliveries_are_trimmed_before_the_fg_reserve_cap(self) -> None:
+        script = _run(REPO_ROOT / "industries" / "garment")
+        trim_call = script.index("            trim_partial(dn)")
+        cap_call = script.index("        cap_finished_goods(dn)")
+        assert trim_call < cap_call

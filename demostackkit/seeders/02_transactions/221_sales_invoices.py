@@ -6,6 +6,14 @@ One invoice per delivery note via ERPNext's own
 `delivery_note.make_sales_invoice()` mapper — no separate volume knob, since
 it just closes out whatever `220_delivery_notes.py` already decided to ship.
 
+The mapper is expected to carry `cost_center` and `taxes`/`taxes_and_charges`
+through from the Delivery Note (itself inherited from the originating Sales
+Order, see `210_sales_orders.py`), but that isn't guaranteed across ERPNext
+mapper versions, and the Sales Register report (ref #36) reads those
+dimensions off the Sales Invoice — so this seeder copies them explicitly from
+the source Delivery Note whenever the mapper leaves them blank, rather than
+trusting the mapper chain silently.
+
 Caches "sales_invoices" (a dn_name -> invoice_name map) for
 `222_customer_returns.py`'s stock-less write-off case, which needs an
 original Sales Invoice to build a stock-less return against.
@@ -45,6 +53,19 @@ sales_invoices = {{}}
 for dn_name in dn_names:
     try:
         si = make_sales_invoice(dn_name)
+        if not si.cost_center:
+            si.cost_center = frappe.db.get_value('Delivery Note', dn_name, 'cost_center')
+        if not si.taxes_and_charges:
+            dn_taxes_template = frappe.db.get_value('Delivery Note', dn_name, 'taxes_and_charges')
+            if dn_taxes_template:
+                si.taxes_and_charges = dn_taxes_template
+                dn_taxes = frappe.get_all(
+                    'Sales Taxes and Charges',
+                    filters={{'parent': dn_name, 'parenttype': 'Delivery Note'}},
+                    fields=['charge_type', 'account_head', 'description', 'rate'],
+                )
+                if dn_taxes:
+                    si.set('taxes', dn_taxes)
         si.insert(ignore_permissions=True)
         si.submit()
         created += 1

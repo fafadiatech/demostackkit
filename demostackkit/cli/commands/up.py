@@ -75,10 +75,13 @@ def up(
         from demostackkit.erpnext.bench import BenchClient
 
         bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
+        frontend_bench = BenchClient(container="demostackkit-frontend-1", site=config.site.name)
         apps_pruned = _reconcile_apps_txt(config, bench)
         apps_fetched = _fetch_extra_apps(config, bench)
         site_created = _create_site_if_needed(config, repo_root)
-        _sync_extra_app_assets(config, bench, build=apps_fetched or site_created)
+        _sync_extra_app_assets(
+            config, bench, build=apps_fetched or site_created, frontend_bench=frontend_bench
+        )
         if apps_pruned or apps_fetched or site_created:
             _reload_frappe_services(runner)
         console.print("[bold cyan]Running seeders...[/bold cyan]")
@@ -139,16 +142,25 @@ def _reconcile_apps_txt(config: object, bench: object) -> bool:
     return True
 
 
-def _sync_extra_app_assets(config: object, bench: object, *, build: bool) -> bool:
+def _sync_extra_app_assets(
+    config: object, bench: object, *, build: bool, frontend_bench: object | None = None
+) -> bool:
     """Build and materialize static assets for extra_apps so nginx can serve them.
 
-    Returns True if assets were materialized into sites/assets/.
+    `bench` runs `bench get-app`/`bench build`, but the frontend (nginx) container that
+    serves `/apps` icons is a separate container over the same volume — writes made from
+    `bench`'s container aren't reliably visible there. `frontend_bench` (when given) also
+    materializes assets, run inside the frontend container itself, so the container that
+    serves the files always has its own copy regardless of cross-container visibility.
+
+    Returns True if assets were materialized into sites/assets/ on either container.
     """
     from demostackkit.core.config import IndustryConfig
     from demostackkit.erpnext.bench import BenchClient
 
     assert isinstance(config, IndustryConfig)
     assert isinstance(bench, BenchClient)
+    assert frontend_bench is None or isinstance(frontend_bench, BenchClient)
 
     app_names = [entry.name for entry in config.extra_apps]
     if not app_names:
@@ -159,7 +171,11 @@ def _sync_extra_app_assets(config: object, bench: object, *, build: bool) -> boo
         bench.build_app_assets(app_names)
 
     console.print("[dim]Materializing extra app assets for frontend nginx...[/dim]")
-    if bench.materialize_app_assets(app_names):
+    changed = bench.materialize_app_assets(app_names)
+    if frontend_bench is not None:
+        changed = frontend_bench.materialize_app_assets(app_names) or changed
+
+    if changed:
         console.print("[green]Extra app assets copied into sites/assets/.[/green]")
         return True
 

@@ -55,6 +55,7 @@ def install_app(
     industries_root = get_industries_root()
     config = IndustryRegistry.from_root(industries_root).get(industry)
     bench = BenchClient(container="demostackkit-backend-1", site=config.site.name)
+    frontend_bench = BenchClient(container="demostackkit-frontend-1", site=config.site.name)
 
     if bench.app_exists_in_bench(app):
         console.print(
@@ -71,6 +72,7 @@ def install_app(
     console.print("[dim]Building and materializing app assets for frontend nginx...[/dim]")
     bench.build_app_assets([app])
     bench.materialize_app_assets([app])
+    frontend_bench.materialize_app_assets([app])
 
     repo_root = industries_root.parent
     runner = ComposeRunner(

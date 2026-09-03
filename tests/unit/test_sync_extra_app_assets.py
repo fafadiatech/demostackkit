@@ -56,3 +56,28 @@ def test_sync_returns_false_when_nothing_materialized() -> None:
     bench.materialize_returns = False
 
     assert _sync_extra_app_assets(config, bench, build=False) is False
+
+
+def test_sync_also_materializes_on_frontend_bench() -> None:
+    """The frontend (nginx) container is a separate container over the same volume —
+    writes from `bench`'s container aren't reliably visible there, so it needs its own
+    materialize pass. See issue #30 (missing /apps icons)."""
+    config = _config("electrical")
+    bench = FakeBench()
+    frontend_bench = FakeBench()
+
+    assert (
+        _sync_extra_app_assets(config, bench, build=False, frontend_bench=frontend_bench) is False
+    )
+    assert bench.materialized == ["hrms", "telephony", "helpdesk"]
+    assert frontend_bench.materialized == ["hrms", "telephony", "helpdesk"]
+
+
+def test_sync_changed_if_only_frontend_bench_materializes() -> None:
+    config = _config("electrical")
+    bench = FakeBench()
+    bench.materialize_returns = False
+    frontend_bench = FakeBench()
+    frontend_bench.materialize_returns = True
+
+    assert _sync_extra_app_assets(config, bench, build=False, frontend_bench=frontend_bench) is True

@@ -61,7 +61,16 @@ class SiteConfig(BaseModel):
 class SeedVolumes(BaseModel):
     sales_orders: int = Field(default=50, ge=1)
     purchase_orders: int = Field(default=30, ge=1)
-    production_orders: int = Field(default=25, ge=0)
+    production_orders: int = Field(
+        default=25,
+        ge=0,
+        description=(
+            "Upper bound on Work Orders raised from seeded Production Plans "
+            "(ref #40). Also drives Job Card volume. Set to 0 for trading-only "
+            "demos with no shop-floor execution. Only Manufacturing industries "
+            "with an operation-backed BOM produce any."
+        ),
+    )
     stock_entries: int = Field(default=100, ge=1)
     customers: int = Field(default=20, ge=1)
     suppliers: int = Field(default=15, ge=1)

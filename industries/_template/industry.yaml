@@ -84,7 +84,7 @@ seed:
     suppliers: 15
     sales_orders: 50
     purchase_orders: 30
-    production_orders: 0        # Set to 0 if not used
+    production_orders: 0        # Work Orders from Production Plans; 0 = skip (ref #40)
     stock_entries: 50
   date_range:
     start: "-180d"

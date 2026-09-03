@@ -365,6 +365,24 @@ seed:
     subcontracting_orders: 3
 ```
 
+## Production Plans, Work Orders & Job Cards
+
+Manufacturing industries with an operation-backed BOM also seed the shop-floor execution chain that **Production Analytics** and **Production Plan Summary** read. A shared transaction seeder (`215_production.py`) groups finished goods into submitted **Production Plans** (linking a live Sales Order line when one exists), calls ERPNext's own `Production Plan.make_work_order()`, then walks the resulting **Work Orders** with a deliberate status mix:
+
+| Status | What gets seeded |
+| --- | --- |
+| Completed (~40%) | Material Transfer → every **Job Card** timed & submitted → Manufacture stock entry |
+| In Progress (~35%) | Material Transfer → first half of Job Cards completed |
+| Not Started (~25%) | Work Order submitted only (Job Cards stay Open) |
+
+Job Card time logs carry an Employee (when the industry seeded one) and a realistic time band around each operation's planned minutes, so efficiency charts aren't a flat 100%. Skipped when `production_orders` is 0 (trading-only demos) or when the company has no BOM Operation rows yet.
+
+```yaml
+seed:
+  volumes:
+    production_orders: 25   # Work Orders (and derived Job Cards); 0 to skip
+```
+
 ## Rejection & Returns
 
 Every industry gets a full receiving-through-invoicing chain — Purchase Receipts against submitted Purchase Orders, Purchase Invoices against those receipts, Delivery Notes against submitted Sales Orders, and Sales Invoices against those deliveries — all raised via ERPNext's own mapper functions (`make_purchase_receipt`, `make_purchase_invoice`, `make_delivery_note`, `make_sales_invoice`), the same mappings the corresponding UI buttons use.

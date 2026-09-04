@@ -147,9 +147,22 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
         self._docker_exec(["bash", "-c", cmd])
 
     def app_exists_in_bench(self, app_name: str) -> bool:
-        """Return True if the app directory already exists in the bench."""
+        """Return True if the app is present in the bench and importable.
+
+        A prior `bench get-app` can leave a stale apps/<name> directory behind
+        (e.g. the git clone succeeded but the pip install step was interrupted)
+        without the app ever landing in the bench's virtualenv. Checking only
+        for the directory would then make callers skip re-fetching it, leaving
+        apps.txt pointing at a name Python can't import — which breaks every
+        `bench` command with a ModuleNotFoundError. Check importability instead.
+        """
         result = self._docker_exec(
-            ["bash", "-c", f"test -d {self.bench_path}/apps/{app_name} && echo yes || echo no"]
+            [
+                "bash",
+                "-c",
+                f"{self.bench_path}/env/bin/python -c 'import {app_name}' "
+                "> /dev/null 2>&1 && echo yes || echo no",
+            ]
         )
         return result.strip() == "yes"
 
@@ -271,7 +284,12 @@ fi
         else:
             fetch_target = entry.name
 
-        cmd = f"cd {self.bench_path} && bench get-app {fetch_target}"
+        # --overwrite: callers only reach get_app() after app_exists_in_bench() found
+        # the app missing or not importable, which includes a stale apps/<name>
+        # directory left by a previously interrupted get-app (repo cloned, pip install
+        # never ran). Without --overwrite, bench prompts interactively to overwrite
+        # that directory and aborts immediately since docker exec has no stdin.
+        cmd = f"cd {self.bench_path} && bench get-app {fetch_target} --overwrite"
         if entry.branch and entry.source != "local":
             cmd += f" --branch {entry.branch}"
 

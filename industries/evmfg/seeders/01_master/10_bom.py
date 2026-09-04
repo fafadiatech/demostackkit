@@ -38,7 +38,11 @@ BOMS = [
     {
         "item": "MAT-BRAKE-DISC",
         "qty": 1,
-        "routing": "EV Car Manufacturing Route",
+        # Narrow, single-step routing (not the full EV Car Manufacturing
+        # Route) -- see 09_routing.py docstring for why a sub-assembly can't
+        # reuse the parent's full routing without breaking multi-level Work
+        # Order sequence_id validation.
+        "routing": "Brake Disc Assembly Route",
         "items": [
             {"item_code": "MAT-DISC-ROTOR", "qty": 2, "uom": "Nos", "rate": 3200.0},
             {"item_code": "MAT-BRAKE-PAD", "qty": 1, "uom": "Set", "rate": 900.0},

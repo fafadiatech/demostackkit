@@ -39,7 +39,11 @@ BOMS = [
     {
         "item": "ESA-COIL-LV",
         "qty": 1,
-        "routing": "Transformer Manufacturing Route",
+        # Narrow, single-step routing (not the full Transformer Manufacturing
+        # Route) -- see 09_routing.py docstring for why a sub-assembly can't
+        # reuse the parent's full routing without breaking multi-level Work
+        # Order sequence_id validation.
+        "routing": "Coil Winding Route",
         "items": [
             {"item_code": "ERM-CU-WIRE-15", "qty": 180.0, "uom": "Kg", "rate": 750.0},
             {"item_code": "ERM-INS-PAPER", "qty": 15.0, "uom": "Kg", "rate": 180.0},
@@ -48,7 +52,7 @@ BOMS = [
     {
         "item": "ESA-COIL-HV",
         "qty": 1,
-        "routing": "Transformer Manufacturing Route",
+        "routing": "Coil Winding Route",
         "items": [
             {"item_code": "ERM-CU-WIRE-30", "qty": 45.0, "uom": "Kg", "rate": 740.0},
             {"item_code": "ERM-INS-PAPER", "qty": 10.0, "uom": "Kg", "rate": 180.0},
@@ -57,7 +61,7 @@ BOMS = [
     {
         "item": "ESA-CORE",
         "qty": 1,
-        "routing": "Transformer Manufacturing Route",
+        "routing": "Core Lamination Route",
         "items": [
             {"item_code": "ERM-CRGO-STEEL", "qty": 280.0, "uom": "Kg", "rate": 120.0},
         ],
@@ -65,7 +69,7 @@ BOMS = [
     {
         "item": "ESA-SWGR-BUS",
         "qty": 1,
-        "routing": "Switchgear Manufacturing Route",
+        "routing": "Busbar Assembly Route",
         "items": [
             {"item_code": "ECOMP-BUSBAR-CU", "qty": 6.0, "uom": "Meter", "rate": 620.0},
             {"item_code": "ERM-MS-SHEET", "qty": 5.0, "uom": "Kg", "rate": 65.0},

@@ -99,7 +99,7 @@ class ProductionSeeder(BaseTransactionSeeder):
         jobs = self._build_jobs(plan)
         if not jobs:
             return
-        self._submit(jobs)
+        self._submit(jobs, self.ctx.industry_config.seed.batch_tracking)
 
     # ── Planning ──────────────────────────────────────────────────────────────
 
@@ -352,18 +352,30 @@ print('{_PLAN_MARKER}' + json.dumps(result))
 
     # ── Submit ────────────────────────────────────────────────────────────────
 
-    def _submit(self, jobs: list[dict[str, Any]]) -> None:
-        payload_json = json.dumps({"jobs": jobs})
+    def _submit(self, jobs: list[dict[str, Any]], batch_tracking: Any) -> None:
+        payload_json = json.dumps(
+            {
+                "jobs": jobs,
+                "batch_tracking_enabled": batch_tracking.enabled,
+                "based_on": batch_tracking.based_on,
+            }
+        )
         script = f"""
 import json
 from datetime import datetime, timedelta
 
 from erpnext.manufacturing.doctype.work_order.work_order import make_stock_entry
+from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+    add_serial_batch_ledgers,
+    get_auto_data,
+)
 
 {ITEM_ROW_HELPERS}
 
 payload = json.loads('''{payload_json}''')
 jobs = payload['jobs']
+batch_tracking_enabled = payload['batch_tracking_enabled']
+batch_tracking_based_on = payload['based_on']
 
 # Widen over-production allowance so seeded WOs against SO-linked plans never
 # trip OverProductionError when opening stock / prior WOs already cover demand.
@@ -466,6 +478,59 @@ def complete_job_cards(wo_name, employees, planned_start, complete_count=None):
             print(f'WARN Job Card {{card_row.name}} on {{wo_name}}: {{e}}')
     return completed
 
+_batch_tracking_cache = {{}}
+
+def _tracking_kind(item_code):
+    \"\"\"Return 'batch', 'serial', or None -- cached per item for this run.\"\"\"
+    if item_code not in _batch_tracking_cache:
+        has_batch_no, has_serial_no = frappe.get_cached_value(
+            'Item', item_code, ['has_batch_no', 'has_serial_no']
+        )
+        kind = 'serial' if has_serial_no else ('batch' if has_batch_no else None)
+        _batch_tracking_cache[item_code] = kind
+    return _batch_tracking_cache[item_code]
+
+def _select_outward_lots(se):
+    \"\"\"Attach an explicit, real (already-in-stock) Batch/Serial selection to
+    every outward (consumption) row of a submitted-but-not-yet Stock Entry.
+
+    ERPNext auto-creates a new lot on an *incoming* movement (the FG output
+    row of a Manufacture entry) the moment the Item carries a batch/serial
+    naming series -- no action needed here for those rows. An *outward* row
+    (s_warehouse set) never fabricates a lot on its own, so this picks a real
+    one via the same FIFO/FEFO auto-fetch the 'Add Serial / Batch No' button
+    in the UI uses, then links it back onto the row explicitly (the bundle
+    is NOT auto-linked by add_serial_batch_ledgers -- confirmed by spiking
+    this against a live site before writing this seeder).
+    \"\"\"
+    for row in se.items:
+        if not row.s_warehouse:
+            continue
+        kind = _tracking_kind(row.item_code)
+        if not kind:
+            continue
+        row.is_rejected = 0  # Stock Entry Detail has no such field; the
+        # bundle-creation helper reads it unconditionally regardless.
+        data = get_auto_data(
+            item_code=row.item_code,
+            warehouse=row.s_warehouse,
+            qty=abs(float(row.qty or 0)),
+            has_batch_no=1 if kind == 'batch' else 0,
+            has_serial_no=1 if kind == 'serial' else 0,
+            based_on=batch_tracking_based_on,
+            posting_date=se.posting_date,
+            posting_time=se.posting_time,
+        )
+        if not data:
+            print(f'WARN no {{kind}} available for {{row.item_code}} in {{row.s_warehouse}}')
+            continue
+        entries = [
+            {{'batch_no': d.get('batch_no'), 'serial_no': d.get('serial_no'), 'qty': d.get('qty')}}
+            for d in data
+        ]
+        bundle_doc = add_serial_batch_ledgers(entries, row, se, warehouse=row.s_warehouse)
+        frappe.db.set_value(row.doctype, row.name, 'serial_and_batch_bundle', bundle_doc.name)
+
 def apply_stock_entry(wo_name, purpose, qty, posting_date):
     se_dict = make_stock_entry(wo_name, purpose, qty=qty)
     se = frappe.get_doc(se_dict)
@@ -473,6 +538,9 @@ def apply_stock_entry(wo_name, purpose, qty, posting_date):
     se.posting_date = posting_date
     se.flags.ignore_permissions = True
     se.insert(ignore_permissions=True)
+    if batch_tracking_enabled:
+        _select_outward_lots(se)
+        se.reload()
     se.submit()
     return se.name
 

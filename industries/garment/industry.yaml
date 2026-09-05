@@ -80,6 +80,11 @@ seed:
     warehouse: "Raw Material Store"
     fg_warehouse: "Finished Goods Store"
     qty_scale: 1.0
+  batch_tracking:
+    enabled: true
+    # Garments ship by lot/size run, not individually-serialized units --
+    # batch-track the finished good too rather than serializing it.
+    serialize_top_level_fg: false
 
 # ── Fixture Files ─────────────────────────────────────────────────────────────
 fixtures:

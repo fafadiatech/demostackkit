@@ -251,7 +251,7 @@ BOMS = [
 
 class BOMSeeder(BaseMasterSeeder):
     label = "Bill of Materials"
-    priority = 100
+    priority = 68
 
     def run(self) -> None:
         company_name = self.ctx.industry_config.company.name

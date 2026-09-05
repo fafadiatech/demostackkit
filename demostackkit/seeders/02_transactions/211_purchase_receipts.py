@@ -34,6 +34,14 @@ than using unseeded randomness there.
 Priority 211 — right after the industry Purchase Order seeder (210), well
 ahead of Quality Inspections (230) since this seeder creates its own linked
 inspections independently.
+
+When `seed.batch_tracking.enabled` is true (ref #4), receiving RM items
+that `86_batch_tracking.py` flagged with `has_batch_no`/`create_new_batch`
+auto-creates a new Batch on submit with zero extra code (ERPNext's own
+incoming-movement behavior) — this seeder's only addition is a cosmetic
+"Vendor Batch" stamp on each such auto-created Batch, recording the
+supplier's own lot identity; forward/backward traceability itself is
+carried entirely by the Batch/Serial ledger linkage, not by this field.
 """
 
 from __future__ import annotations
@@ -67,6 +75,7 @@ class PurchaseReceiptSeeder(BaseTransactionSeeder):
             "seed": self.ctx.random.randint(0, 2**31 - 1),
             "rejection_rate": _REJECTION_RATE,
             "quality_gated": "Quality Management" in modules,
+            "batch_tracking_enabled": self.ctx.industry_config.seed.batch_tracking.enabled,
         }
         payload_json = json.dumps(payload)
 
@@ -80,6 +89,33 @@ payload = json.loads('''{payload_json}''')
 rng = _random_mod.Random(payload['seed'])
 quality_gated = payload['quality_gated']
 rejection_rate = payload['rejection_rate']
+batch_tracking_enabled = payload['batch_tracking_enabled']
+
+def stamp_vendor_batch(pr):
+    \"\"\"Record the supplier's own lot identity on every Batch ERPNext just
+    auto-created for this receipt (has_batch_no + create_new_batch on the
+    Item makes that automatic on submit -- see 86_batch_tracking.py). Purely
+    cosmetic/informational: forward/backward traceability is carried entirely
+    by the Batch/Serial ledger linkage, not by this field.
+    \"\"\"
+    batch_names = set()
+    for sbb_name in frappe.get_all(
+        'Serial and Batch Bundle',
+        filters={{'voucher_type': 'Purchase Receipt', 'voucher_no': pr.name}},
+        pluck='name',
+    ):
+        batch_names.update(
+            frappe.get_all(
+                'Serial and Batch Entry',
+                filters={{'parent': sbb_name, 'batch_no': ['is', 'set']}},
+                pluck='batch_no',
+            )
+        )
+    for batch_no in batch_names:
+        frappe.db.set_value('Batch', batch_no, {{
+            'supplier': pr.supplier,
+            'description': f'Vendor Batch: VB-{{rng.randint(100000, 999999)}}',
+        }})
 
 po_names = frappe.get_all('Purchase Order', filters={{'docstatus': 1}}, pluck='name')
 rng.shuffle(po_names)
@@ -120,6 +156,9 @@ for po_name in po_names:
         pr.submit()
         created += 1
         receipt_names.append(pr.name)
+
+        if batch_tracking_enabled:
+            stamp_vendor_batch(pr)
 
         if quality_gated:
             for item in pr.items:

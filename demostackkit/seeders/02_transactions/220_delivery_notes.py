@@ -82,12 +82,15 @@ class DeliveryNoteSeeder(BaseTransactionSeeder):
         if not {"Selling", "Stock"}.issubset(modules):
             return
 
+        batch_tracking = self.ctx.industry_config.seed.batch_tracking
         payload = {
             "volume": self.volume,
             "seed": self.ctx.random.randint(0, 2**31 - 1),
             "partial_share": _PARTIAL_SHARE,
             "partial_qty_min": _PARTIAL_QTY_MIN,
             "partial_qty_max": _PARTIAL_QTY_MAX,
+            "batch_tracking_enabled": batch_tracking.enabled,
+            "based_on": batch_tracking.based_on,
         }
         payload_json = json.dumps(payload)
 
@@ -96,9 +99,15 @@ import json
 import random as _random_mod
 
 from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
+from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+    add_serial_batch_ledgers,
+    get_auto_data,
+)
 
 payload = json.loads('''{payload_json}''')
 rng = _random_mod.Random(payload['seed'])
+batch_tracking_enabled = payload['batch_tracking_enabled']
+batch_tracking_based_on = payload['based_on']
 
 so_names = frappe.get_all('Sales Order', filters={{'docstatus': 1}}, pluck='name')
 rng.shuffle(so_names)
@@ -139,6 +148,51 @@ def cap_finished_goods(dn):
     dn.set('items', kept)
 
 
+_batch_tracking_cache = {{}}
+
+def _tracking_kind(item_code):
+    \"\"\"Return 'batch', 'serial', or None -- cached per item for this run.\"\"\"
+    if item_code not in _batch_tracking_cache:
+        has_batch_no, has_serial_no = frappe.get_cached_value(
+            'Item', item_code, ['has_batch_no', 'has_serial_no']
+        )
+        kind = 'serial' if has_serial_no else ('batch' if has_batch_no else None)
+        _batch_tracking_cache[item_code] = kind
+    return _batch_tracking_cache[item_code]
+
+def _select_outward_lots(dn):
+    \"\"\"Attach an explicit, real (already-in-stock) Batch/Serial selection to
+    every shipped finished-good row -- a Delivery Note is always an outward
+    move, so this never fabricates a lot, only picks a real one via FIFO/FEFO
+    (same recipe as 215_production.py's _select_outward_lots, spiked against
+    a live site before either was written).
+    \"\"\"
+    for row in dn.items:
+        kind = _tracking_kind(row.item_code)
+        if not kind:
+            continue
+        row.is_rejected = 0  # Delivery Note Item has no such field; the
+        # bundle-creation helper reads it unconditionally regardless.
+        data = get_auto_data(
+            item_code=row.item_code,
+            warehouse=row.warehouse,
+            qty=abs(float(row.qty or 0)),
+            has_batch_no=1 if kind == 'batch' else 0,
+            has_serial_no=1 if kind == 'serial' else 0,
+            based_on=batch_tracking_based_on,
+            posting_date=dn.posting_date,
+            posting_time=dn.posting_time,
+        )
+        if not data:
+            print(f'WARN no {{kind}} available for {{row.item_code}} in {{row.warehouse}}')
+            continue
+        entries = [
+            {{'batch_no': d.get('batch_no'), 'serial_no': d.get('serial_no'), 'qty': d.get('qty')}}
+            for d in data
+        ]
+        bundle_doc = add_serial_batch_ledgers(entries, row, dn, warehouse=row.warehouse)
+        frappe.db.set_value(row.doctype, row.name, 'serial_and_batch_bundle', bundle_doc.name)
+
 today = frappe.utils.getdate()
 created = errors = 0
 dn_names = []
@@ -160,6 +214,9 @@ for so_name in so_names:
         dn.set_posting_time = 1
         dn.posting_date = min(so_delivery_date, today) if so_delivery_date else today
         dn.insert(ignore_permissions=True)
+        if batch_tracking_enabled:
+            _select_outward_lots(dn)
+            dn.reload()
         dn.submit()
         created += 1
         dn_names.append(dn.name)

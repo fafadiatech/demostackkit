@@ -265,3 +265,77 @@ class TestIndustryConfigValidation:
         assert config.slug == "garment"
         assert config.company.currency == "INR"
         assert len(config.users) > 0
+
+
+@pytest.mark.unit
+class TestBatchTrackingConfig:
+    """ref #4: forward/backward traceability config defaults."""
+
+    def _minimal(self, tmp_path: Path, **seed_overrides: dict) -> Path:
+        data = {
+            "name": "Test",
+            "slug": "test",
+            "company": {
+                "name": "Test Co",
+                "abbr": "TC",
+                "currency": "USD",
+                "country": "United States",
+            },
+            "site": {"name": "test.localhost"},
+        }
+        if seed_overrides:
+            data["seed"] = seed_overrides
+        return _write_yaml(tmp_path, data)
+
+    def test_defaults_are_off_and_serialize_top_level_fg(self, tmp_path: Path) -> None:
+        config = load_industry_config(self._minimal(tmp_path))
+        bt = config.seed.batch_tracking
+        assert bt.enabled is False
+        assert bt.serialize_top_level_fg is True
+        assert bt.based_on == "FIFO"
+
+    def test_industry_yaml_can_override_all_fields(self, tmp_path: Path) -> None:
+        path = self._minimal(
+            tmp_path,
+            batch_tracking={
+                "enabled": True,
+                "serialize_top_level_fg": False,
+                "based_on": "Expiry",
+            },
+        )
+        config = load_industry_config(path)
+        bt = config.seed.batch_tracking
+        assert bt.enabled is True
+        assert bt.serialize_top_level_fg is False
+        assert bt.based_on == "Expiry"
+
+    def test_invalid_based_on_rejected(self, tmp_path: Path) -> None:
+        path = self._minimal(tmp_path, batch_tracking={"based_on": "LIFO"})
+        with pytest.raises(Exception):
+            load_industry_config(path)
+
+    @pytest.mark.parametrize(
+        "slug",
+        [
+            "chemical",
+            "abrasives",
+            "crockery",
+            "drones",
+            "electrical",
+            "garment",
+            "evmfg",
+            "jewellery",
+            "ingredientmfg",
+            "print3d",
+            "solar",
+        ],
+    )
+    def test_every_manufacturing_industry_enables_batch_tracking(self, slug: str) -> None:
+        """ref #4 rollout: all 11 Manufacturing industries ship with this on."""
+        repo_root = Path(__file__).parent.parent.parent
+        yaml_path = repo_root / "industries" / slug / "industry.yaml"
+        if not yaml_path.exists():
+            pytest.skip(f"{slug} industry.yaml not found")
+        config = load_industry_config(yaml_path)
+        assert "Manufacturing" in config.modules
+        assert config.seed.batch_tracking.enabled is True

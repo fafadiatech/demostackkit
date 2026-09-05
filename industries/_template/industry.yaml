@@ -97,6 +97,15 @@ seed:
     warehouse: "Stores"              # purchased/raw items (' - ABBR' appended)
     fg_warehouse: "Finished Goods"   # items with a default BOM
     qty_scale: 1.0                   # < 1 for small retail, > 1 for high-volume
+  # Forward/backward Batch & Serial No traceability (ref #4). Only meaningful
+  # for Manufacturing-module industries with an operation-backed BOM.
+  batch_tracking:
+    enabled: false                  # true = raw materials get Batch No, top-level
+                                     # finished goods get Serial No (see below),
+                                     # tracked forward through Purchase Receipts,
+                                     # Work Orders and Delivery Notes
+    serialize_top_level_fg: true     # false = batch-track top-level FGs too
+    based_on: "FIFO"                 # or "Expiry" (FEFO)
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 fixtures:

@@ -74,6 +74,8 @@ seed:
     warehouse: "Vault"
     fg_warehouse: "Finished Goods Vault"
     qty_scale: 1.0
+  batch_tracking:
+    enabled: true
 
 # ── Fixture Files ─────────────────────────────────────────────────────────────
 fixtures:

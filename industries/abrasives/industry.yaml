@@ -77,6 +77,11 @@ seed:
     warehouse: "Raw Material Store"
     fg_warehouse: "Finished Goods Store"
     qty_scale: 1.0
+  batch_tracking:
+    enabled: true
+    # Abrasives ship as lots (wheels/sheets by the box), not individually-
+    # serialized units -- batch-track the finished good too.
+    serialize_top_level_fg: false
 
 data:
   items: "data/items.csv"

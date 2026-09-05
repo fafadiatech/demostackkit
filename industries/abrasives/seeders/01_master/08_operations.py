@@ -49,7 +49,7 @@ OPERATIONS = [
 
 class OperationSeeder(BaseMasterSeeder):
     label = "Operations"
-    priority = 80
+    priority = 64
 
     def run(self) -> None:
         ops_json = json.dumps(OPERATIONS)

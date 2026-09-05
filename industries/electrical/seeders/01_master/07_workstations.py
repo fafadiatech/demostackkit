@@ -61,7 +61,7 @@ WORKSTATIONS = [
 
 class WorkstationSeeder(BaseMasterSeeder):
     label = "Workstations"
-    priority = 70
+    priority = 62
 
     def run(self) -> None:
         ws_json = json.dumps(WORKSTATIONS)

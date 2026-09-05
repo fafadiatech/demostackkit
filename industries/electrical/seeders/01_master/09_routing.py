@@ -123,7 +123,7 @@ BUSBAR_ASSEMBLY_OPERATIONS = [
 
 class RoutingSeeder(BaseMasterSeeder):
     label = "Routings (Transformer & Switchgear)"
-    priority = 90
+    priority = 66
 
     def run(self) -> None:
         routings = [

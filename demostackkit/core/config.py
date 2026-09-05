@@ -144,6 +144,38 @@ class OpeningStockConfig(BaseModel):
     )
 
 
+class BatchTrackingConfig(BaseModel):
+    """Forward/backward raw-material -> finished-good traceability (ref #4).
+
+    When enabled, a new shared master seeder flags every item referenced by a
+    submitted default BOM for a Manufacturing-module industry: components/
+    sub-assemblies get Batch No tracking, top-level finished goods get either
+    Serial No or Batch No tracking (see ``serialize_top_level_fg``). Purchase
+    Receipts and Work Order Manufacture entries then auto-create lots on
+    receipt/production, and Work Order material consumption plus Delivery
+    Notes explicitly select real, already-in-stock batches/serials (FIFO or
+    FEFO) rather than fabricating new ones on an outward move.
+    """
+
+    enabled: bool = Field(
+        default=False,
+        description="Track raw-material batches/serials forward through manufacturing to Delivery Notes",
+    )
+    serialize_top_level_fg: bool = Field(
+        default=True,
+        description=(
+            "Serial-track (not batch-track) top-level finished goods with an "
+            "operation-backed BOM, for individually-identifiable end products "
+            "(e.g. VIN-style). When false, top-level FGs are batch-tracked "
+            "like every other manufactured item."
+        ),
+    )
+    based_on: Literal["FIFO", "Expiry"] = Field(
+        default="FIFO",
+        description="Selection strategy for outward batch/serial auto-fetch",
+    )
+
+
 class SeedDateRange(BaseModel):
     start: str = Field(
         default="-180d", description="Relative date like -180d or absolute YYYY-MM-DD"
@@ -163,6 +195,7 @@ class SeedConfig(BaseModel):
     volumes: SeedVolumes = Field(default_factory=SeedVolumes)
     date_range: SeedDateRange = Field(default_factory=SeedDateRange)
     opening_stock: OpeningStockConfig = Field(default_factory=OpeningStockConfig)
+    batch_tracking: BatchTrackingConfig = Field(default_factory=BatchTrackingConfig)
 
 
 class FixturesConfig(BaseModel):

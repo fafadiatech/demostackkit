@@ -71,6 +71,8 @@ seed:
     warehouse: "Raw Material Store"
     fg_warehouse: "Finished Goods Store"
     qty_scale: 1.0
+  batch_tracking:
+    enabled: true
 
 data:
   items: "data/items.csv"

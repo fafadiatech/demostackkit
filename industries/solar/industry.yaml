@@ -76,6 +76,8 @@ seed:
     enabled: true
     warehouse: "Site Materials"
     qty_scale: 1.0
+  batch_tracking:
+    enabled: true
 
 # ── Fixture Files ─────────────────────────────────────────────────────────────
 fixtures:

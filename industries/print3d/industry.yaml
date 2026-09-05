@@ -71,6 +71,11 @@ seed:
     warehouse: "Raw Material Store"
     fg_warehouse: "Finished Goods Store"
     qty_scale: 0.04
+  batch_tracking:
+    enabled: true
+    # Print-on-demand parts ship by print-run lot, not individually-
+    # serialized units -- batch-track the finished good too.
+    serialize_top_level_fg: false
 
 data:
   items: "data/items.csv"

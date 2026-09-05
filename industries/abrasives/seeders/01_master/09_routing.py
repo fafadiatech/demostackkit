@@ -43,7 +43,7 @@ ROUTING_OPERATIONS = [
 
 class RoutingSeeder(BaseMasterSeeder):
     label = "Routing"
-    priority = 90
+    priority = 66
 
     def run(self) -> None:
         ops_json = json.dumps(ROUTING_OPERATIONS)

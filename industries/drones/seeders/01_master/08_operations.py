@@ -11,6 +11,13 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Motor RPM Test (RPM)", 900, 1100),
+    ("Battery Voltage (V)", 14.5, 16.8),
+    ("Hover Stability Score (0-10)", 7, 10),
+    ("Signal Range Test (m)", 800, 1500),
+]
+
 OPERATIONS = [
     {
         "name": "PCB Soldering & Testing",
@@ -86,3 +93,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "QC Final Inspection")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

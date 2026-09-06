@@ -14,6 +14,13 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Battery Cell Voltage (V)", 3.6, 4.2),
+    ("Insulation Resistance (MOhm)", 1.0, 100.0),
+    ("Motor Efficiency (%)", 85.0, 98.0),
+    ("Brake Efficiency (%)", 95.0, 100.0),
+]
+
 OPERATIONS = [
     {
         "name": "Battery Cell Assembly",
@@ -101,3 +108,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "PDI & Road Test")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

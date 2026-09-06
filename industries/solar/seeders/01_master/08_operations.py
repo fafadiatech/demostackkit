@@ -11,6 +11,13 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Efficiency %", 18, 22),
+    ("Open Circuit Voltage (V)", 36, 42),
+    ("Short Circuit Current (A)", 8, 12),
+    ("Power Output (W)", 300, 400),
+]
+
 OPERATIONS = [
     {
         "name": "Panel Layout Planning",
@@ -80,3 +87,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "Solar QC Sign-off")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

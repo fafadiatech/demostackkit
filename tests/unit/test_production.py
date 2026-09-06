@@ -257,6 +257,8 @@ def _exec_submit_script(
     script: str,
     jobs: list[dict],
     item_tracking: dict[str, tuple[int, int]] | None = None,
+    qc_templates: dict[str, str] | None = None,
+    qc_template_params: dict[str, list[tuple[str, float, float]]] | None = None,
 ) -> dict[str, Any]:
     """Run the submit half against fakes; assert on resulting counters / calls.
 
@@ -264,7 +266,15 @@ def _exec_submit_script(
     the fake `frappe.get_cached_value` the generated script's `_tracking_kind`
     helper calls -- only meaningful when the script was generated with
     `batch_tracking_enabled=True`.
+
+    `qc_templates` maps an Operation name to a Quality Inspection Template name
+    (ref #1) -- consumed by the fake `frappe.db.get_value` the generated
+    script's `_create_job_card_inspection` helper calls to decide whether a
+    Job Card's Operation carries a checklist at all. `qc_template_params`
+    supplies that template's (specification, min_value, max_value) rows.
     """
+    qc_templates = qc_templates or {}
+    qc_template_params = qc_template_params or {}
     created: dict[str, list[Any]] = {
         "Production Plan": [],
         "Work Order": [],
@@ -377,6 +387,12 @@ def _exec_submit_script(
             return [SimpleNamespace(time_in_mins=45)]
         if doctype == "Bin":
             return [SimpleNamespace(warehouse="Stores - AG", actual_qty=100)]
+        if doctype == "Item Quality Inspection Parameter":
+            template = filters.get("parent")
+            return [
+                SimpleNamespace(specification=spec, min_value=lo, max_value=hi)
+                for spec, lo, hi in qc_template_params.get(template, [])
+            ]
         return []
 
     _row_counter = [0]
@@ -434,6 +450,14 @@ def _exec_submit_script(
     fake_sabb_module.get_auto_data = fake_get_auto_data  # type: ignore[attr-defined]
     fake_sabb_module.add_serial_batch_ledgers = fake_add_serial_batch_ledgers  # type: ignore[attr-defined]
 
+    assign_to_calls: list[dict[str, Any]] = []
+
+    def fake_assign_to_add(args: dict[str, Any]) -> None:
+        assign_to_calls.append(args)
+
+    fake_assign_module = types.ModuleType("frappe.desk.form.assign_to")
+    fake_assign_module.add = fake_assign_to_add  # type: ignore[attr-defined]
+
     # Ensure parent packages exist for the imports inside the script.
     for pkg in (
         "erpnext",
@@ -443,12 +467,16 @@ def _exec_submit_script(
         "erpnext.stock",
         "erpnext.stock.doctype",
         "erpnext.stock.doctype.serial_and_batch_bundle",
+        "frappe",
+        "frappe.desk",
+        "frappe.desk.form",
     ):
         sys.modules.setdefault(pkg, types.ModuleType(pkg))
     sys.modules["erpnext.manufacturing.doctype.work_order.work_order"] = fake_wo_module
     sys.modules["erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle"] = (
         fake_sabb_module
     )
+    sys.modules["frappe.desk.form.assign_to"] = fake_assign_module
 
     def fake_get_value(
         doctype: str, filters: Any = None, fieldname: Any = None, **kwargs: Any
@@ -470,6 +498,8 @@ def _exec_submit_script(
             return 0  # must_be_whole_number
         if doctype == "Item" and fieldname == "stock_uom":
             return "Nos"
+        if doctype == "Operation" and fieldname == "quality_inspection_template":
+            return qc_templates.get(filters)
         return None
 
     def fake_get_cached_value(doctype: str, name: str, fieldname: Any = None) -> Any:
@@ -501,6 +531,7 @@ def _exec_submit_script(
     finally:
         del sys.modules["erpnext.manufacturing.doctype.work_order.work_order"]
         del sys.modules["erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle"]
+        del sys.modules["frappe.desk.form.assign_to"]
 
     return {
         "production_plans": len(created.get("Production Plan", [])),
@@ -509,6 +540,8 @@ def _exec_submit_script(
         "job_cards_submitted": sum(
             1 for cards in job_cards_by_wo.values() for c in cards if c.docstatus == 1
         ),
+        "quality_inspections": created.get("Quality Inspection", []),
+        "assign_to_calls": assign_to_calls,
         "stock_purposes": stock_purposes,
         "ms_over_production": ms.over_production_allowance_percentage,
     }
@@ -542,6 +575,42 @@ class TestProductionSeederBehaviour:
         assert "Material Transfer for Manufacture" in result["stock_purposes"]
         assert "Manufacture" in result["stock_purposes"]
         assert result["ms_over_production"] >= 100
+
+    def test_job_card_inspection_created_and_assigned_when_operation_has_template(self) -> None:
+        """ref #1: a Job Card on an Operation carrying a Quality Inspection
+        Template must auto-create a linked In Process Quality Inspection and
+        assign it to a seeded employee's user login."""
+        plan = json.loads(json.dumps(_PLAN))
+        plan["companies"][0]["employee_users"] = ["mohan.kulkarni@electrical.demo"]
+
+        _, submit_script = _run(
+            REPO_ROOT / "industries" / "garment", plan=plan, volume_override=2, seed=5
+        )
+        payload = _payload_from_submit(submit_script)
+        for job in payload["jobs"]:
+            for row in job["items"]:
+                row["status"] = "completed"
+                row["qty"] = 1
+
+        prefix, rest = submit_script.split("payload = json.loads('''", 1)
+        _, suffix = rest.split("''')", 1)
+        mutated = prefix + "payload = json.loads('''" + json.dumps(payload) + "''')" + suffix
+
+        result = _exec_submit_script(
+            mutated,
+            payload["jobs"],
+            qc_templates={"Sew": "Sew QC Template"},
+            qc_template_params={"Sew QC Template": [("Stitch Strength (N)", 10.0, 20.0)]},
+        )
+        assert result["job_cards_submitted"] >= 1
+        assert len(result["quality_inspections"]) >= 1
+        qi = result["quality_inspections"][0]
+        assert qi.inspection_type == "In Process"
+        assert qi.reference_type == "Job Card"
+        assert qi.quality_inspection_template == "Sew QC Template"
+        assert qi.readings and qi.readings[0]["specification"] == "Stitch Strength (N)"
+        assert result["assign_to_calls"], "Quality Inspection was never assigned to anyone"
+        assert result["assign_to_calls"][0]["assign_to"] == ["mohan.kulkarni@electrical.demo"]
 
 
 @pytest.mark.unit

@@ -13,6 +13,13 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Dimensional Accuracy (mm)", 0.0, 0.5),
+    ("Surface Roughness Ra (um)", 0.0, 12.0),
+    ("Layer Adhesion (1-5)", 3.0, 5.0),
+    ("Print Completion (%)", 95.0, 100.0),
+]
+
 OPERATIONS = [
     {
         "name": "FDM Printing",
@@ -94,3 +101,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "Print QC Inspection")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

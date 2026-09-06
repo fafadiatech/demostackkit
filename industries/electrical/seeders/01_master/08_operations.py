@@ -17,6 +17,14 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Turns Ratio Error (%)", 0.0, 0.5),
+    ("Insulation Resistance (MOhm)", 200.0, 10000.0),
+    ("Oil Breakdown Voltage (kV)", 40.0, 80.0),
+    ("Load Loss (W)", 0.0, 2000.0),
+    ("HV Withstand Test Pass (0/1)", 0.9, 1.0),
+]
+
 OPERATIONS = [
     {
         "name": "Coil Winding",
@@ -98,3 +106,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "Final Inspection & Packing")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

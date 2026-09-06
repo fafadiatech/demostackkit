@@ -11,6 +11,13 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Purity (Karat)", 18, 24),
+    ("Weight Tolerance (g)", 0, 0.05),
+    ("Stone Clarity (grade)", 1, 3),
+    ("Surface Finish (grade)", 1, 5),
+]
+
 OPERATIONS = [
     {
         "name": "Metal Melting",
@@ -86,3 +93,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "Quality Hallmarking")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

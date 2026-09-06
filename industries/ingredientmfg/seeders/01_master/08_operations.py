@@ -11,6 +11,14 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Purity %", 95, 99.9),
+    ("Moisture Content %", 0, 6.0),
+    ("Active Compound Assay %", 90, 105),
+    ("Microbial Load (CFU/g)", 0, 1000),
+    ("Heavy Metals (ppm)", 0, 10),
+]
+
 OPERATIONS = [
     {
         "name": "Raw Material Weighing & Dosing",
@@ -80,3 +88,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "Quality Testing")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

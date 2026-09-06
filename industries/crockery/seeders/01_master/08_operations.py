@@ -11,6 +11,13 @@ import json
 
 from demostackkit.seeder.base import BaseMasterSeeder
 
+_QC_INSPECTION_PARAMETERS = [
+    ("Water Absorption % (ceramics)", 0, 3),
+    ("Glaze Thickness (microns)", 80, 200),
+    ("Thermal Shock Resistance (cycles)", 10, 30),
+    ("Dimensional Accuracy (mm)", 0, 1),
+]
+
 OPERATIONS = [
     {
         "name": "Clay Preparation & Wedging",
@@ -92,3 +99,5 @@ print(f'Operations: created={{created}}, skipped={{skipped}}')
 """
         self._exec(script, timeout=120)
         self.ctx.cache_set("operation_names", [op["name"] for op in OPERATIONS])
+        self.ctx.cache_set("qc_operation_name", "QC Inspection")
+        self.ctx.cache_set("qc_inspection_parameters", _QC_INSPECTION_PARAMETERS)

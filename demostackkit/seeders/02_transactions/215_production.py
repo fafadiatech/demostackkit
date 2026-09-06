@@ -66,6 +66,10 @@ _QTY_MIN, _QTY_MAX = 1, 5
 #: under / on / over so Efficiency charts aren't a flat 100%.
 _TIME_FACTOR_MIN, _TIME_FACTOR_MAX = 0.75, 1.35
 
+#: Pass rate for the auto-created Job Card Inspection Checklist (ref #1) —
+#: matches the 85% used by the per-industry 03_quality_inspections.py seeders.
+_QI_PASS_RATE_PCT = 85
+
 
 class ProductionSeeder(BaseTransactionSeeder):
     label = "Production Plans & Work Orders"
@@ -168,6 +172,7 @@ class ProductionSeeder(BaseTransactionSeeder):
                     "scrap_warehouse": company["scrap_warehouse"],
                     "source_warehouse": company["source_warehouse"],
                     "employees": company.get("employees", []),
+                    "employee_users": company.get("employee_users", []),
                     "items": rows,
                 }
             )
@@ -306,12 +311,14 @@ for c in payload['companies']:
                     'sales_order_item': row.sales_order_item,
                 }})
 
-    employees = frappe.get_all(
+    employee_rows = frappe.get_all(
         'Employee',
         filters={{'company': company, 'status': 'Active'}},
-        pluck='name',
+        fields=['name', 'user_id'],
         limit_page_length=40,
     )
+    employees = [e.name for e in employee_rows]
+    employee_users = [e.user_id for e in employee_rows if e.user_id]
 
     result['companies'].append({{
         'name': company,
@@ -330,6 +337,7 @@ for c in payload['companies']:
             fuzzy_tokens=['stores', 'raw'],
         ),
         'employees': employees,
+        'employee_users': employee_users,
         'items': [
             {{
                 'item_code': b.item,
@@ -369,6 +377,7 @@ from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle impor
     add_serial_batch_ledgers,
     get_auto_data,
 )
+from frappe.desk.form.assign_to import add as assign_to_add
 
 {ITEM_ROW_HELPERS}
 
@@ -419,7 +428,9 @@ def ensure_settings_warehouses(wip, fg, scrap):
         ms_doc.flags.ignore_permissions = True
         ms_doc.save(ignore_permissions=True)
 
-def complete_job_cards(wo_name, employees, planned_start, complete_count=None):
+def complete_job_cards(
+    wo_name, employees, employee_users, planned_start, company, production_item, complete_count=None
+):
     cards = frappe.get_all(
         'Job Card',
         filters={{'work_order': wo_name, 'docstatus': 0}},
@@ -476,7 +487,85 @@ def complete_job_cards(wo_name, employees, planned_start, complete_count=None):
             completed += 1
         except Exception as e:
             print(f'WARN Job Card {{card_row.name}} on {{wo_name}}: {{e}}')
+            continue
+
+        try:
+            _create_job_card_inspection(
+                jc, idx, op_end, company, production_item, employee_users
+            )
+        except Exception as e:
+            print(f'WARN Quality Inspection for Job Card {{jc.name}}: {{e}}')
     return completed
+
+def _create_job_card_inspection(jc, idx, op_end, company, production_item, employee_users):
+    \"\"\"ref #1: auto-create the Job Card's Inspection Checklist and assign it.
+
+    Only fires when the Job Card's Operation carries a Quality Inspection
+    Template (seeded by the shared 95_quality_inspection_templates.py) --
+    most Operations don't, so most Job Cards are untouched by this.
+    \"\"\"
+    template = frappe.db.get_value('Operation', jc.operation, 'quality_inspection_template')
+    if not template:
+        return
+
+    params = frappe.get_all(
+        'Item Quality Inspection Parameter',
+        filters={{'parent': template, 'parenttype': 'Quality Inspection Template'}},
+        fields=['specification', 'min_value', 'max_value'],
+        order_by='idx asc',
+    )
+    if not params:
+        return
+
+    # Deterministic-ish pass/fail and reading spread from the Job Card index --
+    # same trick as the time-log factor above, no host-side RNG in the container.
+    accepted = ((idx * 13) % 100) < {_QI_PASS_RATE_PCT}
+    overall_status = 'Accepted' if accepted else 'Rejected'
+    readings = []
+    for p_idx, p in enumerate(params):
+        lo, hi = float(p.min_value or 0), float(p.max_value or 1)
+        fail_this_row = (not accepted) and p_idx == len(params) - 1
+        if fail_this_row:
+            value = hi + (hi - lo) * 0.1
+            r_status = 'Rejected'
+        else:
+            spread = ((idx * 7 + p_idx * 11) % 97) / 97.0
+            value = lo + spread * (hi - lo)
+            r_status = 'Accepted'
+        readings.append({{
+            'specification': p.specification,
+            'min_value': lo,
+            'max_value': hi,
+            'reading_1': str(round(value, 2)),
+            'status': r_status,
+        }})
+
+    qi = frappe.get_doc({{
+        'doctype': 'Quality Inspection',
+        'company': company,
+        'inspection_type': 'In Process',
+        'reference_type': 'Job Card',
+        'reference_name': jc.name,
+        'item_code': production_item,
+        'quality_inspection_template': template,
+        'sample_size': 1,
+        'report_date': op_end.date().isoformat(),
+        'status': overall_status,
+        'inspected_by': 'Administrator',
+        'readings': readings,
+    }})
+    qi.flags.ignore_mandatory = True
+    qi.insert(ignore_permissions=True)
+    qi.submit()
+    frappe.db.set_value('Job Card', jc.name, 'quality_inspection', qi.name)
+
+    if employee_users:
+        assign_to_add({{
+            'assign_to': [employee_users[idx % len(employee_users)]],
+            'doctype': 'Quality Inspection',
+            'name': qi.name,
+            'description': f'Review {{jc.operation}} inspection for {{jc.name}}',
+        }})
 
 _batch_tracking_cache = {{}}
 
@@ -652,7 +741,10 @@ for job in jobs:
                     done = complete_job_cards(
                         wo.name,
                         job.get('employees') or [],
+                        job.get('employee_users') or [],
                         planned_start,
+                        company,
+                        wo.production_item,
                         complete_count=max(1, ops_count // 2),
                     )
                     jc_completed += done
@@ -660,7 +752,13 @@ for job in jobs:
 
                 # completed
                 done = complete_job_cards(
-                    wo.name, job.get('employees') or [], planned_start, complete_count=None
+                    wo.name,
+                    job.get('employees') or [],
+                    job.get('employee_users') or [],
+                    planned_start,
+                    company,
+                    wo.production_item,
+                    complete_count=None,
                 )
                 jc_completed += done
                 try:

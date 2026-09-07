@@ -43,6 +43,11 @@ else
     echo "==> Site $SITE already exists"
 fi
 
+# wkhtmltopdf (Print → PDF) must reach assets from inside Docker; *.localhost
+# does not resolve on the compose network. See infra/configure.sh.
+echo "==> Setting host_name for Print → PDF..."
+bench --site "$SITE" set-config host_name "http://frontend:8080"
+
 # Run seeders via demostackkit CLI
 echo "==> Running seeders (phase: $PHASE)..."
 cd /demostackkit

@@ -79,6 +79,7 @@ def up(
         apps_pruned = _reconcile_apps_txt(config, bench)
         apps_fetched = _fetch_extra_apps(config, bench)
         site_created = _create_site_if_needed(config, repo_root)
+        _ensure_print_host_name(bench)
         _sync_extra_app_assets(
             config, bench, build=apps_fetched or site_created, frontend_bench=frontend_bench
         )
@@ -98,6 +99,27 @@ def up(
 # Frontend is restarted separately after backend is healthy so nginx re-resolves the
 # backend upstream IP (otherwise jewellery.localhost can 502 after compose restart).
 _FRAPPE_PROCESS_SERVICES = ("backend", "websocket", "queue-short", "queue-long", "scheduler")
+
+# Docker-internal URL wkhtmltopdf can reach for Print → PDF asset fetches.
+# Without this, get_url() builds http://<site>.localhost which does not resolve
+# inside the backend container (HostNotFoundError). Also written into
+# common_site_config.json by infra/configure.sh.
+PRINT_HOST_NAME = "http://frontend:8080"
+
+
+def _ensure_print_host_name(bench: object) -> None:
+    """Point site host_name at the frontend container so Print → PDF works in Docker.
+
+    wkhtmltopdf runs inside the backend container and must load CSS/images via HTTP.
+    Traefik's ``*.localhost`` hostnames only resolve on the host, not on the compose
+    network. Setting host_name to the frontend service fixes PDF generation for every
+    Print Format (same root cause on ERPNext v15 and v16).
+    """
+    from demostackkit.erpnext.bench import BenchClient
+
+    assert isinstance(bench, BenchClient)
+    console.print(f"[dim]Ensuring host_name={PRINT_HOST_NAME} for Print → PDF...[/dim]")
+    bench.set_config("host_name", PRINT_HOST_NAME)
 
 
 def _reconcile_apps_txt(config: object, bench: object) -> bool:

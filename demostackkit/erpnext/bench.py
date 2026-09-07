@@ -146,6 +146,11 @@ print('1' if frappe.db.exists('{doctype}', '{name}') else '0')
         cmd = f"cd {self.bench_path} && bench --site {self.site} install-app {app_name}"
         self._docker_exec(["bash", "-c", cmd])
 
+    def set_config(self, key: str, value: str) -> None:
+        """Write a key into the site's site_config.json via bench set-config."""
+        cmd = f"cd {self.bench_path} && bench --site {self.site} set-config {key} {value!r}"
+        self._docker_exec(["bash", "-c", cmd])
+
     def app_exists_in_bench(self, app_name: str) -> bool:
         """Return True if the app is present in the bench and importable.
 

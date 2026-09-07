@@ -6,6 +6,8 @@
 
 > Create, manage and distribute ERPNext demo environments for different industries — with a single command.
 
+[![DemoStackKit Walkthrough](https://img.youtube.com/vi/m68iyzpLiN4/0.jpg)](https://youtu.be/m68iyzpLiN4)
+
 DemoStackKit is an open-source toolkit for quickly spinning up industry-specific ERPNext demo environments with realistic sample data. It includes ready-to-use demos for Garment Manufacturing, Chemical Manufacturing, Engineering Procurement & Construction (EPC), Solar Manufacturing, Auto Dealerships, Jewellery Manufacturing, and Hobby Shop & TCG Retail.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)

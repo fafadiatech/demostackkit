@@ -4,6 +4,24 @@ All notable changes to DemoStackKit, grouped by week. Most recent week first.
 
 ---
 
+## Week of 2026-09-07 → 2026-09-13
+
+### Fixed
+
+- **Print → PDF failing inside Docker** — `demostackkit up`, the seeder entrypoint and `infra/configure.sh` now set the site's `host_name` to `http://frontend:8080` (the nginx service on the compose network). Without it, wkhtmltopdf's asset fetches built `http://<site>.localhost`, which only resolves on the host, not inside the backend container — so every Print Format's PDF generation raised `HostNotFoundError` on both ERPNext v15 and v16.
+- **ERPNext v15/v16 compatibility** — several seeders detected the running ERPNext version indirectly (via the site's actual doctype metadata rather than an image tag) and now branch correctly on both:
+  - `seeder/asset_seeder.py` — v16 renamed `Asset.gross_purchase_amount` to `net_purchase_amount` and replaced `is_existing_asset`/`is_composite_asset` with a single `asset_type` Select; the seeder now checks `frappe.get_meta('Asset')` and writes whichever shape the site has.
+  - `01_master/89_budgets.py` and `02_transactions/230_budget_actuals.py` — v16 dropped `Budget.fiscal_year` and the `Budget Account` child table in favor of `from_fiscal_year`/`to_fiscal_year` plus flat `account`/`budget_amount` fields (one Budget document per account); both seeders now build/read whichever shape `frappe.__version__` indicates, and Budgets are matched on `(company, fiscal_year, cost_center/project, account)` instead of just `(company, fiscal_year, cost_center/project)`.
+  - `02_transactions/215_production.py` — v16 moved the default WIP/FG/scrap warehouse fields from `Manufacturing Settings` onto `Company` (erpnext#50507); `ensure_settings_warehouses()` now writes to whichever doctype actually carries those fields.
+  - `01_master/95_quality_inspection_templates.py` — now creates each `Quality Inspection Parameter` master before referencing it from a Quality Inspection Template, since that Link target must exist first or the template insert raises `LinkValidationError`.
+  - `02_transactions/221_sales_invoices.py` / `223_payment_entries.py` — `SalesInvoiceSeeder` now always publishes the `sales_invoices` cache key (even as `{}` when there were no Delivery Notes), and `PaymentEntrySeeder` treats a missing/empty cache as a soft no-op instead of failing validation, so an industry with no Delivery Notes no longer aborts the whole transactions phase.
+
+### Changed
+
+- **README** — added a YouTube walkthrough thumbnail/link near the top, with a caption prompting readers to click it.
+
+---
+
 ## Week of 2026-08-31 → 2026-09-06
 
 ### Added

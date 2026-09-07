@@ -259,6 +259,8 @@ def _exec_submit_script(
     item_tracking: dict[str, tuple[int, int]] | None = None,
     qc_templates: dict[str, str] | None = None,
     qc_template_params: dict[str, list[tuple[str, float, float]]] | None = None,
+    *,
+    warehouse_defaults_on: str = "manufacturing_settings",
 ) -> dict[str, Any]:
     """Run the submit half against fakes; assert on resulting counters / calls.
 
@@ -272,6 +274,11 @@ def _exec_submit_script(
     script's `_create_job_card_inspection` helper calls to decide whether a
     Job Card's Operation carries a checklist at all. `qc_template_params`
     supplies that template's (specification, min_value, max_value) rows.
+
+    `warehouse_defaults_on` selects where fake ERPNext keeps default WIP/FG/
+    scrap warehouses: ``manufacturing_settings`` (v15) or ``company`` (v16,
+    erpnext#50507). The real failure was AttributeError on Manufacturing
+    Settings when those fields had moved to Company.
     """
     qc_templates = qc_templates or {}
     qc_template_params = qc_template_params or {}
@@ -287,10 +294,23 @@ def _exec_submit_script(
     # Rebuild script body to inject our known jobs payload (already embedded).
     assert "payload = json.loads" in script
 
-    ms = _FakeDoc(
-        name="Manufacturing Settings",
-        over_production_allowance_percentage=0,
-        enforce_time_logs=0,
+    ms_kwargs: dict[str, Any] = {
+        "name": "Manufacturing Settings",
+        "over_production_allowance_percentage": 0,
+        "enforce_time_logs": 0,
+    }
+    if warehouse_defaults_on == "manufacturing_settings":
+        ms_kwargs.update(
+            default_wip_warehouse=None,
+            default_fg_warehouse=None,
+            default_scrap_warehouse=None,
+        )
+    ms = _FakeDoc(**ms_kwargs)
+
+    company_name = jobs[0]["company"] if jobs else "Alpha Garments Pvt Ltd"
+    company_doc = _FakeDoc(
+        name=company_name,
+        doctype="Company",
         default_wip_warehouse=None,
         default_fg_warehouse=None,
         default_scrap_warehouse=None,
@@ -342,6 +362,10 @@ def _exec_submit_script(
 
                 doc.make_work_order = _mwo  # type: ignore[method-assign]
             return doc
+        if arg == "Company":
+            if name == company_doc.name:
+                return company_doc
+            return _FakeDoc(name=name or "Company", doctype="Company")
         if arg == "Job Card":
             for cards in job_cards_by_wo.values():
                 for jc in cards:
@@ -512,10 +536,30 @@ def _exec_submit_script(
             {"call": "db.set_value", "doctype": doctype, "name": name, "fieldname": fieldname}
         )
 
+    def fake_get_meta(doctype: str) -> Any:
+        fields = set()
+        if (
+            doctype == "Manufacturing Settings"
+            and warehouse_defaults_on == "manufacturing_settings"
+        ):
+            fields = {
+                "default_wip_warehouse",
+                "default_fg_warehouse",
+                "default_scrap_warehouse",
+            }
+        elif doctype == "Company" and warehouse_defaults_on == "company":
+            fields = {
+                "default_wip_warehouse",
+                "default_fg_warehouse",
+                "default_scrap_warehouse",
+            }
+        return SimpleNamespace(has_field=lambda field: field in fields)
+
     fake_frappe = SimpleNamespace(
         get_doc=fake_get_doc,
         get_all=fake_get_all,
         get_single=lambda _name: ms,
+        get_meta=fake_get_meta,
         get_cached_value=fake_get_cached_value,
         db=SimpleNamespace(
             get_value=fake_get_value,
@@ -544,6 +588,10 @@ def _exec_submit_script(
         "assign_to_calls": assign_to_calls,
         "stock_purposes": stock_purposes,
         "ms_over_production": ms.over_production_allowance_percentage,
+        "ms_default_wip_warehouse": getattr(ms, "default_wip_warehouse", None),
+        "company_default_wip_warehouse": company_doc.default_wip_warehouse,
+        "company_default_fg_warehouse": company_doc.default_fg_warehouse,
+        "company_default_scrap_warehouse": company_doc.default_scrap_warehouse,
     }
 
 
@@ -611,6 +659,29 @@ class TestProductionSeederBehaviour:
         assert qi.readings and qi.readings[0]["specification"] == "Stitch Strength (N)"
         assert result["assign_to_calls"], "Quality Inspection was never assigned to anyone"
         assert result["assign_to_calls"][0]["assign_to"] == ["mohan.kulkarni@electrical.demo"]
+
+    def test_warehouse_defaults_written_to_company_on_v16_shape(self) -> None:
+        """erpnext#50507: v16 moved default WIP/FG/scrap warehouses from
+        Manufacturing Settings to Company. Writing to MS raises AttributeError
+        — the seeder must detect via meta and set Company instead."""
+        _, submit_script = _run(REPO_ROOT / "industries" / "garment", volume_override=1, seed=3)
+        payload = _payload_from_submit(submit_script)
+        for job in payload["jobs"]:
+            for row in job["items"]:
+                row["status"] = "not_started"
+                row["qty"] = 1
+
+        prefix, rest = submit_script.split("payload = json.loads('''", 1)
+        _, suffix = rest.split("''')", 1)
+        mutated = prefix + "payload = json.loads('''" + json.dumps(payload) + "''')" + suffix
+
+        result = _exec_submit_script(mutated, payload["jobs"], warehouse_defaults_on="company")
+        job = payload["jobs"][0]
+        assert result["company_default_wip_warehouse"] == job["wip_warehouse"]
+        assert result["company_default_fg_warehouse"] == job["fg_warehouse"]
+        assert result["company_default_scrap_warehouse"] == job["scrap_warehouse"]
+        # Manufacturing Settings must not have been given the moved fields.
+        assert result["ms_default_wip_warehouse"] is None
 
 
 @pytest.mark.unit

@@ -55,6 +55,10 @@ class SalesInvoiceSeeder(BaseTransactionSeeder):
     def run(self) -> None:
         dn_names = self.ctx.cache_get("delivery_notes", [])
         if not dn_names:
+            # Always publish the key so downstream seeders (payment entries,
+            # customer returns) can soft-no-op on an empty map instead of
+            # treating a missing cache entry as a hard pre-flight failure.
+            self.ctx.cache_set("sales_invoices", {})
             return
 
         payload_json = json.dumps(dn_names)

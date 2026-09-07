@@ -412,21 +412,31 @@ def best_source_warehouse(item_code, company, fallback):
             return b.warehouse
     return fallback
 
-def ensure_settings_warehouses(wip, fg, scrap):
-    ms_doc = frappe.get_single('Manufacturing Settings')
+def ensure_settings_warehouses(company, wip, fg, scrap):
+    # v15 keeps default WIP/FG/scrap warehouses on Manufacturing Settings;
+    # v16 moved them to Company (erpnext#50507). Detect via meta rather than
+    # the image tag — same approach as asset_seeder.py.
+    ms_meta = frappe.get_meta('Manufacturing Settings')
+    company_meta = frappe.get_meta('Company')
+    if ms_meta.has_field('default_wip_warehouse'):
+        doc = frappe.get_single('Manufacturing Settings')
+    elif company_meta.has_field('default_wip_warehouse'):
+        doc = frappe.get_doc('Company', company)
+    else:
+        return
     dirty = False
-    if wip and not ms_doc.default_wip_warehouse:
-        ms_doc.default_wip_warehouse = wip
+    if wip and not doc.default_wip_warehouse:
+        doc.default_wip_warehouse = wip
         dirty = True
-    if fg and not ms_doc.default_fg_warehouse:
-        ms_doc.default_fg_warehouse = fg
+    if fg and not doc.default_fg_warehouse:
+        doc.default_fg_warehouse = fg
         dirty = True
-    if scrap and not ms_doc.default_scrap_warehouse:
-        ms_doc.default_scrap_warehouse = scrap
+    if scrap and not doc.default_scrap_warehouse:
+        doc.default_scrap_warehouse = scrap
         dirty = True
     if dirty:
-        ms_doc.flags.ignore_permissions = True
-        ms_doc.save(ignore_permissions=True)
+        doc.flags.ignore_permissions = True
+        doc.save(ignore_permissions=True)
 
 def complete_job_cards(
     wo_name, employees, employee_users, planned_start, company, production_item, complete_count=None
@@ -637,7 +647,9 @@ plans_created = wo_created = jc_completed = transfers = manufactures = errors = 
 
 for job in jobs:
     company = job['company']
-    ensure_settings_warehouses(job['wip_warehouse'], job['fg_warehouse'], job['scrap_warehouse'])
+    ensure_settings_warehouses(
+        company, job['wip_warehouse'], job['fg_warehouse'], job['scrap_warehouse']
+    )
 
     try:
         po_items = []

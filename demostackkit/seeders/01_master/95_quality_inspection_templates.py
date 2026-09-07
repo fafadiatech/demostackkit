@@ -9,14 +9,16 @@ so a Job Card against that Operation never carries a checklist and the
 Job Card completion seeder (`215_production.py`) has nothing to react to.
 
 Reads the `qc_operation_name` / `qc_inspection_parameters` cache keys each
-industry's `08_operations.py` sets, builds one `Quality Inspection Template`
-from those industry-specific parameters (reusing the same specifications the
+industry's `08_operations.py` sets, ensures each specification exists as a
+`Quality Inspection Parameter` master (the Link target for template /
+reading rows), builds one `Quality Inspection Template` from those
+industry-specific parameters (reusing the same specifications the
 per-industry `03_quality_inspections.py` seeder already uses for its own
 readings), and links it onto the Operation via `quality_inspection_template`.
 
 No-ops when Manufacturing isn't in `modules` or the industry's operations
-seeder never cached a QC operation. Idempotent — skips the template if it
-already exists and only writes the Operation link when it's missing.
+seeder never cached a QC operation. Idempotent — skips Parameter / template
+docs that already exist and only writes the Operation link when it's missing.
 
 Priority 95 — after every industry's Operations (50) and BOM (70) seeders,
 well before Opening Stock / Production (215) so the link is in place before
@@ -63,6 +65,16 @@ params = payload['params']
 
 created = linked = 0
 if frappe.db.exists('Operation', operation):
+    # specification is a Link to Quality Inspection Parameter — create
+    # masters first or template insert raises LinkValidationError.
+    for p in params:
+        if not frappe.db.exists('Quality Inspection Parameter', p['specification']):
+            frappe.get_doc({{
+                'doctype': 'Quality Inspection Parameter',
+                'parameter': p['specification'],
+                'description': p['specification'],
+            }}).insert(ignore_permissions=True)
+
     if not frappe.db.exists('Quality Inspection Template', template_name):
         frappe.get_doc({{
             'doctype': 'Quality Inspection Template',

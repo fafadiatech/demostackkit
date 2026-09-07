@@ -6,6 +6,7 @@ fix ref #37).
 from __future__ import annotations
 
 import ast
+import random
 import sys
 import types
 from datetime import date
@@ -15,6 +16,9 @@ from typing import Any
 
 import pytest
 from _seeder_harness import REPO_ROOT, SHARED_SEEDERS, load_seeder_class, run_seeder
+
+from demostackkit.core.config import load_industry_config
+from demostackkit.seeder.base import SeedContext
 
 SEEDER_PATH = SHARED_SEEDERS / "02_transactions" / "221_sales_invoices.py"
 
@@ -104,6 +108,27 @@ def _exec_generated_script(script: str) -> tuple[dict, list[_FakeSalesInvoice]]:
 
 @pytest.mark.unit
 class TestSalesInvoiceSeeder:
+    def test_caches_empty_map_when_no_delivery_notes(self) -> None:
+        """Downstream PaymentEntrySeeder used to hard-fail when this key was
+        missing after a no-op. Always publish an empty map instead."""
+        seeder_cls = load_seeder_class(SEEDER_PATH, "SalesInvoiceSeeder")
+        cfg = load_industry_config(REPO_ROOT / "industries" / "garment" / "industry.yaml")
+        ctx = SeedContext(
+            site=cfg.site.name,
+            industry_slug="garment",
+            industry_config=cfg,
+            bench_path="/home/frappe/frappe-bench",
+            random=random.Random(1),
+        )
+        ctx.cache_set("delivery_notes", [])
+
+        class Recording(seeder_cls):  # type: ignore[valid-type, misc]
+            def _exec(self, script: str, timeout: int = 120) -> str:
+                raise AssertionError("should not execute when delivery_notes is empty")
+
+        Recording(ctx).run()
+        assert ctx.cache_get("sales_invoices") == {}
+
     def test_generated_script_is_valid_python(self) -> None:
         script = _run(REPO_ROOT / "industries" / "garment")
         assert script

@@ -71,6 +71,23 @@ class TestPaymentEntrySeeder:
         assert plan_script == ""
         assert submit_script == ""
 
+    def test_validate_allows_missing_or_empty_sales_invoices_cache(self) -> None:
+        """SalesInvoiceSeeder may leave the cache unset/empty when there were
+        no Delivery Notes — that must soft-no-op, not abort the phase."""
+        seeder_cls = load_seeder_class(SEEDER_PATH, "PaymentEntrySeeder")
+        cfg = load_industry_config(REPO_ROOT / "industries" / "garment" / "industry.yaml")
+        for cache in ({}, {"sales_invoices": {}}):
+            ctx = SeedContext(
+                site=cfg.site.name,
+                industry_slug="garment",
+                industry_config=cfg,
+                bench_path="/home/frappe/frappe-bench",
+                random=random.Random(1),
+            )
+            for key, value in cache.items():
+                ctx.cache_set(key, value)
+            assert seeder_cls(ctx).validate() == []
+
     def test_generated_scripts_are_valid_python(self) -> None:
         rows = [
             {

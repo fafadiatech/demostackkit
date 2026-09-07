@@ -35,11 +35,20 @@ docstatus=1 — leaving them Draft would leave the report empty even after
 `230_budget_actuals.py` posts spend against them (ref #39).
 
 Idempotent: Cost Centers are skipped if already present; Budgets are matched
-on (company, fiscal_year, cost_center) or (company, fiscal_year, project).
+on (company, fiscal_year, cost_center, account) or (company, fiscal_year,
+project, account).
 Priority 89 runs after Standard Warehouses (61), Employee Users (84) and every
 industry's Project seeder (88, see project_seeders.py), and just ahead of
 Opening Stock / Asset Maintenance (90) — so the Departments, Projects and
 Fiscal Years this seeder reads already exist.
+
+ERPNext 16 reworked the Budget doctype: the single `fiscal_year` Link became
+`from_fiscal_year`/`to_fiscal_year`, and the `accounts` child table (multiple
+account/budget_amount rows per Budget) was replaced by flat `account` and
+`budget_amount` fields — one Budget document per account. The generated
+script below detects the running version via `frappe.__version__` and builds
+either shape at runtime, so the same seeder works against v14/v15 (child
+table) and v16+ (one document per account).
 """
 
 from __future__ import annotations
@@ -108,6 +117,10 @@ company = '''{company}'''
 abbr = '''{abbr}'''
 plan = json.loads('''{payload}''')
 
+# ERPNext 16 dropped Budget.fiscal_year + the Budget.accounts child table in
+# favour of from_fiscal_year/to_fiscal_year + one Budget document per account.
+budget_per_account = int(frappe.__version__.split('.')[0]) >= 16
+
 fy_row = frappe.db.sql(
     "select name from `tabFiscal Year` "
     "where year_start_date <= CURDATE() and year_end_date >= CURDATE()"
@@ -117,13 +130,76 @@ fiscal_year = fy_row[0][0] if fy_row else None
 cc_created = cc_skipped = 0
 budget_created = budget_skipped = 0
 
-def resolve_accounts(names):
-    resolved = []
-    for name in names:
+def resolve_rows(names, amounts):
+    # Pair each account with its amount BEFORE dropping accounts that don't
+    # exist, so a missing account never shifts a later account onto the
+    # wrong amount.
+    rows = []
+    for name, amt in zip(names, amounts):
+        if not amt:
+            continue
         full = f'{{name}} - {{abbr}}'
         if frappe.db.exists('Account', full):
-            resolved.append(full)
-    return resolved
+            rows.append({{'account': full, 'budget_amount': amt}})
+    return rows
+
+_BUDGET_DEFAULTS = {{
+    'applicable_on_material_request': 1,
+    'applicable_on_purchase_order': 1,
+    'applicable_on_booking_actual_expenses': 1,
+    'action_if_annual_budget_exceeded': 'Warn',
+    'action_if_accumulated_monthly_budget_exceeded': 'Warn',
+    'action_if_annual_budget_exceeded_on_mr': 'Warn',
+    'action_if_accumulated_monthly_budget_exceeded_on_mr': 'Warn',
+    'action_if_annual_budget_exceeded_on_po': 'Warn',
+    'action_if_accumulated_monthly_budget_exceeded_on_po': 'Warn',
+}}
+
+def budget_exists(budget_against, target, account=None):
+    filters = {{'company': company, 'budget_against': budget_against}}
+    filters['cost_center' if budget_against == 'Cost Center' else 'project'] = target
+    if budget_per_account:
+        filters['account'] = account
+        filters['from_fiscal_year'] = fiscal_year
+    else:
+        filters['fiscal_year'] = fiscal_year
+    return frappe.db.exists('Budget', filters)
+
+def create_budgets(budget_against, target, rows):
+    # Budget is submittable; Budget Variance Report only reads docstatus=1.
+    global budget_created, budget_skipped
+    if not rows:
+        return
+    base = dict(_BUDGET_DEFAULTS)
+    base['doctype'] = 'Budget'
+    base['budget_against'] = budget_against
+    base['company'] = company
+    base['cost_center' if budget_against == 'Cost Center' else 'project'] = target
+    if budget_per_account:
+        for row in rows:
+            if budget_exists(budget_against, target, row['account']):
+                budget_skipped += 1
+                continue
+            fields = dict(base)
+            fields['account'] = row['account']
+            fields['budget_amount'] = row['budget_amount']
+            fields['from_fiscal_year'] = fiscal_year
+            fields['to_fiscal_year'] = fiscal_year
+            doc = frappe.get_doc(fields)
+            doc.insert(ignore_permissions=True)
+            doc.submit()
+            budget_created += 1
+    else:
+        if budget_exists(budget_against, target):
+            budget_skipped += 1
+            return
+        fields = dict(base)
+        fields['fiscal_year'] = fiscal_year
+        fields['accounts'] = rows
+        doc = frappe.get_doc(fields)
+        doc.insert(ignore_permissions=True)
+        doc.submit()
+        budget_created += 1
 
 if not fiscal_year:
     print('Budgets: skipped, no Fiscal Year covers today')
@@ -157,41 +233,8 @@ else:
         else:
             cc_skipped += 1
 
-        if frappe.db.exists(
-            'Budget', {{'company': company, 'fiscal_year': fiscal_year, 'cost_center': cc_full}}
-        ):
-            budget_skipped += 1
-            continue
-
-        rows = [
-            {{'account': acct, 'budget_amount': amt}}
-            for acct, amt in zip(resolve_accounts(cc['accounts']), cc['amounts'])
-            if amt
-        ]
-        if not rows:
-            continue
-
-        # Budget is submittable; Budget Variance Report only reads docstatus=1.
-        doc = frappe.get_doc({{
-            'doctype': 'Budget',
-            'budget_against': 'Cost Center',
-            'cost_center': cc_full,
-            'company': company,
-            'fiscal_year': fiscal_year,
-            'applicable_on_material_request': 1,
-            'applicable_on_purchase_order': 1,
-            'applicable_on_booking_actual_expenses': 1,
-            'action_if_annual_budget_exceeded': 'Warn',
-            'action_if_accumulated_monthly_budget_exceeded': 'Warn',
-            'action_if_annual_budget_exceeded_on_mr': 'Warn',
-            'action_if_accumulated_monthly_budget_exceeded_on_mr': 'Warn',
-            'action_if_annual_budget_exceeded_on_po': 'Warn',
-            'action_if_accumulated_monthly_budget_exceeded_on_po': 'Warn',
-            'accounts': rows,
-        }})
-        doc.insert(ignore_permissions=True)
-        doc.submit()
-        budget_created += 1
+        rows = resolve_rows(cc['accounts'], cc['amounts'])
+        create_budgets('Cost Center', cc_full, rows)
 
     projects = frappe.get_all(
         'Project',
@@ -201,34 +244,8 @@ else:
         limit_page_length={_MAX_PROJECT_BUDGETS},
     )
     for proj, proj_plan in zip(projects, plan['projects']):
-        if frappe.db.exists(
-            'Budget', {{'company': company, 'fiscal_year': fiscal_year, 'project': proj}}
-        ):
-            budget_skipped += 1
-            continue
-
-        rows = [
-            {{'account': acct, 'budget_amount': amt}}
-            for acct, amt in zip(resolve_accounts(proj_plan['accounts']), proj_plan['amounts'])
-            if amt
-        ]
-        if not rows:
-            continue
-
-        doc = frappe.get_doc({{
-            'doctype': 'Budget',
-            'budget_against': 'Project',
-            'project': proj,
-            'company': company,
-            'fiscal_year': fiscal_year,
-            'applicable_on_booking_actual_expenses': 1,
-            'action_if_annual_budget_exceeded': 'Warn',
-            'action_if_accumulated_monthly_budget_exceeded': 'Warn',
-            'accounts': rows,
-        }})
-        doc.insert(ignore_permissions=True)
-        doc.submit()
-        budget_created += 1
+        rows = resolve_rows(proj_plan['accounts'], proj_plan['amounts'])
+        create_budgets('Project', proj, rows)
 
 frappe.db.commit()
 print(

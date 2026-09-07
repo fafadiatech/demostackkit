@@ -66,10 +66,11 @@ class PaymentEntrySeeder(BaseTransactionSeeder):
     priority = 223
 
     def validate(self) -> list[str]:
-        errors = []
-        if not self.ctx.cache_get("sales_invoices"):
-            errors.append("sales_invoices not in cache")
-        return errors
+        # Soft dependency: SalesInvoiceSeeder may legitimately leave this
+        # unset/empty when there were no Delivery Notes (or every invoice
+        # create failed with WARN). run() already no-ops in that case —
+        # matching CustomerReturnSeeder — so don't abort the whole phase.
+        return []
 
     def run(self) -> None:
         sales_invoices = self.ctx.cache_get("sales_invoices", {})

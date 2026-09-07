@@ -216,6 +216,22 @@ if not frappe.db.exists('DocType', 'Asset'):
     print('Assets: the Assets module is not available on this site, nothing to seed')
     raise SystemExit(0)
 
+# ERPNext v16 renamed Asset.gross_purchase_amount -> net_purchase_amount and
+# replaced the is_existing_asset/is_composite_asset checks with a single
+# asset_type Select ("Existing Asset" / "Composite Asset" / "Composite
+# Component"). Detect which shape this site's Asset doctype uses instead of
+# branching on the ERPNext version string, since the meta reflects the
+# actual installed app regardless of the tag it reports.
+asset_meta = frappe.get_meta('Asset')
+purchase_amount_fieldname = (
+    'net_purchase_amount' if asset_meta.has_field('net_purchase_amount') else 'gross_purchase_amount'
+)
+existing_asset_fields = (
+    {{'asset_type': 'Existing Asset'}}
+    if asset_meta.has_field('asset_type')
+    else {{'is_existing_asset': 1}}
+)
+
 fy_created = fy_skipped = 0
 for w in payload['fiscal_years']:
     existing = frappe.db.sql(
@@ -280,7 +296,7 @@ for a in payload['assets']:
         skipped += 1
         continue
     try:
-        doc = frappe.get_doc({{
+        asset_fields = {{
             'doctype': 'Asset',
             'asset_name': a['asset_name'],
             'item_code': item_by_category[a['category']],
@@ -289,9 +305,8 @@ for a in payload['assets']:
             'location': a['location'],
             'purchase_date': a['purchase_date'],
             'available_for_use_date': a['available_for_use_date'],
-            'gross_purchase_amount': a['gross_purchase_amount'],
+            purchase_amount_fieldname: a['gross_purchase_amount'],
             'asset_quantity': 1,
-            'is_existing_asset': 1,
             'calculate_depreciation': 1,
             'maintenance_required': 1 if a['maintenance_required'] else 0,
             'finance_books': [{{
@@ -300,7 +315,9 @@ for a in payload['assets']:
                 'frequency_of_depreciation': 1,
                 'expected_value_after_useful_life': 0,
             }}],
-        }})
+        }}
+        asset_fields.update(existing_asset_fields)
+        doc = frappe.get_doc(asset_fields)
         doc.insert(ignore_permissions=True)
         doc.submit()
         frappe.db.commit()

@@ -35,6 +35,10 @@ Priority 230 — after Bank Transactions (224) and the rest of the Accounts
 transaction chain, well before Maintenance Contracts (245). Cash itself is
 available from CoA setup; the late priority just keeps budget actuals after
 the operational ledger is already populated.
+
+Reads Budget lines via `frappe.__version__`-based branching to match whatever
+shape `89_budgets.py` wrote: the `Budget Account` child table pre-v16, or the
+flat `account`/`budget_amount`/`from_fiscal_year` fields v16 introduced.
 """
 
 from __future__ import annotations
@@ -143,6 +147,11 @@ import json
 
 companies = json.loads('''{payload_json}''')
 
+# ERPNext 16 dropped Budget.fiscal_year + the Budget Account child table in
+# favour of from_fiscal_year/to_fiscal_year + one Budget document per account
+# (see 89_budgets.py). Detect at runtime and read the right shape.
+budget_per_account = int(frappe.__version__.split('.')[0]) >= 16
+
 fy_row = frappe.db.sql(
     "select name, year_start_date, year_end_date from `tabFiscal Year` "
     "where year_start_date <= CURDATE() and year_end_date >= CURDATE()"
@@ -172,32 +181,52 @@ if fy_row:
             main = f'Main - {{abbr}}'
             company_cc = main if frappe.db.exists('Cost Center', main) else None
 
-        budgets = frappe.get_all(
-            'Budget',
-            filters={{'company': company, 'fiscal_year': fiscal_year, 'docstatus': 1}},
-            fields=['name', 'cost_center', 'project'],
-        )
-        for b in budgets:
-            cost_center = b.cost_center or company_cc
-            if not cost_center:
-                continue
-            rows = frappe.get_all(
-                'Budget Account',
-                filters={{'parent': b.name}},
-                fields=['account', 'budget_amount'],
+        if budget_per_account:
+            budgets = frappe.get_all(
+                'Budget',
+                filters={{'company': company, 'from_fiscal_year': fiscal_year, 'docstatus': 1}},
+                fields=['name', 'cost_center', 'project', 'account', 'budget_amount'],
             )
-            for r in rows:
-                if not r.budget_amount:
+            for b in budgets:
+                cost_center = b.cost_center or company_cc
+                if not cost_center or not b.budget_amount:
                     continue
                 lines.append({{
                     'company': company,
-                    'account': r.account,
-                    'budget_amount': float(r.budget_amount),
+                    'account': b.account,
+                    'budget_amount': float(b.budget_amount),
                     'cost_center': cost_center,
                     'project': b.project or None,
                     'credit_account': credit_account,
                     'fiscal_year_start': str(fy_start),
                 }})
+        else:
+            budgets = frappe.get_all(
+                'Budget',
+                filters={{'company': company, 'fiscal_year': fiscal_year, 'docstatus': 1}},
+                fields=['name', 'cost_center', 'project'],
+            )
+            for b in budgets:
+                cost_center = b.cost_center or company_cc
+                if not cost_center:
+                    continue
+                rows = frappe.get_all(
+                    'Budget Account',
+                    filters={{'parent': b.name}},
+                    fields=['account', 'budget_amount'],
+                )
+                for r in rows:
+                    if not r.budget_amount:
+                        continue
+                    lines.append({{
+                        'company': company,
+                        'account': r.account,
+                        'budget_amount': float(r.budget_amount),
+                        'cost_center': cost_center,
+                        'project': b.project or None,
+                        'credit_account': credit_account,
+                        'fiscal_year_start': str(fy_start),
+                    }})
 
 print('{_PLAN_MARKER}' + json.dumps({{'lines': lines}}))
 """

@@ -42,6 +42,13 @@ fabricate a lot on an outward move — which is what
 `02_transactions/215_production.py` and `02_transactions/220_delivery_notes.py`
 add once this seeder has switched tracking on.
 
+ERPNext v16 gated Serial and Batch Bundle creation behind Stock Settings
+`enable_serial_and_batch_no_for_item` ("Activate Serial and Batch No for
+Item"). Without it, Opening Stock reconciliations that use
+`use_serial_batch_fields` submit with no SLE — empty Bins, near-zero Sales
+Orders. This seeder turns that flag on when the field exists (meta-detected
+so v15 is a no-op); Opening Stock (90) then runs with bundles able to form.
+
 No cache_set: every consumer (`90_opening_stock.py`, and the two seeders
 above) re-reads `has_batch_no`/`has_serial_no` live off the Item master
 rather than from any seed-time cache — the same "queried rather than
@@ -93,6 +100,13 @@ bom_rows = frappe.get_all(
 if not bom_rows:
     print('Batch/Serial Tracking: skipped, no submitted default BOMs found')
 else:
+    # v16+ only: Serial and Batch Bundle insert requires this Stock Settings
+    # gate (erpnext#52549). Absent on v15 — has_field keeps that a no-op.
+    if frappe.get_meta('Stock Settings').has_field('enable_serial_and_batch_no_for_item'):
+        frappe.db.set_single_value(
+            'Stock Settings', 'enable_serial_and_batch_no_for_item', 1
+        )
+
     bom_names = [b.name for b in bom_rows]
     fg_item_codes = {{b.item for b in bom_rows}}
 

@@ -123,6 +123,15 @@ class TestBatchTrackingSeederScripts:
         payload = payload_from_script(script)
         assert payload["serialize_top_level_fg"] is False
 
+    def test_enables_serial_batch_stock_setting_when_field_exists(self) -> None:
+        """v16 gates Serial/Batch Bundle creation behind this Stock Settings
+        flag; v15 has no such field — the script must meta-detect, not write
+        unconditionally (orphan Singles row on v15)."""
+        script = _run(REPO_ROOT / "industries" / "electrical")
+        assert "has_field('enable_serial_and_batch_no_for_item')" in script
+        assert "set_single_value(" in script
+        assert "'Stock Settings', 'enable_serial_and_batch_no_for_item', 1" in script
+
 
 @pytest.mark.unit
 class TestBatchTrackingSeederBehaviour:
@@ -174,16 +183,31 @@ class TestBatchTrackingSeederBehaviour:
             return []
 
         set_value_calls: dict[str, dict] = {}
+        single_value_calls: list[tuple[str, str, int]] = []
 
         def fake_set_value(doctype, name, values):
             set_value_calls[name] = values
 
+        def fake_set_single_value(doctype, fieldname, value):
+            single_value_calls.append((doctype, fieldname, value))
+
+        fake_meta = types.SimpleNamespace(
+            has_field=lambda field: field == "enable_serial_and_batch_no_for_item"
+        )
+
         fake_frappe = types.SimpleNamespace(
             get_all=fake_get_all,
-            db=types.SimpleNamespace(set_value=fake_set_value, commit=lambda: None),
+            get_meta=lambda doctype: fake_meta,
+            db=types.SimpleNamespace(
+                set_value=fake_set_value,
+                set_single_value=fake_set_single_value,
+                commit=lambda: None,
+            ),
         )
 
         exec(compile(script, "<batch tracking seeder>", "exec"), {"frappe": fake_frappe})
+
+        assert single_value_calls == [("Stock Settings", "enable_serial_and_batch_no_for_item", 1)]
 
         # FG-1 is the only top-level FG (never a component); SUB-1/RM-1/RM-2
         # are all components (SUB-1 despite also having its own BOM).
@@ -199,3 +223,43 @@ class TestBatchTrackingSeederBehaviour:
             }
         assert "ALREADY-FLAGGED" not in set_value_calls
         assert "NON-STOCK-SVC" not in set_value_calls
+
+    def test_skips_serial_batch_stock_setting_when_field_absent(self) -> None:
+        """v15 Stock Settings has no enable_serial_and_batch_no_for_item —
+        has_field must keep set_single_value from firing."""
+        script = _run(REPO_ROOT / "industries" / "evmfg")
+
+        bom_rows = [{"name": "BOM-FG-1", "item": "FG-1"}]
+        bom_items = {"BOM-FG-1": [{"item_code": "RM-1"}]}
+        item_meta = {
+            "FG-1": {"is_stock_item": 1, "has_batch_no": 0, "has_serial_no": 0},
+            "RM-1": {"is_stock_item": 1, "has_batch_no": 0, "has_serial_no": 0},
+        }
+
+        def fake_get_all(doctype, filters=None, fields=None, **kwargs):
+            if doctype == "BOM":
+                return [types.SimpleNamespace(**row) for row in bom_rows]
+            if doctype == "BOM Item":
+                parents = filters["parent"][1]
+                rows = [row for p in parents for row in bom_items.get(p, [])]
+                return [types.SimpleNamespace(**row) for row in rows]
+            if doctype == "Item":
+                names = filters["name"][1]
+                return [
+                    types.SimpleNamespace(name=n, **item_meta[n]) for n in names if n in item_meta
+                ]
+            return []
+
+        single_value_calls: list[tuple] = []
+        fake_frappe = types.SimpleNamespace(
+            get_all=fake_get_all,
+            get_meta=lambda doctype: types.SimpleNamespace(has_field=lambda field: False),
+            db=types.SimpleNamespace(
+                set_value=lambda *a, **k: None,
+                set_single_value=lambda *a: single_value_calls.append(a),
+                commit=lambda: None,
+            ),
+        )
+
+        exec(compile(script, "<batch tracking seeder>", "exec"), {"frappe": fake_frappe})
+        assert single_value_calls == []

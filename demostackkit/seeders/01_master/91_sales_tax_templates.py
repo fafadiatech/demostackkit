@@ -12,11 +12,16 @@ sales-tax template everywhere else — so `210_sales_orders.py` has more than
 one template to vary orders across.
 
 Tax accounts are resolved dynamically against whatever the "Standard" chart of
-accounts actually created for this company, the same defensive pattern
-`89_budgets.py::resolve_accounts` uses for expense accounts: there is no
-guarantee a generic template ships country-specific ledgers like "CGST"/
-"SGST", so a template with no resolvable account is skipped rather than
-failing the whole seed run.
+accounts actually created for this company. Unlike the defensive
+skip-if-missing pattern `89_budgets.py::resolve_accounts` uses for expense
+accounts, a missing tax ledger here is *created* on demand: the generic
+"Standard" CoA ships a "Duties and Taxes" group account with no country-
+specific leaves at all (no "CGST"/"SGST" for India, etc.), so skipping would
+leave this seeder a no-op for nearly every India-flagged industry. A leaf
+Account is created under that group the first time a hint (e.g. "CGST") has
+no match, and reused for every subsequent template that needs the same hint.
+A template is only skipped if the company has no Tax-type group account to
+hang a new leaf off at all.
 
 Idempotent: an existing template is matched on (title, company) and reused.
 
@@ -75,6 +80,16 @@ if not tax_accounts:
         filters={{'company': company, 'is_group': 0, 'parent_account': ['like', '%Duties and Taxes%']}},
         fields=['name', 'account_name'],
     )
+tax_accounts = [frappe._dict(a) for a in tax_accounts]
+preexisting_count = len(tax_accounts)
+
+tax_group = frappe.db.get_value(
+    'Account', {{'company': company, 'account_type': 'Tax', 'is_group': 1}}, 'name'
+) or frappe.db.get_value(
+    'Account',
+    {{'company': company, 'is_group': 1, 'account_name': ['like', '%Duties and Taxes%']}},
+    'name',
+)
 
 
 def resolve_account(hint):
@@ -82,7 +97,21 @@ def resolve_account(hint):
     for acc in tax_accounts:
         if hint_lower in (acc.account_name or '').lower():
             return acc.name
-    return tax_accounts[0].name if tax_accounts else None
+    if preexisting_count:
+        return tax_accounts[0].name
+    if not tax_group:
+        return None
+    new_acc = frappe.get_doc({{
+        'doctype': 'Account',
+        'account_name': hint,
+        'parent_account': tax_group,
+        'company': company,
+        'account_type': 'Tax',
+        'is_group': 0,
+    }})
+    new_acc.insert(ignore_permissions=True)
+    tax_accounts.append(frappe._dict({{'name': new_acc.name, 'account_name': new_acc.account_name}}))
+    return new_acc.name
 
 
 created = skipped = 0
